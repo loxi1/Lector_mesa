@@ -1,0 +1,2247 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+GIGATMS.UHF
+</name>
+</assembly>
+<members>
+<member name="T:com.gigatms.My.Resources.Resources">
+<summary>
+  用於查詢當地語系化字串等的強類型資源類別。
+</summary>
+</member>
+<member name="P:com.gigatms.My.Resources.Resources.ResourceManager">
+<summary>
+  傳回這個類別使用的快取的 ResourceManager 執行個體。
+</summary>
+</member>
+<member name="P:com.gigatms.My.Resources.Resources.Culture">
+<summary>
+  覆寫目前執行緒的 CurrentUICulture 屬性，對象是所有
+  使用這個強類型資源類別的資源查閱。
+</summary>
+</member>
+<member name="T:com.gigatms.Parameters.BuzzerAction">
+ <summary>
+ Specifies the pattern of sounding buzzer
+ </summary>
+ <seealso cref="!:ControlBuzzer(BuzzerAction)"/>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerAction.Success">
+ <summary>
+ Selects success beep sound
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerAction.Failure">
+ <summary>
+ Selects failure beep sounrd
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerAction.Disable">
+ <summary>
+ Selects to turn off beep sound
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerAction.Auto">
+ <summary>
+ Selects to use default beep sound
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.BuzzerOperationMode">
+ <summary>
+ Specifies the repeats mode of sounding the buzzer.
+ </summary>
+ <seealso cref="!:GetBuzzerOperationMode()"/>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerOperationMode.OFF">
+ <summary>
+ Selects to turn off beep sound
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerOperationMode.ONCE">
+ <summary>
+ Selects to sound the beep once
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.BuzzerOperationMode.REPEAT">
+ <summary>
+ Selects to repeatly sound the beep
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.MemoryBank">
+ <summary>
+ Specifies the memory bank of tag.
+ </summary>
+ <seealso cref="!:ReadTag(String, MemoryBank, Integer, ByRef Byte())"/>
+ <seealso cref="!:WriteTag(String, MemoryBank, Integer, ByRef Byte())"/>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.RESERVED">
+ <summary>
+ Reserved Memory Bank
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.EPC">
+ <summary>
+ EPC Memory Bank
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.TID">
+ <summary>
+ TID Memory Bank
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.USER">
+ <summary>
+ User Memory Bank
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.KILL_PASSWORD">
+ <summary>
+ Kill Password field of Reserved Memory Bank
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBank.ACCESS_PASSWORD">
+ <summary>
+ Access Password field of Reserved Memory Bank
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.TagDataEncodeType">
+ <summary>
+ Specifies the type of decoding tag data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TagDataEncodeType.UDC">
+ <summary>
+ The tag data format is undefined.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TagDataEncodeType.EAN_UPC_EAS">
+ <summary>
+ Use EAN/UPC/EAS format to decode tag data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TagDataEncodeType.EAN_UPC">
+ <summary>
+ Use EAN/UPC format to decode tag data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TagDataEncodeType.RAW_DATA">
+ <summary>
+ Use KeyboardOutputFormatOption setting to decode and output data.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.TagPresentedType">
+ <summary>
+ SpecifSpecifies the tag data format received at OnTagPresented Event.
+ </summary>
+ <seealso cref="!:StartInventory(TagPresentedType)"/>
+</member>
+<member name="F:com.gigatms.Parameters.TagPresentedType.PC_EPC">
+ <summary>
+ The ouput data is PC + EPC field fields data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TagPresentedType.PC_EPC_TID">
+ <summary>
+ The ouput data is PC + EPC fields + TID bank data.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.RfSensitivityLevel">
+ <summary>
+ Specifies the RF input sensitivity level.
+ </summary>
+ <seealso cref="!:GetRfSensitivity()"/>
+ <seealso cref="!:SetRfSensitivity(Boolean, RfSensitivityLevel)"/>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_14_HIGHEST">
+ <summary>
+ The highest sensitivity level 14.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_13">
+ <summary>
+ The sensitivity level 13.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_12">
+ <summary>
+ The sensitivity level 12.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_11">
+ <summary>
+ The sensitivity level 11.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_10">
+ <summary>
+ The sensitivity level 10.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_9">
+ <summary>
+ The sensitivity level 9.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_8">
+ <summary>
+ The sensitivity level 8.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_7">
+ <summary>
+ The sensitivity level 7.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_6">
+ <summary>
+ The sensitivity level 6.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_5">
+ <summary>
+ The sensitivity level 5.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_4">
+ <summary>
+ The sensitivity level 4.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_3">
+ <summary>
+ The sensitivity level 3.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_2">
+ <summary>
+ The sensitivity level 2.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.RfSensitivityLevel.LEVEL_1_LOWEST">
+ <summary>
+ The lowest sensitivity level 1.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.Session">
+ <summary>
+ Sesson is a flag that indicates whether a tag may respond to an reader. Tags maintain a separate inventoried
+flag for each of four sessions.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Session.S0">
+ <summary>
+ Session 0 is selected for an inventory round.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Session.S1">
+ <summary>
+ Session 1 is selected for an inventory round.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Session.S2">
+ <summary>
+ Session 2 is selected for an inventory round.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Session.S3">
+ <summary>
+ Session 3 is selected for an inventory round.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Session.SL">
+ <summary>
+ A selected flag, SL, which a reader may assert or deassert using a Select command.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.Target">
+ <summary>
+ Target indicates whether the Select modifies a Tag’s SL flag or its inventoried flag, and in the case of
+ inventoried it further specifies one Of four sessions.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.A">
+ <summary>
+ Tagget A selected for S0 to S3.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.B">
+ <summary>
+ Target B selected for S0 to S3.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.A_B">
+ <summary>
+ Toggle target A, B for S0 to S3.. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.deSL">
+ <summary>
+ Target A selected for SL session.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.SL">
+ <summary>
+  Target B selected for SL session.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.Target.SL_deSL">
+ <summary>
+  Toggle target A, B for SL session. 
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.TriggerType">
+ <summary>
+ Specifies the way of triggering to turn on the RF power to read tag data.
+ </summary>
+ <seealso cref="!:GetTriggerType()"/>
+ <seealso cref="!:SetTriggerType(TriggerType)"/>/>
+ <seealso cref="!:StartInventory(TagPresentedType)"/>
+</member>
+<member name="F:com.gigatms.Parameters.TriggerType.Command">
+ <summary>
+ The RF power is  turning on when calliing <see cref="!:StartInventory(TagPresentedType)"/> method.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TriggerType.DigitalInput">
+ <summary>
+ The RF power is turning on when user presses the button.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.TriggerType.Sensor">
+ <summary>
+ The RF power is turning on when the sensor detects a tag.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.OutputInterface">
+ <summary>
+ Specifies the data ouput interface.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.OutputInterface.HIDnVCOM">
+ <summary>
+ The data is output via HID virtual comport interface.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.OutputInterface.BLE">
+ <summary>
+ The data is output via BLE interface.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.OutputInterface.TCP_Client">
+ <summary>
+ The data is output via TCP client interface.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.OutputInterface.TCP_Server">
+ <summary>
+ The data is output via TCP server interface.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.OutputInterface.Default">
+ <summary>
+ The data is output by auto.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.KeyboardSimulation">
+ <summary>
+ Specifies the interface of keyboard output.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.KeyboardSimulation.Disable">
+ <summary>
+ Disable keyboard output.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.KeyboardSimulation.HID">
+ <summary>
+ HID keyboard output.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.KeyboardSimulation.BLE">
+ <summary>
+ BLE keyboard output.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.EventType">
+ <summary>
+ Specifies the event command type.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.EventType.TagPresented">
+ <summary>
+ The event indicates the tag is presented.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.EventType.TagPresentedWithRemoved">
+ <summary>
+ The event indicates the tag is presented then removed.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.EventType.TagPresentedEx">
+ <summary>
+ The event indicates the tag is presented with extension message.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.IOState">
+ <summary>
+ Specifies the state of I/O pin.
+ </summary>
+ <seealso cref="!:GetIOState()"/>
+ <seealso cref="!:SetIOState(IONumber, IOState)"/>
+ <seealso cref="!:OutputPin0State"/>
+ <seealso cref="!:OutputPin1State"/>
+ <seealso cref="!:OutputPin2State"/>
+</member>
+<member name="F:com.gigatms.Parameters.IOState.Low">
+ <summary>
+ The I/O pin is in low state.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.IOState.High">
+ <summary>
+ The I/O pin is in high state.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.IONumber">
+ <summary>
+ Specifies the number of IO pin for selecting to access.
+ </summary>
+ <seealso cref="T:com.gigatms.Parameters.IOState"/>
+ <seealso cref="!:GetIOState()"/>
+</member>
+<member name="F:com.gigatms.Parameters.IONumber.Output_Pin_0">
+ <summary>
+ Selects output I/O pin 0
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.IONumber.Output_Pin_1">
+ <summary>
+ Selects output I/O pin 1
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.IONumber.Output_Pin_2">
+ <summary>
+ Selects output I/O pin 2
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.IONumber.Input_Pin_0">
+ <summary>
+ Selects input I/O pin 0
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.ErrorCode">
+ <summary>
+ Specifies the result of invoking method.
+ </summary>
+ <seealso cref="T:com.gigatms.Parameters.ErrorCode"/>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_NONE">
+ <summary>
+ Request command completed successfully
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_UNKNOWN">
+ <summary>
+ Unknown error
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_NOMEM">
+ <summary>
+ No available memory to process request command
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_BUSY">
+ <summary>
+  Command was rejected by the device, this could be caused by the device is busy in processing the previous command.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_IO">
+ <summary>
+ The inputs/outpus of device occurs an unexcepted error that cannot be handled by device.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_TIMEOUT">
+ <summary>
+ Cannot get reply command for a specified period of seconds.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_REQUEST">
+ <summary>
+ The request command is not supported by device.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_NOMSG">
+ <summary>
+ Cannot get message data from device.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_PARAM">
+ <summary>
+ The reply data is invalid or cannot parse correctly.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_PROTO">
+ <summary>
+ The command format is invalid.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_PROTO_CRC">
+ <summary>
+ The CRC caculation error is detected. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_NORESP">
+ <summary>
+ RF Chip doesn't respond to MCU (Timeout).
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_HEADER">
+ <summary>
+ Header Bit=1.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_PREAMBLE">
+ <summary>
+  Signals to MCU that there was an error during preamble detection or FIFO overflow happened during reception or transmission.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_RXCOUNT">
+ <summary>
+ Signals the MCU that the reception was shorter than expected or an error caused by a disabled command or protocol violation was observed during reception.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_CRC">
+ <summary>
+ Tag reply CRC error.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_FIFO">
+ <summary>
+ A fifo underflow IRQ is not produced.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_REFLECTED_POWER">
+ <summary>
+ Chip reflected power error.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_BUS_PINS">
+ <summary>
+ Data bus interface pins not working.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_ENABLE_PIN">
+ <summary>
+ The enable pin is not working.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_CRYSTAL">
+ <summary>
+ Crystal is not stable.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_LOCK_PLL">
+ <summary>
+ PLL is not locked.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_CHIP_RF_POWER_OFF">
+ <summary>
+ RF Power is Off.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_SELECT">
+ <summary>
+ Error when selecting tag.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_ACCESS">
+ <summary>
+ Error on sending access password.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_REQRN">
+ <summary>
+ Error on sending ReqRN.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_CHANNEL_TIMEOUT">
+ <summary>
+ Error on RF channel timed out.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_PC_LENGTH_ERROR">
+ <summary>
+ Error on EPC Length.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_WRITE_CHECK_ERROR">
+ <summary>
+ Error on writing tag data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_HANDLE_ERROR">
+ <summary>
+ Error on getting tag handle.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_ACK_NO_EPC">
+ <summary>
+ After ACK command the tag no reply EPC.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_NOT_COVERED">
+ <summary>
+ Catch-all for errors not covered by other codes.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_NO_SUPPORTED">
+ <summary>
+ The Tag does not support the specified parameters or feature.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_PRIVILEGES">
+ <summary>
+ The Interrogator did not authenticate itself with sufficient privileg-es for the Tag to perform the operation.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_MEMORY_OVERRUN">
+ <summary>
+ The Tag memory location does not exist, is too small, or the Tag does not support the specified EPC length.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_MEMORY_LOCK">
+ <summary>
+ The Tag memory location is locked or permalocked and is either not writeable or not readable.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_CRYPTO">
+ <summary>
+ Catch-all for errors specified by the cryptographic suite.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_NOT_ENCAPSULATED">
+ <summary>
+ Command not encapsulated The Interrogator did not encapsulate the command in an AuthComm or SecureComm as required.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_BUFFER_OVERFLOW">
+ <summary>
+ The operation failed because the ResponseBuffer overflowed.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_SECUREITY_TIMEOUT">
+ <summary>
+ The command failed because the Tag is in a security timeout.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_ERROR_NO_POWER">
+ <summary>
+ The Tag has insufficient power to perform the operation.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_GEN2_ERROR_UNKNOWN">
+ <summary>
+ The Tag does not support error-specific codes.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_TAG_INVALID_PASSWORD">
+ <summary>
+ The password is incorrect – tag is not open. The IDS custom password protection is active.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_TAG_BATTERY">
+ <summary>
+ The battery measurement can not be started. The tag is fully passive and there is no battery attached.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_TAG_INVALID_COMMAND">
+ <summary>
+ Command is not allowed in active state. Custom commands that can modify logging and calibration parameters are not allowed 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ErrorCode.ERR_TAG_EEPROM_BUSY">
+ <summary>
+ The memory can not be accessed as the measurement unit or SPI is accessing the EEPROM. This error is reported when the EEPROM.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.MemoryBankSelection">
+ <summary>
+ Specifies the output tag data source.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBankSelection.PC">
+ <summary>
+ Output PC field of EPC bank.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBankSelection.EPC">
+ <summary>
+ Output EPC ID field of EPC bank.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBankSelection.TID">
+ <summary>
+ Output TID bank data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBankSelection.USER">
+ <summary>
+ Output User bank data.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.MemoryBankSelection.EPC_ASCII">
+ <summary>
+ Output EPC ID field in ASCII encoding format.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.PostDataDelimiter">
+ <summary>
+ Specifies the delimeter append to the end of output data.
+ </summary>
+ <seealso cref="!:SetOutputFormat(Boolean, KeyboardOutputFormatOption)"/>
+<seealso cref="!:KeyboardOutputFormatOption"/>
+</member>
+<member name="F:com.gigatms.Parameters.PostDataDelimiter.CR">
+ <summary>
+ Carriage (0x0D) delimeter
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.PostDataDelimiter.LF">
+ <summary>
+ Line feed (0x0A) delimeter
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.PostDataDelimiter.TAB">
+ <summary>
+ Tab (0x09) delimeter
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.ActiveMode">
+ <summary>
+ Specifies the operation mode of reading a tag.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.READ">
+ <summary>
+ Auto reads tag data by specified decode type. The data will post to caller by event API.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.COMMAND">
+ <summary>
+ Turn off RF power. Needs to issue a command to access the tag data, such as ReadTag, Write Tag.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.TAG_ANALYSIS">
+ <summary>
+ Auto reads and send out the tag specification.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.VERIFY">
+ <summary>
+ Verify external bar code scanner data with encoded tag data. 
+ If it passed, it sends the bar code data in keystrokes.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.ENCODE">
+ <summary>
+ Encode external bar code scanner data in specified format and then write to tags. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.CUSTOMIZED_READ">
+ <summary>
+ Only read the tag which its EPC prefix is same to the one defined in Deactivate and Reactivate mode. 
+ The EPC prefix is select-able to be replaced by the one defined in Deactivate and Reactivate mode. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.DEACTIVATE">
+ <summary>
+ Use Deactivated EPC prefix to replace EPC prefix of tags.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.REACTIVATE">
+ <summary>
+ Use Reactivated EPC prefix to replace EPC prefix of tags.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.DEACTIVATE_USER_BANK">
+ <summary>
+ Use Deactivated User memory prefix to replace EPC prefix of tags.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.ActiveMode.REACTIVATE_USER_BANK">
+ <summary>
+ Use Reactivated User memory prefix to replace EPC prefix of tags.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.LockAction">
+ <summary>
+ Specifies the action of locling memory.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.LockAction.UNLOCK">
+ <summary>
+ Unlock the memory.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.LockAction.LOCK">
+ <summary>
+ Lock the memory.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.LockAction.PERMANENT_UNLOCK">
+ <summary>
+ Permanent unlock the memory.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.LockAction.PERMANENT_LOCK">
+ <summary>
+ Permanent lock the memory.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.State">
+ <summary>
+ Specifies the state.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.State.OFF">
+ <summary>
+ The state is off.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.State.ON">
+ <summary>
+ The state is on.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.ClientSocket">
+ <summary>
+ Presents the information about the socket of incoming connection.
+ </summary>
+</member>
+<member name="P:com.gigatms.Parameters.ClientSocket.Address">
+ <summary>
+ Gets the IP and port information
+ </summary>
+ <returns>The IP and port information.The format is: IP:Port</returns>
+</member>
+<member name="P:com.gigatms.Parameters.ClientSocket.IsConnected">
+ <summary>
+ Gets a value indicating whether the underlying Client socket Is connected to a remote reader.
+ </summary>
+ <returns>
+ true if the Client socket was connected to a remote reader; otherwise, false.
+ </returns>
+</member>
+<member name="P:com.gigatms.Parameters.ClientSocket.Timeout">
+ <summary>
+ Gets a value that specifies the number of mini-seconds before a timeout occurs when an operation doesn't finish.  
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:com.gigatms.Parameters.ClientSocket.IsBusy">
+ <summary>
+ Gets a value that indicates whether the Client socket is under busy state or not.
+ </summary>
+ <returns>true if the Client socket is under busy state; otherwise, false.</returns>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData">
+ <summary>
+ Presents the tag data information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DeviceAddress">
+ <summary>
+ Gets a value that indicates which device address (number) reads the tag data. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DeviceSerialNumber">
+ <summary>
+ Gets a value that indicates the device serial number information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.TID">
+ <summary>
+ Gets a value that indicates the TID data information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.TagSerialNumber">
+ <summary>
+ Gets a value that indicates the tag serial number information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.InputDecodedType">
+ <summary>
+ Gets a value that indicates the type of decoding tag data. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.Data">
+ <summary>
+ Gets a list of reading tag data information.
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData.DecodedType">
+ <summary>
+ Specifies the type of decoding tag data. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DecodedType.TagData">
+ <summary>
+ Use KeyboardOutputFormatOption setting to decode and output data. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DecodedType.UDC">
+ <summary>
+ Use UDC format to decode tag data. 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DecodedType.EAN_UPC">
+ <summary>
+ Use EAN/UPC format to decode tag data. 
+ </summary>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData.DataInfo">
+ <summary>
+ Presents the tag data information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DataInfo.Length">
+ <summary>
+ Ges a value that indicates the tag data size in byte.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DataInfo.OutputDataType">
+ <summary>
+ Gets a value that indicates the output data format.
+ </summary>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.DataInfo.ToString">
+ <summary>
+ Converts the value Of this instance To its equivalent string representation.
+ </summary>
+ <returns>
+ The string representation of the value of this instance as specified by provider.
+ The string format is determined by the DecodeType value.
+ If the DecodeType is Tag and UDC, the string format is HEX string. If is EAN_UPC, then the string format is ASCII string.
+ </returns>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.DataInfo.ToBytes">
+ <summary>
+ Converts the value Of this instance To its equivalent byte array representation.
+ </summary>
+ <returns>
+ The byte array representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData.TIDInfo">
+ <summary>
+ Presents the TID information that reads from the TID band of tag memory.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.TIDInfo.Length">
+ <summary>
+ Ges a value that indicates the TID size in byte.
+ </summary>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.TIDInfo.ToBytes">
+ <summary>
+ Converts the value Of this instance To its equivalent byte array representation.
+ </summary>
+ <returns>
+ The byte array representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.TIDInfo.ToHexString">
+ <summary>
+ Converts the value Of this instance To its equivalent HEX string representation.
+ </summary>
+ <returns>
+ The HEX string representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData.TagSerialNumberInfo">
+ <summary>
+ Presents the tag serial number information. 
+ The tag serial number may be idential to the barcode attached to the tag 
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.TagSerialNumberInfo.Length">
+ <summary>
+ Ges a value that indicates the tag serial number in bit.
+ </summary>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.TagSerialNumberInfo.ToBytes">
+ <summary>
+ Converts the value Of this instance To its equivalent byte array representation.
+ </summary>
+ <returns>
+ The byte array representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.TagSerialNumberInfo.ToHexString">
+ <summary>
+ Converts the value Of this instance To its equivalent HEX string representation.
+ </summary>
+ <returns>
+ The HEX string representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.TagSerialNumberInfo.ToDecimal">
+ <summary>
+ Converts the value Of this instance To its equivalent decimal number representation.
+ </summary>
+ <returns>
+ The decimal number representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="T:com.gigatms.Parameters.DecodedTagData.DeviceSerialNumberInfo">
+ <summary>
+ Presents the device serial number information.
+ </summary>
+</member>
+<member name="F:com.gigatms.Parameters.DecodedTagData.DeviceSerialNumberInfo.Length">
+ <summary>
+ Ges a value that indicates the data size in byte for the device serial number.
+ </summary>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.DeviceSerialNumberInfo.ToBytes">
+ <summary>
+ Converts the value Of this instance To its equivalent byte array representation.
+ </summary>
+ <returns>
+ The byte array representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="M:com.gigatms.Parameters.DecodedTagData.DeviceSerialNumberInfo.ToHexString">
+ <summary>
+ Converts the value Of this instance To its equivalent HEX string representation.
+ </summary>
+ <returns>
+ The HEX string representation of the value of this instance as specified by provider
+ </returns>
+</member>
+<member name="T:com.gigatms.Parameters.TagInformationFormat">
+ <summary>
+ Presents the tag information.
+ </summary>
+</member>
+<member name="P:com.gigatms.Parameters.TagInformationFormat.EpcHex">
+ <summary>
+ Presents the EPC ID In HEX String.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:com.gigatms.Parameters.TagInformationFormat.TidHex">
+ <summary>
+ Presents the TID In HEX String.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:com.gigatms.Parameters.TagInformationFormat.PcEpcHex">
+ <summary>
+ Presents the PC, EPC ID In HEX String.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:com.gigatms.Parameters.TagInformationFormat.Rssi">
+ <summary>
+ Presents the Received Signal Strength Indicator of reading tag.
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:com.gigatms.Host">
+ <summary>
+ Provides APIs to access the host (computer, mobile phone) information. 
+ </summary>
+</member>
+<member name="E:com.gigatms.Host.OnPortStateChanged">
+ <summary>
+ Indicates that the port connection status is changed.
+ </summary>
+</member>
+<member name="T:com.gigatms.Host.PortState">
+ <summary>
+ Specifies the state of device connection
+ </summary>
+</member>
+<member name="M:com.gigatms.Host.GetPortCount">
+ <summary>
+ Gets the total number of ports in current computer.
+ </summary>
+ <returns>The total number of ports in current computer..</returns>
+</member>
+<member name="M:com.gigatms.Host.GetPortName(System.Int32)">
+ <summary>
+ Gets the port name by indicating port index.
+ </summary>
+ <param name="index">The index number of port . The value starts from 0.</param>
+ <returns>The port name with secified port index.</returns>
+</member>
+<member name="P:com.gigatms.Host.NetDeviceSearcherEnabled">
+ <summary>
+ Enables/disables to search Wi-Fi device.
+ </summary>
+ <returns>
+ Return true for searching device enabled.
+ Return false for searching device disabled.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100A.SetInventoryActiveMode(System.Boolean,com.gigatms.Parameters.ActiveMode)">
+ <summary>
+ Sets the operation mode of reading a tag.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="activeMode">
+ The operation mode of reading a tag. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="T:com.gigatms.TS800">
+ <summary>
+ Provides APIs to control TS800 reader and access the settings. 
+ </summary>
+</member>
+<member name="M:com.gigatms.TS800.#ctor(System.Int32,System.Int32)">
+ <summary>
+ Initializes a new instance of TS800 class.
+ </summary>
+ <param name="timeout">The number of seconds before a timeout occurs when an operation doesn't finish.</param>
+ <param name="retryTimes">The retry count of operation if host meets the timeout occurs.</param>
+ <remarks>Use this constructor to create a new instance of the UHF class when you want to specify the timeout and retries.
+</remarks>
+</member>
+<member name="M:com.gigatms.TS800.GetTagPresentedRepeatInterval(System.Boolean)">
+ <summary>
+ Gets the time period that the reader continues to detect to determine a tag is presented.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetWiFiApList">
+ <summary>
+ Gets a list of access point names.
+ </summary>
+ <returns>A list of string type that contains access point information.</returns>
+</member>
+<member name="E:com.gigatms.TS800.OnIOStateChanged">
+ <summary>
+ Indicates that the I/O pin status is changed.
+ </summary>
+</member>
+<member name="P:com.gigatms.TS800.OutputPin0State">
+ <summary>
+ Gets a value indicating the output I/O pin 0 state which is high or low.
+ </summary>
+ <returns>low if the output I/O pin 0 is in low state; otherwise, high. The default is low. </returns>
+ <remarks>It needs to invoke the GetIOState() method to update this property value.</remarks>
+ <seealso cref="M:com.gigatms.TS800.GetIOState"/>
+ <seealso cref="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)"/>
+</member>
+<member name="P:com.gigatms.TS800.OutputPin1State">
+ <summary>
+ Gets a value indicating the output I/O pin 1 state which is high or low.
+ </summary>
+ <returns>low if the output I/O pin 1 is in low state; otherwise, high. The default is low. </returns>
+ <remarks>It needs to invoke the GetIOState() method to update this property value.</remarks>
+ <seealso cref="M:com.gigatms.TS800.GetIOState"/>
+ <seealso cref="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)"/>
+</member>
+<member name="P:com.gigatms.TS800.OutputPin2State">
+ <summary>
+ Gets a value indicating the output I/O pin 2 state which is high or low.
+ </summary>
+ <returns>low if the output I/O pin 2 is in low state; otherwise, high. The default is low. </returns>
+ <remarks>It needs to invoke the GetIOState() method to update this property value.</remarks>
+ <seealso cref="M:com.gigatms.TS800.GetIOState"/>
+ <seealso cref="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)"/>
+</member>
+<member name="P:com.gigatms.TS800.InputPin0State">
+ <summary>
+ Gets a value indicating the input I/O pin 0 state which is high or low.
+ </summary>
+ <returns></returns>
+ <remarks>It needs to invoke the GetIOState() method to update this property value.</remarks>
+ <seealso cref="M:com.gigatms.TS800.GetIOState"/>
+</member>
+<member name="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)">
+ <summary>
+ Sets the I/O pin specified HIGH or LOW.
+ </summary>
+ <param name="ioNumber">Specifies the number of I/O pin for selecting to access.</param>
+ <param name="ioState">Specifies the state of I/O pin.</param>
+   <seealso cref="M:com.gigatms.TS800.GetIOState"/>
+  <seealso cref="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin0State"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin1State"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin2State"/>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetIOState">
+ <summary>
+ Get the state of all I/O pin.
+ </summary>
+ <returns>    
+ Return true if the operation is OK.
+ Return false If the operation Is failed.
+ </returns>
+ <remarks>
+ The read state values are all stored in the IO0State, IO1State, IO2State properties.
+ </remarks>
+ <seealso cref="M:com.gigatms.TS800.SetIOState(com.gigatms.Parameters.IONumber,com.gigatms.Parameters.IOState)"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin0State"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin1State"/>
+ <seealso cref="P:com.gigatms.TS800.OutputPin2State"/>
+</member>
+<member name="M:com.gigatms.TS800.ControlBuzzer(com.gigatms.Parameters.BuzzerAction)">
+ <summary>
+ Make reader buzzer to sound a specified beep pattern.
+ </summary>
+ <param name="buzzerAction">Specifies the pattern of sounding buzzer</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is  failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.SetBuzzerOperationMode(System.Boolean,com.gigatms.Parameters.BuzzerOperationMode)">
+ <summary>
+ Sets the way of controlling the reader buzzer.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="buzzerOperationMode">The way of controlling the reader buzzer.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetBuzzerOperationMode(System.Boolean)">
+ <summary>
+ Gets the way of controlling the buzzer.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.SetTriggerType(System.Boolean,System.Collections.Generic.HashSet{com.gigatms.Parameters.TriggerType})">
+ <summary>
+ Sets the trigger type for turning on RF power.
+ </summary>
+ <param name="triggerType">Specifies trigger type for turning on RF power.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetTriggerType(System.Boolean)">
+ <summary>
+ Gets the trigger type for turning on RF power.
+ </summary>
+ <returns>Option values for specifies the way of triggering the RF to read tag data..
+ If failed, the Return value Is null (Nothing).</returns>
+</member>
+<member name="M:com.gigatms.TS800.SetOutputInterface(System.Boolean,com.gigatms.Parameters.OutputInterface)">
+ <summary>
+ Sets the data output interface.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="outputInterface">
+ The list of data output interface.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetOutputInterface(System.Boolean)">
+ <summary>
+ Gets the data output interface.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.SetCommandTriggerState(com.gigatms.Parameters.State)">
+ <summary>
+ Sets the state of command trigger.
+ </summary>
+ <param name="state">The state of command trigger.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetCommandTriggerState">
+ <summary>
+ Gets the state of command trigger.
+ </summary>
+ <returns>The state of command trigger.</returns>
+</member>
+<member name="M:com.gigatms.TS800.SetScanMode(System.Boolean,com.gigatms.TS800.ScanMode)">
+ <summary>
+ Sets the way of trigger to turn of the RF power.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="mode">The way of trigger to turn of the RF power</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetScanMode(System.Boolean)">
+ <summary>
+ Gets the way of trigger to turn of the RF power.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>The way of trigger to turn of the RF power.</returns>
+</member>
+<member name="M:com.gigatms.TS800.SetInventoryActiveMode(System.Boolean,com.gigatms.Parameters.ActiveMode)">
+ <summary>
+ Sets the operation mode of reading a tag.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="activeMode">
+ The operation mode of reading a tag. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetInventoryActiveMode(System.Boolean)">
+ <summary>
+ Gets the operation mode of reading a tag.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>    ''' 
+ <returns>The operation mode of reading a tag.</returns>
+</member>
+<member name="M:com.gigatms.TS800.GetBleRomVersion">
+ <summary>
+ Gets the firmware version running on the BLE module.
+ </summary>
+ <returns>
+ The firmware version running on the BLE module.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.GetBleDeviceName">
+ <summary>
+ Gets the BLE name for device. 
+ </summary>
+ <returns>
+ The BLE name for device. 
+ </returns>
+</member>
+<member name="M:com.gigatms.TS800.SetBleDeviceName(System.String)">
+ <summary>
+ Sets the BLE name for device. 
+ </summary>
+ <param name="name">
+ The BLE name for device. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="T:com.gigatms.TCPDataReceiver">
+ <summary>
+ Provides APIs to received incoming presented tag data.
+ </summary>
+</member>
+<member name="E:com.gigatms.TCPDataReceiver.OnTagDataReceived">
+ <summary>
+ Indicates that the reader reads a new tag. 
+ </summary>
+ <param name="sender">The caller object that raises the event.</param>
+ <param name="tagData">The tag data information</param>
+</member>
+<member name="E:com.gigatms.TCPDataReceiver.OnTagRemoved">
+ <summary>
+ Indicates a tag is removed. 
+ </summary>
+ <param name="sender"></param>
+ <param name="tagData"></param>
+</member>
+<member name="M:com.gigatms.TCPDataReceiver.Start(System.Int32)">
+ <summary>
+ Starts listening for incoming connection.
+ </summary>
+ <param name="port">
+ The local port to be bound for listening.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TCPDataReceiver.Stop">
+ <summary>
+ Closes the listener.
+ </summary>
+</member>
+<member name="P:com.gigatms.TCPDataReceiver.IsStarted">
+ <summary>
+ Gets a value that indicates whether the Socket is bound to a specific local port.
+ </summary>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="P:com.gigatms.TCPDataReceiver.LocalAddressList">
+ <summary>
+ Gets the local IP address and port list that library is currently listening.
+ </summary>
+ <returns>The local IP address and port list that library is currently listening. The address format is IP:Port.</returns>
+</member>
+<member name="M:com.gigatms.TS100.#ctor(System.Int32,System.Int32)">
+ <summary>
+ Initializes a new instance of TS100 class.
+ </summary>
+ <param name="timeout">The number of seconds before a timeout occurs when an operation doesn't finish.</param>
+ <param name="retryTimes">The retry count of operation if host meets the timeout occurs.</param>
+ <remarks>Use this constructor to create a new instance of the UHF class when you want to specify the timeout and retries.
+</remarks>
+</member>
+<member name="M:com.gigatms.TS100.GetTagPresentedRepeatInterval(System.Boolean)">
+ <summary>
+ Gets the time period that the reader continues to detect to determine a tag is presented.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetWiFiApList">
+ <summary>
+ Gets a list of access point names.
+ </summary>
+ <returns>A list of string type that contains access point information.</returns>
+</member>
+<member name="M:com.gigatms.TS100.ControlBuzzer(com.gigatms.Parameters.BuzzerAction)">
+ <summary>
+ Control reader to make a specified sound beep.
+ </summary>
+ <param name="buzzerAction">The pattern of sound beep</param>
+ <returns>   
+ Return true if the operation is OK.
+ Return false If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetBuzzerOperationMode(System.Boolean,com.gigatms.Parameters.BuzzerOperationMode)">
+ <summary>
+ Sets the repeats mode of sounding the beep with the same pattern.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="buzzerOperationMode">Specifies the repeats mode of sounding the beep with the same pattern.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetBuzzerOperationMode(System.Boolean)">
+ <summary>
+ Gets the repeats mode of sounding the beep with the same pattern.
+ </summary>
+ <returns>The repeats mode of sounding the beep with the same pattern.</returns>
+</member>
+<member name="M:com.gigatms.TS100.GetMemoryBankSelection(System.Boolean)">
+ <summary>
+ Gets the selection of memory bank for tag data output.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ The selection of memory bank for tag data output. 
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetMemoryBankSelection(System.Boolean,System.Collections.Generic.HashSet{com.gigatms.Parameters.MemoryBankSelection})">
+ <summary>
+ Sets the selection of memory bank for tag data output.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="memoryBankSelections">
+ The selection of memory bank for tag data output. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetPostDataDelimiter(System.Boolean)">
+ <summary>
+ Gets the post data delimiter for tag data output.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ The post data delimiter for tag data output.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetPostDataDelimiter(System.Boolean,System.Collections.Generic.HashSet{com.gigatms.Parameters.PostDataDelimiter})">
+ <summary>
+ Sets the post data delimiter for tag data output.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="postDataDelimiter">
+ The post data delimiter for tag data output.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetOutputInterface(System.Boolean,com.gigatms.Parameters.KeyboardSimulation,System.Collections.Generic.HashSet{com.gigatms.Parameters.OutputInterface})">
+ <summary>
+ Sets the data output interface.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="keyboardSimulation">
+ Specifies the interface of keyboard output.
+ </param>
+ <param name="outputInterfaces">
+ The list of data output interface.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetOutputInterface(System.Boolean,com.gigatms.Parameters.KeyboardSimulation@,System.Collections.Generic.HashSet{com.gigatms.Parameters.OutputInterface}@)">
+ <summary>
+ Gets the data output interface.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="keyboardSimulation">
+ Specifies the interface of keyboard output.
+ </param>
+ <param name="outputInterfaces">
+ The list of data output interface.
+ </param>
+</member>
+<member name="M:com.gigatms.TS100.SetFilter(System.Boolean,System.Collections.Generic.HashSet{com.gigatms.Parameters.TagDataEncodeType})">
+ <summary>
+ Sets the filter for reading tag data.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="filterTypes">
+ Specifies the decoded type for reading tag data.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetFilter(System.Boolean)">
+ <summary>
+ Get the filter used to decode of reading tag data.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+</param>
+ <returns>Filter value for reading tag data.</returns>
+</member>
+<member name="M:com.gigatms.TS100.SetEventType(System.Boolean,com.gigatms.Parameters.EventType)">
+ <summary>
+ Sets the event command type.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="eventType">
+ The type for the event command.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetEventType(System.Boolean)">
+ <summary>
+ Gets the event command type.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetInventoryActiveMode(System.Boolean,com.gigatms.Parameters.ActiveMode)">
+ <summary>
+ Sets the operation mode of reading a tag.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="activeMode">
+ The operation mode of reading a tag. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetInventoryActiveMode(System.Boolean)">
+ <summary>
+ Gets the operation mode of reading a tag.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>The operation mode of reading a tag.</returns>
+</member>
+<member name="M:com.gigatms.TS100.StartInventoryEx(System.Collections.Generic.HashSet{com.gigatms.Parameters.TagDataEncodeType})">
+ <summary>
+ Starts the process of tag inventory using specified tag data encoded type.
+ </summary>
+ <param name="filterTypes">Specifies the type of decoding tag data.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+ <seealso cref="E:com.gigatms.UHF.OnTagPresentedEx"/>
+</member>
+<member name="M:com.gigatms.TS100.GetBleRomVersion">
+ <summary>
+ Gets the firmware version running on the BLE module.
+ </summary>
+ <returns>
+ The firmware version running on the BLE module.
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.GetBleDeviceName">
+ <summary>
+ Gets the BLE name for device. 
+ </summary>
+ <returns>
+ The BLE name for device. 
+ </returns>
+</member>
+<member name="M:com.gigatms.TS100.SetBleDeviceName(System.String)">
+ <summary>
+ Sets the BLE name for device. 
+ </summary>
+ <param name="name">
+ The BLE name for device. 
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="T:com.gigatms.UHF">
+ <summary>
+ Provides APIs to control UHF reader and access the reader settings.
+ </summary>
+</member>
+<member name="P:com.gigatms.UHF.SdkVersion">
+ <summary>
+ Gets the version of SDK library (GIGATMS.UHF.dll)
+ </summary>
+ <returns>The version of SDK library</returns>
+</member>
+<member name="E:com.gigatms.UHF.OnTagPresented">
+ <summary>
+ Indicates that the reader reads a new tag.
+ </summary>
+</member>
+<member name="E:com.gigatms.UHF.OnTagRemoved">
+ <summary>
+ Indicates that a tag is rremoved.
+ </summary>
+ <param name="sender"></param>
+ <param name="tagInformation"></param>
+</member>
+<member name="E:com.gigatms.UHF.OnTagPresentedEx">
+ <summary>
+ Indicates that the reader reads a new tag.
+ </summary>
+ <param name="sender">The caller object that raises the event.</param>
+ <param name="tagDecodeInformation">The value that presents the tag data information.</param>
+</member>
+<member name="M:com.gigatms.UHF.#ctor(System.Int32,System.Int32)">
+ <summary>
+ Initializes a new instance of UHF class.
+ </summary>
+ <param name="timeout">The number of seconds before a timeout occurs when an operation doesn't finish.</param>
+ <param name="retryTimes">The retry count of operation if host meets the timeout occurs.</param>
+ <remarks>Use this constructor to create a new instance of the UHF class when you want to specify the timeout and retries.
+</remarks>
+</member>
+<member name="P:com.gigatms.UHF.IsConnected">
+ <summary>
+ Gets a value indicating the connected or disconnected status of the device object.
+ </summary>
+ <returns>true if the port is connected; otherwise, false.</returns>
+ <seealso cref="M:com.gigatms.UHF.Connect(System.String,System.String)"/>
+</member>
+<member name="P:com.gigatms.UHF.DeviceAddress">
+ <summary>
+ Gets or sets a value that specifies the an address number for the reader.
+ </summary>
+ <returns>The address number for the reader.</returns>
+</member>
+<member name="P:com.gigatms.UHF.Timeout">
+ <summary>
+ 'Gets or sets a value that specifies the number of seconds before a timeout occurs when an operation doesn't finish.
+ </summary>
+ <returns>The value that specifies the number of seconds before a timeout occurs when an operation doesn't finish.</returns>
+</member>
+<member name="P:com.gigatms.UHF.RetryTimes">
+ <summary>
+ Gets or sets a value that specifies the retry count of operation if host meets the timeout occurs.
+ </summary>
+ <returns>The value that specifies the retry count of operation if host meets the timeout occurs.</returns>
+</member>
+<member name="P:com.gigatms.UHF.IsOpenPortError">
+ <summary>
+ Gets a boolean value that indicates the device is connected OK or not.
+ </summary>
+ <returns>true if the port is connected; otherwise, false.</returns>
+</member>
+<member name="M:com.gigatms.UHF.Connect(System.String,System.String)">
+ <summary>
+ Connects to device using specified port name and settings.
+ </summary>
+ <param name="portName">The communication port where device connects.</param>
+ <param name="baudrate">The baudrate used for data communication.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return false If the operation Is failed.
+ </returns>
+ <seealso cref="M:com.gigatms.UHF.Disconnect"/>
+</member>
+<member name="M:com.gigatms.UHF.Disconnect">
+ <summary>
+ Closes the port connection.
+ </summary>
+ <returns>    
+ Return true if the operation is OK.
+ Return false If the operation Is failed.
+ </returns>
+ <seealso cref="M:com.gigatms.UHF.Connect(System.String,System.String)"/>
+</member>
+<member name="M:com.gigatms.UHF.GetFirmwareVersion">
+ <summary>
+ Gets the firmware program version running on the device.
+ </summary>
+ <returns>The firmware program version running on the device.</returns>
+</member>
+<member name="M:com.gigatms.UHF.StartInventory(com.gigatms.Parameters.TagPresentedType)">
+ <summary>
+ Starts the process of tag inventory using specified trigger source.
+ </summary>
+ <param name="tagPresentedType">Specify the way of triggering the RF power to read tag data.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+ <seealso cref="E:com.gigatms.UHF.OnTagPresented"/>
+</member>
+<member name="M:com.gigatms.UHF.StopInventory">
+ <summary>
+ Stops the process of tag inventory.
+ </summary>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.ReadTag(System.String,com.gigatms.Parameters.MemoryBank,System.Int32,System.Int32)">
+ <summary>
+ Reads tag data from given memory bank.
+ </summary>
+ <param name="hexAccessPassword">
+ Specifies the password to write data.</param>
+ <param name="memoryBank">
+ Specifies which memory bank to read.</param>
+ <param name="startWordAddress">
+ Specifies the start word address of memory bank to read data. 
+ When read EPC bank, notice that EPC starts from address 02, 
+ the first two 2 words are for CRC and PC.
+ </param>
+ <param name="readLength">
+ Specifies the length read from memory bank.
+ </param>
+ <returns>
+ The data to read out.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.ReadTag(System.String,System.String,com.gigatms.Parameters.MemoryBank,System.Int32,System.Int32)">
+ <summary>
+ Reads tag data from given memory bank.
+ </summary>
+ <param name="hexSelectedPcEpc">
+ Specifies the password to write data.
+ </param>
+ <param name="hexAccessPassword">
+ Specifies the access password to get the permission to access tag data.
+ </param>
+ <param name="memoryBank">
+ Specifies which memory bank to read.
+ </param>
+ <param name="startWordAddress">
+ Specifies the start word address of memory bank to read data. 
+ When read EPC bank, notice that EPC starts from address 02, 
+ the first two 2 words are for CRC and PC.
+ </param>
+ <param name="readLength">
+ Specifies the length read from memory bank.
+ </param>
+ <returns>
+ The data to read out.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.WriteTag(System.String,com.gigatms.Parameters.MemoryBank,System.Int32,System.Byte[])">
+ <summary>
+ Writes specified data to given memory bank.
+ </summary>
+ <param name="hexAccessPassword">Specifies the password to write data.</param>
+ <param name="memoryBank">Specifies which memory bank to write.</param>
+ <param name="startWordAddress">Specifies the start word address of memory bank to write data.When write EPC bank, notice that EPC starts from address 02, the first two 2 words are for CRC and PC.</param>
+ <param name="data">Specifies the data to write to memory bank.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.WriteTag(System.String,System.String,com.gigatms.Parameters.MemoryBank,System.Int32,System.Byte[])">
+ <summary>
+ Selects a tag and writes specified data to given memory bank.
+ </summary>
+ <param name="hexSelectedPcEpc">Specifies the tag EPC to be selected.</param>
+ <param name="hexAccessPassword">Specifies the password to write data.</param>
+ <param name="memoryBank">Specifies which memory bank to write.</param>
+ <param name="startWordAddress">Specifies the start word address of memory bank to write data.When write EPC bank, notice that EPC starts from address 02, the first two 2 words are for CRC and PC.</param>
+ <param name="data">Specifies the data to write to memory bank.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.WriteEPC(System.String,System.Byte[])">
+ <summary>
+ Writes specified data to EPC memory bank.
+ </summary>
+ <param name="hexAccessPassword">Specifies the password to write data.</param>
+ <param name="epcData">Specifies the data to write to memory bank.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.WriteEPC(System.String,System.String,System.Byte[])">
+ <summary>
+ Selects a tag and writes specified data to EPC memory bank.
+ </summary>
+ <param name="hexSelectedPcEpc">Specifies the tag EPC to be selected.</param>
+ <param name="hexAccessPassword">Specifies the password to write data.</param>
+ <param name="data">Specifies the data to write to memory bank.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.SetRfPower(System.Boolean,System.Int32)">
+ <summary>
+ Sets the RF Power strength. The value is ranging from 1 to 27.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="rfPower">Specifies the RF Power strength. The value is ranging from 1 to 27. The default value is 11.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetRfPower(System.Boolean)">
+ <summary>
+ Gets the RF Power strength.
+ </summary>
+ <returns>The RF power strength.The value is ranging from 1 to 27. The default value is 11.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetFrequency(System.Boolean,System.Collections.Generic.HashSet{System.Double})">
+ <summary>
+  Sets the channel of hopping frequency in MHz. 
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="frequencyMHzList">Specifies the channel of hopping frequency for reading tag data.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetFrequency(System.Boolean)">
+ <summary>
+ Gets the channel of hopping frequency in MHz.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>Presents the hopping frequencies for reading tag.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetRfSensitivity(System.Boolean,com.gigatms.Parameters.RfSensitivityLevel)">
+ <summary>
+ Sets the RF input sensitivity level.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="sensitivity">Specifies the RF input sensitivity level.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetRfSensitivity(System.Boolean)">
+ <summary>
+ Gets the RF input sensitivity level.
+ </summary>
+ <returns>The RF input sensitivity level.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetSessionAndTarget(System.Boolean,com.gigatms.Parameters.Session,com.gigatms.Parameters.Target)">
+ <summary>
+ Sets the session flag and target used for inventory round.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="session">
+ The session flag to be selected for an inventory round
+ </param>
+ <param name="target">
+ Target indicates whether the Select modifies a Tag’s SL flag 
+ or its inventoried flag
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed. 
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetSessionAndTarget(System.Boolean,com.gigatms.Parameters.Session@,com.gigatms.Parameters.Target@)">
+ <summary>
+ Gets the session flag and target used for inventory round.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="session">
+ The session flag to be selected for an inventory round
+ </param>
+ <param name="target">
+ Target indicates whether the Select modifies a Tag’s SL flag 
+ or its inventoried flag
+ </param>
+</member>
+<member name="M:com.gigatms.UHF.SetQValue(System.Boolean,System.Int32)">
+ <summary>
+ Sets the starting Q value for the number of slots in the round.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="qValue">The starting Q value for the number of slots in the round.  The value ranges from 0 to 15.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetQValue(System.Boolean)">
+ <summary>
+ Gets the starting Q value for the number of slots in the round.
+ </summary>
+ <param name="temporary"></param>
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ <returns>The starting Q value for the number of slots in the round.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetTagPresentedRepeatInterval(System.Boolean,System.Int32)">
+ <summary>
+ Sets to determine a tag is presented after reader detects in a given period time. The value is ranging from 0 to 254.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="hundredMilliSeconds">The time period (unit in 100ms) that the reader continues to detect.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetTagPresentedRepeatInterval(System.Boolean)">
+ <summary>
+ Gets the time period that the reader continues to detect to determine a tag is presented.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.SetTagRemovedThreshold(System.Boolean,System.Int32)">
+ <summary>
+ Sets to determine a tag is removed after reader doesn't detect in a given inventory rounds. The value is ranging from 0 to 254.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="inventoryRound">The number of inventory rounds that the reader continues doesn't detect.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetTagRemovedThreshold(System.Boolean)">
+ <summary>
+ Gets the time period that the reader doesn't detect to determine a tag is presented.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.SetInventoryRoundInterval(System.Boolean,System.Int32)">
+ <summary>
+ Sets the time interval between each inventory round. The value is ranging from 0 to 254.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="tenMilliSeconds">The time interval between each inventory round. The value unit is 10ms.</param>
+ <returns></returns>
+</member>
+<member name="M:com.gigatms.UHF.GetInventoryRoundInterval(System.Boolean)">
+ <summary>
+ Gets the time interval between each inventory round.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <returns>The time interval between each inventory round. The value unit is 10ms.</returns>
+</member>
+<member name="M:com.gigatms.UHF.LockTag(System.String,System.Collections.Generic.Dictionary{com.gigatms.Parameters.MemoryBank,com.gigatms.Parameters.LockAction})">
+ <summary>
+ Lock or unlock specified memory.
+ </summary>
+ <param name="hexAccessPassword">The password to access tag data.</param>
+ <param name="lockInfos">The lock action with a list of specified memory.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.LockTag(System.Collections.Generic.Dictionary{com.gigatms.Parameters.MemoryBank,com.gigatms.Parameters.LockAction})">
+ <summary>
+ Lock or unlock specified memory.
+ </summary>
+ <param name="lockInfos">The lock action with a list of specified memory.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.KillTag(System.String)">
+ <summary>
+ Permanently disable a Tag
+ </summary>
+ <param name="hexKillPassword">The kill password to be verified.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.KillTag(System.String,System.String)">
+ <summary>
+ Permanently disable a Tag
+ </summary>
+ <param name="hexAccessPassword">The password to access tag data.</param>
+ <param name="hexKillPassword">The kill password to be verified.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetRxDecode(System.Boolean)">
+ <summary>
+ Gets the RF data encoding(Baseband FM0 or Miller-modulated subcarrier).
+ </summary>
+ <param name="temporary"></param>
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ <returns>The RF data encoding.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetRxDecode(System.Boolean,com.gigatms.Parameters.RxDecodeType)">
+ <summary>
+ Sets the RF data encoding(Baseband FM0 or Miller-modulated subcarrier).
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="rxDecode">Specifies the RF data encoding.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="M:com.gigatms.UHF.GetLinkFrequency(System.Boolean)">
+ <summary>
+ Gets the tag's backscatter link frequency. 
+ </summary>
+ <param name="temporary"></param>
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ <returns>The tag's backscatter link frequency.</returns>
+</member>
+<member name="M:com.gigatms.UHF.SetLinkFrequency(System.Boolean,com.gigatms.Parameters.LinkFrequencyType)">
+ <summary>
+ Sets the tag's backscatter link frequency. May affect data transmission speed.
+ </summary>
+ <param name="temporary">
+ True value specifies the changes are temporary overwrides for settings. The changes are not saved into the EEPROM and take immediate effect (no rebooting required).
+ False value specifies the changes are permanently overwrides for settings And also saved into the EEPROM. The changes will keep after rebooting the device.
+ </param>
+ <param name="linkFrequency">Specifies the tag's backscatter link frequency.</param>
+ <returns>
+ Return true if the operation is OK.
+ Return False If the operation Is failed.
+ </returns>
+</member>
+<member name="P:com.gigatms.UHF.ErrorCode">
+ <summary>
+ Gets the error code the the result of invoking method.
+ </summary>
+ <returns>The error code the the result of invoking method.</returns>
+ <seealso cref="P:com.gigatms.UHF.ErrorMessage"/>
+</member>
+<member name="P:com.gigatms.UHF.ErrorMessage">
+ <summary>
+ Gets the error reason description. 
+ </summary>
+ <returns>The error reason description. </returns>
+ <seealso cref="P:com.gigatms.UHF.ErrorCode"/>
+</member>
+<member name="E:com.gigatms.UHF.OnErrorOccurred">
+ <summary>
+ Notifies the application that an error has been detected and a suitable response is necessary to process the error condition.
+ </summary>
+ <param name="errorCode"></param>
+ <param name="errorMessage"></param>
+ <seealso cref="P:com.gigatms.UHF.ErrorCode"/>
+ <seealso cref="P:com.gigatms.UHF.ErrorMessage"/>
+</member>
+<member name="P:com.gigatms.UM800L.IsNewSetFrequencySupported">
+ <summary>
+ New Set Frequency: clear frequency list And create frequency list with profile ID, and add frequency without profile ID
+ </summary>
+</member>
+<member name="T:com.gigatms.Gen2.SelectTagAction">
+ <summary>
+ Action elicits the Tag behavior in Table 6.30, in which matching and not-matching Tags assert or deassert SL or set their inventoried flag to A or B. A Tag conforming to the contents of the MemBank, Pointer, Length, and Mask fields is matching. A Tag not conforming to the contents of these fields is not-matching. The criteria for determining whether a Tag is matching or not-matching are specified by the MemBank, Pointer, Length and Mask fields.
+ </summary>
+ <remarks>
+ SL: assert SL
+ NSL: deassert SL
+ A: inventoried → A
+ B: inventoried → B
+ </remarks>
+</member>
+</members>
+</doc>

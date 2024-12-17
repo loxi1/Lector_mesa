@@ -1,0 +1,97 @@
+﻿v2.6 R0  2020/03/23
+	* 新增RxDecode與LinkFrequency的設定UI
+
+v2.5 R0  2020/01/18	
+	* 因應BLE Lib .NetFramework改為 4.5版本
+	* 變更版本號的命名方式
+
+v2.0.4 R2 2020/01/09
+	* 在keyboard輸出功能開啟時，會使inventory頁面發生停頓的問題，進行改善
+
+v2.0.4 R1 2020/01/06
+	* 修正因開啟keyboard輸出時會導致Inventory頁面的Start會被觸發連按導致一直清除讀取清單
+
+v2.0.4 R0 2019/12/19
+	* 變更Target Session的設定UI
+	* 變更MemoryBankSelection的設定UI  (TS100除去User的選項，因為不支援)
+	* 變更InventoryActiveMode的設定UI  (TS100除去VERIFY和ENCODE的選項，因為不支援)
+	* 變更TagPresentedRepeatInterval的設定UI  參數值改為0~254
+	* 變更TagRemovedThreshold的設定UI  參數值改為0~254
+	* 變更InventoryRoundInterval的設定UI  參數值改為0~254
+	* 新增BLE資訊的分頁
+
+v2.0.3 R0 2019/12/06
+	* 變更PostDataDelimiter的設定UI
+	* 變更MemoryBankSelection的設定UI
+
+v2.0.2 R1 2019/11/11
+	* 新增各設定的GET按鈕 (原本只有SET)	
+	* Device Settings新增以下設定區塊
+		Command Trigger State
+		ScanMode
+	* 調整 Set/Get Trigger Type 的UI設計 (因API變更參數類型由各種方式組合出的單一列舉轉為HASHSET)
+	* CONNECT後鎖定PORT的combobox
+
+v2.0.2 R0  2019/10/31
+	* 變更Tag Present Repeat Interval的設定UI
+	* 變更Tag Remove Threshold的設定UI
+	* 新增Inventory Round Interval的設定UI
+	* 新增Inventory Active Mode 的設定UI
+	* 新增Lock/Kill Tag的頁面
+
+v2.0.1 R2  2019/09/16
+	* Write EPC 增加 TargetPCEPC輸入欄位
+
+v2.0.1 R1  2019/09/02
+	* 變更InventoryEx的UI呈現方式
+
+v2.0.1 R0  2019/08/20	
+	* 因應SDK更動，新增與修改UI
+
+V2.0.0 R0  2019/06/17
+	* 將TS100 與 TS800 的Sample介面分別實作，Compile時需要注意
+
+V1.0.0 R11 2019/04/29
+	* 新增Q value, session, target的設定UI
+	* 修正一些UI初始化的bug
+
+V1.0.0 R10 2019/03/27
+	* 因StartInventory的帶入參數變更，變更UI的設計，移除Inventory頁面的TRIGGER SOURCE選擇
+	* 新增TRIGGER TYPE的設定項目
+
+V1.0.0 R9 2019/02/23
+	* 因應SDK修正  變更部分範例程式碼的撰寫
+
+V1.0.0 R8 2019/01/23
+	* 介面新增顯示目前的Sdk版本號與Firmware版本號
+	* 修正Frequency設置時不會清除掉並未顯示在介面上的頻段
+
+V1.0.0 R7 2019/01/07
+	* Changed Enabled Buzzer (Checkbox) to Operation Mode (Combobox) and added Set Buzzer Operation Mode (Button) in Buzzer Group Box.
+
+V1.0.0 R6 2018/12/05
+	* Added the comboBox "Tag Presented Type" in Inventory tab page and change the display of the correspond data grid view.
+	* Added a new tab page for performance settings.
+	* Added Set Rf Power interface.	
+	* Added frequencies checkbox to get/set the frequencies from/to the device.
+
+V1.0.0 R5 2018/11/13
+	* Added "Decoded", "Output Format", "Buzzer" and "Output Interface" group boxes in control tab page.
+	* Devided the inventory to a new tab page
+	* Added "Tag EPC Write" in Read/Write tab page
+
+V1.0.0 R4 2018/10/8
+	* Adjusted UI
+	* Added Read/Write Data UI
+
+V1.0.0 R3 2018/6/6
+	* Rename app title to UHF Sample.
+	* Update app version.
+	* Change target Platform to x86.
+
+V1.0.0 R2 2018/5/31
+	* Update new GIGATMS.UHF library.
+	* Modified variables' name.
+
+V1.0.0 R1 2018/3/31
+	* Modify member of GPIO description from channel to port.

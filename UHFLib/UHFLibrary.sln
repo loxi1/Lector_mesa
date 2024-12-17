@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UHF_Sample", "UHFSample\UHF_Sample.vbproj", "{0B5E2825-EC8D-4932-9344-CF91882B37A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		TS100(Debug)|Any CPU = TS100(Debug)|Any CPU
+		TS100(Release)|Any CPU = TS100(Release)|Any CPU
+		TS800(Debug)|Any CPU = TS800(Debug)|Any CPU
+		TS800(Release)|Any CPU = TS800(Release)|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS100(Debug)|Any CPU.ActiveCfg = TS100(Debug)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS100(Debug)|Any CPU.Build.0 = TS100(Debug)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS100(Release)|Any CPU.ActiveCfg = TS100(Release)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS100(Release)|Any CPU.Build.0 = TS100(Release)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS800(Debug)|Any CPU.ActiveCfg = TS800(Debug)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS800(Debug)|Any CPU.Build.0 = TS800(Debug)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS800(Release)|Any CPU.ActiveCfg = TS800(Release)|Any CPU
+		{0B5E2825-EC8D-4932-9344-CF91882B37A3}.TS800(Release)|Any CPU.Build.0 = TS800(Release)|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72021D0B-47EB-472B-9F25-EE4E686712CA}
+	EndGlobalSection
+EndGlobal
