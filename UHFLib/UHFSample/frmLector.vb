@@ -13,7 +13,8 @@ Public Class frmLector
     Private _title As String = My.Application.Info.Title
     Private _tagList As List(Of String)
     Private _FrequencyItems As List(Of CheckBox)
-    Private _LastClick As Integer = 1
+    Dim enterPressed As Boolean = False ' Bandera para evitar ejecuciones múltiples
+    Dim m_BDPrenda As New BDPrenda()
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.Text = "TS800 Sample" & " V" &
@@ -138,7 +139,7 @@ Public Class frmLector
             TabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
-            MsgBox("Conexión exitosa al reader.", MsgBoxStyle.Information, "Resultado de conexión")
+            MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         _host.NetDeviceSearcherEnabled = True
         Me.Cursor = cursor
@@ -556,7 +557,8 @@ Public Class frmLector
         cbxInventory.SelectedIndex = 0
 
 
-        tabControl.SelectedTab = tpPerformance
+        tabControl.SelectedTab = tpInventory
+
     End Sub
 
     Private Sub btnSetRfPower_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetRfPower.Click
@@ -961,27 +963,58 @@ Public Class frmLector
         nudInventoryRoundInterval.Value = inventoryRoundInterval
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-        btnStartInventory.PerformClick()
-    End Sub
-
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
         Dim selectedTab As TabPage = tabControl.SelectedTab
         If selectedTab.Name = "tpInventory" Then
             CodBarras.Focus()
         End If
     End Sub
+    Private Sub LeerCodigoRFID()
+        ' Implementa aquí la funcionalidad del lector RFID
+        Debug.Print("Se ejecuta LeerCodigoRFID")
+        btnStartInventory.PerformClick()
+        btnStopInventory.PerformClick()
+        ' Recorrer todas las filas del DataGridView y mostrar valores
+        ' Mostrar los valores de _tagList en la ventana de depuración
+        Dim primerCodigoRFID As String = ""
+        If _tagList.Count > 0 Then
+            primerCodigoRFID = ProcesarCodigoRFID(_tagList(0))
+        End If
+
+        Dim codigoBarras As String = CodBarras.Text
+        Debug.Print($"Codigo de barras {codigoBarras} RFID --> {primerCodigoRFID}")
+        CodBarras.Text = "" ' Limpiar el campo
+        CodBarras.Focus()   ' Mantener el foco en el control
+    End Sub
 
     Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
         If e.KeyCode = Keys.Enter Then
-            dgvTagList.Focus()
-            e.Handled = True
+            Debug.Print("Se ejecuta el enter (KeyDown)")
+            LeerCodigoRFID()         ' Llama a la función directamente
+            e.SuppressKeyPress = True ' Evita el evento KeyPress
+            e.Handled = True          ' Detiene el comportamiento predeterminado
         End If
     End Sub
 
-    Private Sub CodBarras_Leave(sender As Object, e As EventArgs) Handles CodBarras.Leave
-        Debug.Print("SAlio del foco Codigo Barras")
-        btnStartInventory.PerformClick()
-        btnStopInventory.PerformClick()
+    Private Sub CodBarras_KeyUp(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyUp
+        ' No es necesario ejecutar nada en KeyUp
+        If e.KeyCode = Keys.Enter Then
+            e.Handled = True
+        End If
     End Sub
+    Private Function ProcesarCodigoRFID(codigo As String) As String
+        ' Verifica si el código comienza con "3000" y lo elimina
+        If codigo.StartsWith("3000") Then
+            codigo = codigo.Substring(4) ' Elimina los primeros 4 caracteres (3000)
+        End If
+
+        ' Verifica si el código tiene exactamente 24 caracteres
+        If codigo.Length = 24 Then
+            Return codigo ' Devuelve el código corregido
+        Else
+            Debug.Print("El código RFID no es válido: " & codigo)
+            Return String.Empty ' Devuelve cadena vacía si no es válido
+        End If
+    End Function
+
 End Class
