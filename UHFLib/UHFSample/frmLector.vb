@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Linq
 Imports com.gigatms
 Imports com.gigatms.Parameters
 
@@ -13,8 +14,11 @@ Public Class frmLector
     Private _title As String = My.Application.Info.Title
     Private _tagList As List(Of String)
     Private _FrequencyItems As List(Of CheckBox)
+    Private mEmpresa As String = "COFACO"
+    Private mCodTrabajador As String = "36104"
     Dim enterPressed As Boolean = False ' Bandera para evitar ejecuciones múltiples
     Dim m_BDPrenda As New BDPrenda()
+    Dim m_BDPrendaScm As New BDPrendaScm()
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.Text = "TS800 Sample" & " V" &
@@ -136,7 +140,7 @@ Public Class frmLector
         If bResult = True Then
             cbxPort.Enabled = False
             cbxBaudrate.Enabled = False
-            TabControl.Enabled = True
+            tabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
             MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -246,7 +250,7 @@ Public Class frmLector
         cbxBaudrate.Enabled = True
         cbxPort.Enabled = True
         btnWifiSetting.Enabled = False
-        TabControl.Enabled = False
+        tabControl.Enabled = False
         btnConnect.Text = "Conectar"
         lblRomVersion.Text = "ROM Versión: "
     End Sub
@@ -291,6 +295,7 @@ Public Class frmLector
         dgvTagList.Rows.Clear()
         _tagList.Clear()
         CountTags()
+        MsnVincular.Text = ""
     End Sub
 
     Private Sub CountTags()
@@ -969,52 +974,251 @@ Public Class frmLector
             CodBarras.Focus()
         End If
     End Sub
-    Private Sub LeerCodigoRFID()
-        ' Implementa aquí la funcionalidad del lector RFID
-        Debug.Print("Se ejecuta LeerCodigoRFID")
-        btnStartInventory.PerformClick()
-        btnStopInventory.PerformClick()
-        ' Recorrer todas las filas del DataGridView y mostrar valores
-        ' Mostrar los valores de _tagList en la ventana de depuración
-        Dim primerCodigoRFID As String = ""
-        If _tagList.Count > 0 Then
-            primerCodigoRFID = ProcesarCodigoRFID(_tagList(0))
-        End If
+    'Private Sub LeerCodigoRFID()
+    '    Debug.Print("Se ejecuta LeerCodigoRFID")
+    '    btnStartInventory.PerformClick()
+    '    btnStopInventory.PerformClick()
+    '    Dim mCodBarra As String = CodBarras.Text.Trim()
+    '    Dim sCodigoRFID As String = ObtenerPCEPC()
 
-        Dim codigoBarras As String = CodBarras.Text
-        Debug.Print($"Codigo de barras {codigoBarras} RFID --> {primerCodigoRFID}")
-        CodBarras.Text = "" ' Limpiar el campo
-        CodBarras.Focus()   ' Mantener el foco en el control
-    End Sub
+    '    CodBarras.Clear()
+    '    CodBarras.Focus()
+    '    Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
+
+    '    If String.IsNullOrWhiteSpace(sCodigoRFID) Then
+    '        MsnVincular.Text = "Por favor, lea un código RFID válido."
+    '        Exit Sub
+    '    End If
+    '    sCodigoRFID = "E90069150000700A8R40718C"
+    '    If String.IsNullOrWhiteSpace(mCodBarra) Then
+    '        MsnVincular.Text = "Por favor, lea un código de barras."
+    '        Exit Sub
+    '    End If
+
+    '    Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+
+    '    ' Validar si el RFID ya existe en la base de datos
+    '    Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
+    '    Dim dataRta = m_BDPrendaScm.GetData(dictionary)
+    '    Debug.Print($"Sigue 1")
+    '    If dataRta.Rows.Count > 0 Then
+    '        Dim lsDatos = BuildDataString(dataRta.Rows(0))
+    '        MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
+    '        Exit Sub
+    '    End If
+    '    Debug.Print($"Sigue 2")
+
+    '    ' Manejar conexión explícita para Sybase
+    '    Using connectionAse = m_BDPrenda.GetConnection()
+    '        Debug.Print($"Estado de la conexión antes de SetRfid: {connectionAse?.State}")
+
+    '        ' Enviar datos a Sybase
+    '        Dim lsResult = m_BDPrenda.SetRfid(connectionAse, mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
+    '        Debug.Print($"Resultado de SetRfid: {lsResult.Item1}, Mensaje: {lsResult.Item2}")
+    '        Debug.Print($"Datos devueltos por SetRfid: Filas={lsResult.Item3.Rows.Count}")
+
+    '        MsnVincular.Text = lsResult.Item2
+    '        Debug.Print($"Sigue 3")
+    '        If lsResult.Item1 <> 0 Then
+    '            Debug.Print($"Error al registrar RFID en Sybase: {lsResult.Item2}")
+    '            MsnVincular.Text = $"Error al registrar RFID en Sybase: {lsResult.Item2}"
+    '            Exit Sub
+    '        End If
+
+    '        ' Insertar datos en MySQL
+    '        dataRta = lsResult.Item3
+    '        If dataRta.Rows.Count > 0 Then
+    '            Dim row As DataRow = dataRta.Rows(0)
+    '            Dim subCorteValue As Object = If(dataRta.Columns.Contains("sub_corte"), row("sub_corte"), DBNull.Value)
+    '            Dim insertData As New Dictionary(Of String, Object) From {
+    '            {"id_rfid", sCodigoRFID},
+    '            {"id_barras", row("etiqueta")},
+    '            {"op", row("op")},
+    '            {"corte", row("corte")},
+    '            {"subcorte", subCorteValue},
+    '            {"cod_talla", row("cod_talla")},
+    '            {"id_talla", row("id_talla")},
+    '            {"talla", row("talla")},
+    '            {"cod_combinacion", row("cod_comb")},
+    '            {"color", row("color")},
+    '            {"cod_trabajador", row("fotocheck")}
+    '        }
+
+    '            Dim llReturn = m_BDPrendaScm.Insert(insertData)
+    '            Debug.Print($"Sigue 4")
+    '            If llReturn = -1 Then
+    '                MsnVincular.Text = $"Error al registrar en MySQL: {m_BDPrendaScm.GetError()}"
+    '                Exit Sub
+    '            End If
+
+    '            Dim lsDatos = BuildDataString(row)
+    '            Debug.Print($"Sigue 5")
+    '            MsnVincular.Text = $"Se registró correctamente: {lsDatos}"
+    '        Else
+    '            Debug.Print("No se devolvieron datos de Retrieve.")
+    '            MsnVincular.Text = "Error al procesar datos. Verifique con el administrador."
+    '        End If
+    '        Debug.Print($"Estado de la conexión después de SetRfid: {connectionAse?.State}")
+    '    End Using
+    'End Sub
+
+
+    ' Método que devuelve el valor de szPCEPC
+    Private Function ObtenerPCEPC() As String
+        If dgvTagList.Rows.Count > 0 AndAlso Not dgvTagList.Rows(0).IsNewRow Then
+            Return dgvTagList.Rows(0).Cells(0).Value?.ToString()
+        End If
+        Return String.Empty
+    End Function
 
     Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
         If e.KeyCode = Keys.Enter Then
-            Debug.Print("Se ejecuta el enter (KeyDown)")
-            LeerCodigoRFID()         ' Llama a la función directamente
-            e.SuppressKeyPress = True ' Evita el evento KeyPress
-            e.Handled = True          ' Detiene el comportamiento predeterminado
-        End If
-    End Sub
-
-    Private Sub CodBarras_KeyUp(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyUp
-        ' No es necesario ejecutar nada en KeyUp
-        If e.KeyCode = Keys.Enter Then
+            If enterPressed Then Exit Sub ' Prevenir múltiples ejecuciones
+            enterPressed = True
+            Try
+                If CodBarras Is Nothing Then Throw New Exception("CodBarras no está inicializado.")
+                If dgvTagList Is Nothing Then Throw New Exception("dgvTagList no está inicializado.")
+                LeerCodigoRFID()
+            Catch ex As Exception
+                Debug.Print($"Error en CodBarras_KeyDown: {ex.Message}")
+                MsnVincular.Text = "Error: " & ex.Message
+            Finally
+                enterPressed = False
+            End Try
+            e.SuppressKeyPress = True
             e.Handled = True
         End If
     End Sub
-    Private Function ProcesarCodigoRFID(codigo As String) As String
-        ' Verifica si el código comienza con "3000" y lo elimina
-        If codigo.StartsWith("3000") Then
-            codigo = codigo.Substring(4) ' Elimina los primeros 4 caracteres (3000)
-        End If
 
-        ' Verifica si el código tiene exactamente 24 caracteres
-        If codigo.Length = 24 Then
-            Return codigo ' Devuelve el código corregido
-        Else
-            Debug.Print("El código RFID no es válido: " & codigo)
-            Return String.Empty ' Devuelve cadena vacía si no es válido
-        End If
+
+    Private Function BuildDataString(row As DataRow) As String
+        Dim lsDatosList As New List(Of String) From {
+            $"OP: {row("op")}",
+            $"Corte: {row("corte")}",
+            $"SubCorte: {row("sub_corte")}",
+            $"Talla: {row("talla")}",
+            $"Color: {row("color")}"
+        }
+        Return String.Join(" ", lsDatosList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)))
     End Function
 
+    Private Sub LeerCodigoRFID()
+        Debug.Print("Se ejecuta LeerCodigoRFID")
+        btnStartInventory.PerformClick()
+        btnStopInventory.PerformClick()
+        Dim lsDatos As String = ""
+        Dim mCodBarra As String = CodBarras.Text.Trim()
+        Dim sCodigoRFID As String = ObtenerPCEPC()
+
+        CodBarras.Clear()
+        CodBarras.Focus()
+        Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
+
+        If String.IsNullOrWhiteSpace(sCodigoRFID) Then
+            MsnVincular.Text = "Por favor, lea un código RFID válido."
+            Exit Sub
+        End If
+        sCodigoRFID = "R20169990000700A8R407200"
+
+        If String.IsNullOrWhiteSpace(mCodBarra) Then
+            MsnVincular.Text = "Por favor, lea un código de barras."
+            Exit Sub
+        End If
+
+        Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+
+        ' Validar si el RFID ya existe en la base de datos
+        ' Validar si el RFID ya existe en la base de datos
+        Try
+            Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
+            Dim dataRta = m_BDPrendaScm.GetData(dictionary)
+
+            Debug.Print($"Filas devueltas por GetData: {dataRta.Rows.Count}")
+            If dataRta.Rows.Count > 0 Then
+                lsDatos = BuildDataString(dataRta.Rows(0))
+                MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
+                Exit Sub
+            End If
+        Catch ex As Exception
+            Debug.Print($"Error al validar RFID: {ex.Message}")
+            MsnVincular.Text = "Error al validar RFID. Verifique con el administrador."
+            Exit Sub
+        End Try
+        Debug.Print($"Sigue 2")
+
+        Debug.Print("Registro en Sybase...")
+        Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
+        MsnVincular.Text = lsResult.Item2
+        If lsResult.Item1 <> 0 Then
+            Debug.Print($"Error al registrar en Sybase: {lsResult.Item2}")
+            Exit Sub
+        End If
+
+        Debug.Print("Consulta de datos timbrados...")
+        Try
+            Dim dataTimbrado = m_BDPrenda.GetTimbradasByWorkerAndEtiqueta(mCodTrabajador, mCodBarra)
+            If dataTimbrado.Rows.Count = 0 Then
+                Debug.Print("No se encontraron registros.")
+                MsnVincular.Text = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
+                Exit Sub
+            End If
+            Debug.Print($"Filas encontradas: {dataTimbrado.Rows.Count}")
+            Dim row As DataRow = dataTimbrado.Rows(0)
+            Dim insertData As New Dictionary(Of String, Object) From {
+                {"id_rfid", sCodigoRFID},
+                {"id_barras", row("etiqueta")},
+                {"op", row("op")},
+                {"corte", row("corte")},
+                {"subcorte", row("sub_corte")},
+                {"cod_talla", row("cod_talla")},
+                {"id_talla", row("id_talla")},
+                {"talla", row("talla")},
+                {"cod_combinacion", row("cod_comb")},
+                {"color", row("color")},
+                {"cod_trabajador", row("fotocheck")}
+            }
+
+            Dim llReturn = m_BDPrendaScm.Insert(insertData)
+            If llReturn <> 1 Then
+                MsnVincular.Text = Msn(llReturn)
+            Else
+                MsnVincular.Text = "Prenda registrada exitosamente."
+            End If
+        Catch ex As Exception
+            Debug.Print($"Error en el flujo de registro: {ex.Message}")
+            MsnVincular.Text = "Error inesperado al registrar la prenda. Consulte con el administrador."
+        End Try
+    End Sub
+
+    Private Function Msn(llReturn As Long) As String
+        Dim message As String
+
+        Select Case llReturn
+            Case 1
+                ' Inserción exitosa (1 fila insertada)
+                message = "El registro fue insertado correctamente."
+
+            Case 0
+                ' No se insertaron filas (por ejemplo, datos duplicados o restricciones violadas)
+                message = "No se pudo insertar el registro. Es posible que los datos no sean válidos o que ya existan registros con valores duplicados."
+
+            Case -1
+                ' Error general en la ejecución (por ejemplo, un error con la base de datos)
+                message = "Error al ejecutar la consulta. Por favor, revisa los detalles del error en el log."
+
+            Case 2
+                ' Violación de clave primaria (un valor duplicado en una columna de clave primaria)
+                message = "No se pudo insertar el registro debido a una violación de clave primaria (registro duplicado)."
+
+            Case 3
+                ' Error de conexión (no se pudo conectar con la base de datos)
+                message = "Error al conectar con la base de datos. Asegúrate de que el servidor esté disponible."
+
+            Case Else
+                ' Si el valor de llReturn no coincide con ninguno de los casos anteriores
+                message = $"Error desconocido (Código: {llReturn}). Por favor, contacta con el soporte técnico."
+        End Select
+
+        Return message
+    End Function
 End Class

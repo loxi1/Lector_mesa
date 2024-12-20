@@ -99,7 +99,6 @@ Partial Class frmLector
         Me.lblRfPower = New System.Windows.Forms.Label()
         Me.tpInventory = New System.Windows.Forms.TabPage()
         Me.gbxInventoryEx = New System.Windows.Forms.GroupBox()
-        Me.BtnBuscar = New System.Windows.Forms.Button()
         Me.MsnVincular = New System.Windows.Forms.Label()
         Me.CodBarras = New System.Windows.Forms.TextBox()
         Me.Label34 = New System.Windows.Forms.Label()
@@ -938,7 +937,6 @@ Partial Class frmLector
         '
         'gbxInventoryEx
         '
-        Me.gbxInventoryEx.Controls.Add(Me.BtnBuscar)
         Me.gbxInventoryEx.Controls.Add(Me.MsnVincular)
         Me.gbxInventoryEx.Controls.Add(Me.CodBarras)
         Me.gbxInventoryEx.Controls.Add(Me.Label34)
@@ -951,20 +949,11 @@ Partial Class frmLector
         Me.gbxInventoryEx.TabIndex = 7
         Me.gbxInventoryEx.TabStop = False
         '
-        'BtnBuscar
-        '
-        Me.BtnBuscar.Location = New System.Drawing.Point(468, 21)
-        Me.BtnBuscar.Name = "BtnBuscar"
-        Me.BtnBuscar.Size = New System.Drawing.Size(75, 23)
-        Me.BtnBuscar.TabIndex = 27
-        Me.BtnBuscar.Text = "Buscar"
-        Me.BtnBuscar.UseVisualStyleBackColor = True
-        '
         'MsnVincular
         '
         Me.MsnVincular.AutoSize = True
         Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsnVincular.Location = New System.Drawing.Point(140, 52)
+        Me.MsnVincular.Location = New System.Drawing.Point(4, 52)
         Me.MsnVincular.Name = "MsnVincular"
         Me.MsnVincular.Size = New System.Drawing.Size(132, 15)
         Me.MsnVincular.TabIndex = 26
@@ -1267,5 +1256,4 @@ Partial Class frmLector
     Friend WithEvents clnTID As DataGridViewTextBoxColumn
     Friend WithEvents clnCount As DataGridViewTextBoxColumn
     Friend WithEvents MsnVincular As Label
-    Friend WithEvents BtnBuscar As Button
 End Class
