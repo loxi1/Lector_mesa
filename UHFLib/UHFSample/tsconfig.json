@@ -7,5 +7,8 @@
   "Connection Lifetime": "300",
   "SERVER_NAME_SY": "dbsybase10.cofaco.com",
   "PORT_SY": "6100",
-  "DATA_BASE_SY": "nexus"
+  "DATA_BASE_SY": "nexus",
+  "METHOD":"AES-256-CBC",
+  "SECRET_IV":"101712",
+  "SECRET_KEY":"$BP@2017"
 }

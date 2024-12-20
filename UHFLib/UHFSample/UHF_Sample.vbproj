@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="BDPrenda.vb" />
     <Compile Include="BDPrendaScm.vb" />
+    <Compile Include="DBConsultas.vb" />
     <Compile Include="frmLector.Designer.vb">
       <DependentUpon>frmLector.vb</DependentUpon>
     </Compile>
