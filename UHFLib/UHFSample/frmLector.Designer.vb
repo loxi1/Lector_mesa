@@ -22,6 +22,7 @@ Partial Class frmLector
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmLector))
         Me.pnlConnect = New System.Windows.Forms.Panel()
         Me.lblRomVersion = New System.Windows.Forms.Label()
         Me.lblSdkVersion = New System.Windows.Forms.Label()
@@ -1118,11 +1119,12 @@ Partial Class frmLector
         Me.ClientSize = New System.Drawing.Size(609, 673)
         Me.Controls.Add(Me.tabControl)
         Me.Controls.Add(Me.pnlConnect)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
-        Me.MaximizeBox = False
         Me.Name = "frmLector"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "TS800 Sample"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.pnlConnect.ResumeLayout(False)
         Me.pnlConnect.PerformLayout()
         Me.tabControl.ResumeLayout(False)
@@ -1251,9 +1253,9 @@ Partial Class frmLector
     Friend WithEvents btnSetRxDecode As Button
     Friend WithEvents cbxRxDecode As ComboBox
     Friend WithEvents Label49 As Label
-    Friend WithEvents CodBarras As TextBox
     Friend WithEvents clnEPC As DataGridViewTextBoxColumn
     Friend WithEvents clnTID As DataGridViewTextBoxColumn
     Friend WithEvents clnCount As DataGridViewTextBoxColumn
     Friend WithEvents MsnVincular As Label
+    Friend WithEvents CodBarras As TextBox
 End Class

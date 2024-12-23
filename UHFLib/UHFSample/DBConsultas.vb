@@ -1,108 +1,67 @@
-﻿Imports System.Data
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Security.Cryptography
+﻿Imports System.Security.Cryptography
 Imports System.Text
-Imports System.IO
 Imports Newtonsoft.Json
-Imports Sybase.Data.AseClient
+Imports System.IO
+Imports System.Linq
 
 Public Class DBConsultas
-    Private ReadOnly myConexion As New Sybase()
-    Private comando As New AseCommand()
-    Private ss_error As String = ""
-
+    ' Variables de configuración
     Private SECRET_KEY As String
     Private SECRET_IV As String
     Private METHOD As String
 
-    Private _key As Byte()
-    Private _iv As Byte()
-    Private _clave As String = "xhEaYalLB4gWqzdUtgwhkQ=="
-    Public Function GetData(whereParameters As Dictionary(Of String, Object)) As DataTable
-        Dim dataTable As New DataTable()
-        Try
-            Using connection = myConexion.Connect()
-                If connection.State <> ConnectionState.Open Then
-                    Throw New Exception("No se pudo establecer la conexión con la base de datos Sybase.")
-                End If
+    ' Variables para clave y vector de inicialización
+    Private key As Byte()
+    Private iv As Byte()
 
-                Dim query As String = "SELECT identificador, codigo, datos, empresa, estado, clave FROM usuario_timbrado"
-                If whereParameters.Count > 0 Then
-                    query &= " WHERE " & String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
-                End If
+    ' Constructor que carga los valores desde un archivo JSON
+    Public Sub New()
+        Dim jsonFilePath As String = "tsconfig.json"
+        ' Leer y procesar el archivo JSON
+        If File.Exists(jsonFilePath) Then
+            Dim jsonContent As String = File.ReadAllText(jsonFilePath)
+            Dim config = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(jsonContent)
 
-                Using comando = New AseCommand(query, connection)
-                    comando.Parameters.Clear()
-                    For Each param In whereParameters
-                        comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
-                    Next
-
-                    Using reader = comando.ExecuteReader()
-                        dataTable.Load(reader)
-                    End Using
-                End Using
-            End Using
-        Catch ex As Exception
-            ss_error = ex.Message
-            LogError("Error en GetData", ex)
-        End Try
-        Return dataTable
-    End Function
-
-    Public Function ExtraerData(whereParameters As Dictionary(Of String, Object)) As DataTable
-        Dim dataTable As New DataTable()
-        Try
-            Using connection = myConexion.Connect()
-                If connection.State <> ConnectionState.Open Then
-                    Throw New Exception("No se pudo establecer la conexión con la base de datos Sybase.")
-                End If
-
-                Dim query As String = "SELECT identificador, codigo, datos, empresa, estado FROM usuario_timbrado"
-                If whereParameters.Count > 0 Then
-                    query &= " WHERE " & String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
-                End If
-
-                Using comando = New AseCommand(query, connection)
-                    comando.Parameters.Clear()
-                    For Each param In whereParameters
-                        comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
-                    Next
-
-                    Using reader = comando.ExecuteReader()
-                        dataTable.Load(reader)
-                    End Using
-                End Using
-            End Using
-        Catch ex As Exception
-            ss_error = ex.Message
-            LogError("Error en ExtraerData", ex)
-        End Try
-        Return dataTable
-    End Function
-
-    Private Function GetIniSecret(titulo As String) As Integer
-        Try
-            Dim json As String = File.ReadAllText("tsconfig.json")
-            Dim config = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
-
+            ' Extraer los valores de configuración
             SECRET_KEY = config("SECRET_KEY")
             SECRET_IV = config("SECRET_IV")
             METHOD = config("METHOD")
 
-            Return 1
-        Catch ex As Exception
-            ss_error = $"Error al cargar configuración: {ex.Message}"
-            LogError("Error en GetIniSecret", ex)
-            Return 0
-        End Try
+            ' Convertir SECRET_KEY y SECRET_IV a hash de 256 bits y 128 bits respectivamente
+            key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(SECRET_KEY))
+            iv = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(SECRET_IV)).Take(16).ToArray()
+        Else
+            Throw New FileNotFoundException($"El archivo de configuración '{jsonFilePath}' no existe.")
+        End If
+    End Sub
+
+    ' Función para cifrar un texto
+    Public Function Encrypt(stringToEncrypt As String) As String
+        Using aes As Aes = Aes.Create()
+            aes.Key = key
+            aes.IV = iv
+            aes.Mode = CipherMode.CBC
+
+            Using encryptor As ICryptoTransform = aes.CreateEncryptor()
+                Dim plainTextBytes As Byte() = Encoding.UTF8.GetBytes(stringToEncrypt)
+                Dim cipherTextBytes As Byte() = encryptor.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length)
+                Return Convert.ToBase64String(cipherTextBytes)
+            End Using
+        End Using
     End Function
 
-    Private Sub LogError(message As String, Optional ex As Exception = Nothing)
-        Dim logMessage As String = $"{DateTime.Now}: {message}"
-        If ex IsNot Nothing Then
-            logMessage &= Environment.NewLine & ex.ToString()
-        End If
-        File.AppendAllText("db_errors.log", logMessage & Environment.NewLine)
-    End Sub
+    ' Función para descifrar un texto
+    Public Function Decrypt(stringToDecrypt As String) As String
+        Using aes As Aes = Aes.Create()
+            aes.Key = key
+            aes.IV = iv
+            aes.Mode = CipherMode.CBC
+
+            Using decryptor As ICryptoTransform = aes.CreateDecryptor()
+                Dim cipherTextBytes As Byte() = Convert.FromBase64String(stringToDecrypt)
+                Dim plainTextBytes As Byte() = decryptor.TransformFinalBlock(cipherTextBytes, 0, cipherTextBytes.Length)
+                Return Encoding.UTF8.GetString(plainTextBytes)
+            End Using
+        End Using
+    End Function
 End Class

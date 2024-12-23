@@ -15,7 +15,7 @@ Public Class frmLector
     Private _tagList As List(Of String)
     Private _FrequencyItems As List(Of CheckBox)
     Private mEmpresa As String = "COFACO"
-    Private mCodTrabajador As String = "36104"
+    Private mCodTrabajador As String
     Dim enterPressed As Boolean = False ' Bandera para evitar ejecuciones múltiples
     Dim m_BDPrenda As New BDPrenda()
     Dim m_BDPrendaScm As New BDPrendaScm()
@@ -25,6 +25,21 @@ Public Class frmLector
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
                     My.Application.Info.Version.Revision
+
+        Me.Height = Screen.PrimaryScreen.Bounds.Height
+        Me.Width = Screen.PrimaryScreen.Bounds.Width
+        ' Asegurar que el formulario esté en la parte superior de la pantalla
+        Me.Top = 0
+
+        ' (Opcional) Centrar horizontalmente el formulario
+        Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) \ 2
+        ' Configuración del TabControl para ocupar todo el espacio disponible
+        Me.tabControl.Dock = DockStyle.Fill
+
+        ' Configuración del Panel para siempre estar en la parte inferior
+        Me.pnlConnect.Dock = DockStyle.Bottom
+        Me.pnlConnect.Height = 100 ' Ajusta la altura del panel según lo que necesites
+
 
         _host = New Host()
         _ts800 = New TS800(TIME_OUT, RETRY_TIMES)
@@ -74,6 +89,7 @@ Public Class frmLector
             .Add(New ComboBoxItem(TagPresentedType.PC_EPC_TID, "EPC + TID"))
         End With
 
+        CodBarras.Text = ""
         tabControl.Enabled = False
         _FrequencyItems = New List(Of CheckBox)
         _host.NetDeviceSearcherEnabled = True
@@ -257,17 +273,20 @@ Public Class frmLector
 
     Private m_bIsInventoryProcessing As Boolean
     Private Sub btnStartInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStartInventory.Click
+        StartInventory()
+    End Sub
+
+    Private Sub StartInventory()
         Dim result As Boolean
-        Dim tagPresetnedType As TagPresentedType
+        Dim tagPresentedType As TagPresentedType = ComboBoxItem.GetCurrentItemValue(cbxInventory)
         ClearTagListView()
-        tagPresetnedType = ComboBoxItem.GetCurrentItemValue(cbxInventory)
-        Select Case tagPresetnedType
+        Select Case tagPresentedType
             Case TagPresentedType.PC_EPC
                 dgvTagList.Columns.Item(1).Visible = False
             Case TagPresentedType.PC_EPC_TID
                 dgvTagList.Columns.Item(1).Visible = True
         End Select
-        result = _ts800.StartInventory(tagPresetnedType)
+        result = _ts800.StartInventory(tagPresentedType)
         If result Then
             m_bIsInventoryProcessing = True
             btnStartInventory.Enabled = False
@@ -276,8 +295,11 @@ Public Class frmLector
     End Sub
 
     Private Sub btnStopInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStopInventory.Click
-        Dim result As Boolean
-        result = _ts800.StopInventory()
+        StopInventory()
+    End Sub
+
+    Private Sub StopInventory()
+        Dim result As Boolean = _ts800.StopInventory()
         If result Then
             m_bIsInventoryProcessing = False
             btnStartInventory.Enabled = True
@@ -561,9 +583,26 @@ Public Class frmLector
 
         cbxInventory.SelectedIndex = 0
 
+        Dim formResponse As New FormTrabajador()
 
+        If formResponse.ShowDialog() <> DialogResult.OK Then
+            Exit Sub
+        End If
+
+        mCodTrabajador = formResponse.CodTrabajador
+        Dim dato_usuario As String = formResponse.Usuario
+
+        If String.IsNullOrWhiteSpace(mCodTrabajador) OrElse String.IsNullOrWhiteSpace(dato_usuario) Then
+            MessageBox.Show("Por favor, complete todos los campos.", "Error")
+            Exit Sub
+        End If
+
+        ' Concatenar los datos al título de la ventana
+        Me.Text = $"Vincular - Usuario: {dato_usuario} - Trabajador: {mCodTrabajador}"
+
+
+        ' Configurar la pestaña de inventario
         tabControl.SelectedTab = tpInventory
-
     End Sub
 
     Private Sub btnSetRfPower_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetRfPower.Click
@@ -1064,12 +1103,38 @@ Public Class frmLector
 
 
     ' Método que devuelve el valor de szPCEPC
+    ' Método que devuelve el valor de szPCEPC
     Private Function ObtenerPCEPC() As String
         If dgvTagList.Rows.Count > 0 AndAlso Not dgvTagList.Rows(0).IsNewRow Then
-            Return dgvTagList.Rows(0).Cells(0).Value?.ToString()
+            Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()
+
+            If Not String.IsNullOrEmpty(value) AndAlso value.Length > 24 Then
+                ' Retorna los últimos 24 caracteres si el valor tiene más de 24
+                Return value.Substring(value.Length - 24)
+            End If
+
+            Return value ' Retorna el valor completo si tiene 24 o menos caracteres
         End If
         Return String.Empty
     End Function
+
+    Private Function PrimerValorRFID() As String
+        If _tagList IsNot Nothing AndAlso _tagList.Count > 0 AndAlso _tagList(0) IsNot Nothing Then
+            Dim value As String = _tagList(0).ToString()
+
+            If Not String.IsNullOrEmpty(value) AndAlso value.Length > 24 Then
+                ' Retorna los últimos 24 caracteres si el valor tiene más de 24
+                Return value.Substring(value.Length - 24)
+            End If
+
+            ' Retorna el valor completo si tiene 24 o menos caracteres
+            Return value
+        End If
+
+        ' Retorna una cadena vacía si la lista está vacía o el primer elemento es nulo
+        Return String.Empty
+    End Function
+
 
     Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
         If e.KeyCode = Keys.Enter Then
@@ -1090,7 +1155,6 @@ Public Class frmLector
         End If
     End Sub
 
-
     Private Function BuildDataString(row As DataRow) As String
         Dim lsDatosList As New List(Of String) From {
             $"OP: {row("op")}",
@@ -1104,21 +1168,22 @@ Public Class frmLector
 
     Private Sub LeerCodigoRFID()
         Debug.Print("Se ejecuta LeerCodigoRFID")
-        btnStartInventory.PerformClick()
-        btnStopInventory.PerformClick()
+        StartInventory()
+        StopInventory()
         Dim lsDatos As String = ""
         Dim mCodBarra As String = CodBarras.Text.Trim()
         Dim sCodigoRFID As String = ObtenerPCEPC()
+        Dim otroRFID As String = PrimerValorRFID()
 
         CodBarras.Clear()
         CodBarras.Focus()
-        Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
+        Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
 
         If String.IsNullOrWhiteSpace(sCodigoRFID) Then
             MsnVincular.Text = "Por favor, lea un código RFID válido."
             Exit Sub
         End If
-        sCodigoRFID = "R20169990000700A8R407200"
+        sCodigoRFID = "S40069990000700A8R407201"
 
         If String.IsNullOrWhiteSpace(mCodBarra) Then
             MsnVincular.Text = "Por favor, lea un código de barras."
@@ -1221,4 +1286,15 @@ Public Class frmLector
 
         Return message
     End Function
+
+    Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
+        ' Verificar si el texto tiene exactamente 20 caracteres
+        If CodBarras.Text.Length = 20 Then
+            LeerCodigoRFID() ' Llamar a la función de lectura
+        End If
+    End Sub
+
+    Private Sub frmLector_Resize(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Resize
+
+    End Sub
 End Class
