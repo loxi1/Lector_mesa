@@ -13,29 +13,73 @@ Public Class Sybase
     Public s_error As String = ""
 
     ' Método para conectarse a la base de datos
+    '27-12-2024
+    'Public Function Connect() As AseConnection
+    '    If LoadConfig("tsconfig.json") Then
+    '        Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
+    '        Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
+    '        Try
+    '            If myConexion Is Nothing Then
+    '                myConexion = New AseConnection(sCadenaConexion)
+    '            End If
+
+    '            If myConexion.State = ConnectionState.Closed Then
+    '                myConexion.Open()
+    '            End If
+    '            Debug.Print($"Estado de la conexión después de intentar abrir: {myConexion.State}")
+    '        Catch ex As AseException
+    '            s_error = $"Error al conectar: {ex.Message}"
+    '            Debug.Print(s_error)
+    '            Throw New Exception(s_error)
+    '        End Try
+    '    Else
+    '        Debug.Print("No se pudo cargar la configuración.")
+    '        Throw New Exception("Error al cargar la configuración de la base de datos.")
+    '    End If
+
+    '    Return myConexion
+    'End Function
+    '27-12-2024 15:30
+    'Public Function Connect() As AseConnection
+    '    Try
+    '        If myConexion Is Nothing OrElse myConexion.State = ConnectionState.Closed OrElse myConexion.State = ConnectionState.Broken Then
+    '            Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
+    '            Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
+
+    '            myConexion = New AseConnection(sCadenaConexion)
+    '            myConexion.Open()
+    '        End If
+    '    Catch ex As AseException
+    '        s_error = $"Error al conectar: {ex.Message}"
+    '        LogError("Error al conectar", ex)
+    '        Throw
+    '    End Try
+
+    '    Debug.Print($"Estado de la conexión después de intentar abrir: {myConexion.State}")
+    '    Return myConexion
+    'End Function
     Public Function Connect() As AseConnection
-        If LoadConfig("tsconfig.json") Then
-            Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
-            Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
-            Try
-                If myConexion Is Nothing Then
-                    myConexion = New AseConnection(sCadenaConexion)
-                End If
+        Try
+            ' Cargar configuración
+            If Not LoadConfig("tsconfig.json") Then
+                Throw New Exception("Error al cargar la configuración. Verifique el archivo tsconfig.json.")
+            End If
 
-                If myConexion.State = ConnectionState.Closed Then
-                    myConexion.Open()
-                End If
-                Debug.Print($"Estado de la conexión después de intentar abrir: {myConexion.State}")
-            Catch ex As AseException
-                s_error = $"Error al conectar: {ex.Message}"
-                Debug.Print(s_error)
-                Throw New Exception(s_error)
-            End Try
-        Else
-            Debug.Print("No se pudo cargar la configuración.")
-            Throw New Exception("Error al cargar la configuración de la base de datos.")
-        End If
+            ' Crear la conexión si es necesario
+            If myConexion Is Nothing OrElse myConexion.State = ConnectionState.Closed OrElse myConexion.State = ConnectionState.Broken Then
+                Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
+                Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
 
+                myConexion = New AseConnection(sCadenaConexion)
+                myConexion.Open()
+            End If
+        Catch ex As AseException
+            s_error = $"Error al conectar: {ex.Message}"
+            LogError("Error al conectar", ex)
+            Throw
+        End Try
+
+        Debug.Print($"Estado de la conexión después de intentar abrir: {myConexion.State}")
         Return myConexion
     End Function
 
@@ -69,22 +113,55 @@ Public Class Sybase
     End Sub
 
     ' Método para cargar configuración desde un archivo JSON
+    '27-12-2024
+    'Private Function LoadConfig(filePath As String) As Boolean
+    '    Try
+    '        If File.Exists(filePath) Then
+    '            Dim json As String = File.ReadAllText(filePath)
+    '            Dim config As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
+
+    '            m_ServerName = config("SERVER_NAME_SY")
+    '            m_Port = config("PORT_SY")
+    '            m_DataBase = config("DATA_BASE_SY")
+    '            Return True
+    '        Else
+    '            s_error = $"El archivo de configuración '{filePath}' no existe."
+    '            Return False
+    '        End If
+    '    Catch ex As Exception
+    '        s_error = $"Error al cargar configuración: {ex.Message}"
+    '        Return False
+    '    End Try
+    'End Function
     Private Function LoadConfig(filePath As String) As Boolean
         Try
+            Debug.Print($"Cargando configuración desde: {filePath}")
             If File.Exists(filePath) Then
                 Dim json As String = File.ReadAllText(filePath)
                 Dim config As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
 
-                m_ServerName = config("SERVER_NAME_SY")
-                m_Port = config("PORT_SY")
-                m_DataBase = config("DATA_BASE_SY")
+                ' Validar que las claves requeridas existan
+                If config.ContainsKey("SERVER_NAME_SY") Then m_ServerName = config("SERVER_NAME_SY")
+                If config.ContainsKey("PORT_SY") Then m_Port = config("PORT_SY")
+                If config.ContainsKey("DATA_BASE_SY") Then m_DataBase = config("DATA_BASE_SY")
+
+                ' Verificar si faltan valores
+                If String.IsNullOrEmpty(m_ServerName) OrElse String.IsNullOrEmpty(m_Port) OrElse String.IsNullOrEmpty(m_DataBase) Then
+                    s_error = "Faltan parámetros en el archivo de configuración."
+                    Debug.Print(s_error)
+                    Return False
+                End If
+
+                Debug.Print($"Configuración cargada: Server={m_ServerName}, Port={m_Port}, Database={m_DataBase}")
                 Return True
             Else
-                s_error = $"El archivo de configuración '{filePath}' no existe."
+                s_error = $"El archivo de configuración no existe: {filePath}"
+                Debug.Print(s_error)
                 Return False
             End If
         Catch ex As Exception
             s_error = $"Error al cargar configuración: {ex.Message}"
+            Debug.Print(s_error)
             Return False
         End Try
     End Function

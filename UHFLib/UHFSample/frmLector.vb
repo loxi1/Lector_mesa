@@ -25,20 +25,28 @@ Public Class frmLector
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
                     My.Application.Info.Version.Revision
+        ' Configurar el TabControl para dibujar las pestañas con fuente personalizada
+        Me.tabControl.DrawMode = TabDrawMode.OwnerDrawFixed
+        AddHandler Me.tabControl.DrawItem, AddressOf TabControl_DrawItem
 
-        Me.Height = Screen.PrimaryScreen.Bounds.Height
-        Me.Width = Screen.PrimaryScreen.Bounds.Width
-        ' Asegurar que el formulario esté en la parte superior de la pantalla
-        Me.Top = 0
+        ' Ajustar automáticamente el tamaño de las pestañas según el texto
+        Me.tabControl.SizeMode = TabSizeMode.Fixed
+        AdjustTabWidth()
+        Debug.Print($"Load {pnlConnect.Height}")
+        posicion()
+        'Me.Height = Screen.PrimaryScreen.Bounds.Height
+        'Me.Width = Screen.PrimaryScreen.Bounds.Width
+        '' Asegurar que el formulario esté en la parte superior de la pantalla
+        'Me.Top = 0
 
-        ' (Opcional) Centrar horizontalmente el formulario
-        Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) \ 2
-        ' Configuración del TabControl para ocupar todo el espacio disponible
-        Me.tabControl.Dock = DockStyle.Fill
+        '' (Opcional) Centrar horizontalmente el formulario
+        'Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) \ 2
+        '' Configuración del TabControl para ocupar todo el espacio disponible
+        'Me.tabControl.Dock = DockStyle.Fill
 
-        ' Configuración del Panel para siempre estar en la parte inferior
-        Me.pnlConnect.Dock = DockStyle.Bottom
-        Me.pnlConnect.Height = 100 ' Ajusta la altura del panel según lo que necesites
+        '' Configuración del Panel para siempre estar en la parte inferior
+        'Me.pnlConnect.Dock = DockStyle.Bottom
+        'Me.pnlConnect.Height = 100 ' Ajusta la altura del panel según lo que necesites
 
 
         _host = New Host()
@@ -89,10 +97,37 @@ Public Class frmLector
             .Add(New ComboBoxItem(TagPresentedType.PC_EPC_TID, "EPC + TID"))
         End With
 
-        CodBarras.Text = ""
+        'CodBarras.Text = ""
         tabControl.Enabled = False
         _FrequencyItems = New List(Of CheckBox)
         _host.NetDeviceSearcherEnabled = True
+    End Sub
+    Private Sub AdjustTabWidth()
+        ' Ajustar el ancho de cada pestaña basado en el texto
+        Using g As Graphics = Me.tabControl.CreateGraphics()
+            Dim font As New Font("Microsoft Sans Serif", 15.0F, FontStyle.Regular)
+            Dim maxTabWidth As Integer = 0
+
+            For i As Integer = 0 To Me.tabControl.TabPages.Count - 1
+                ' Medir el ancho del texto de la pestaña
+                Dim tabTextSize As SizeF = g.MeasureString(Me.tabControl.TabPages(i).Text, font)
+                maxTabWidth = Math.Max(maxTabWidth, CInt(tabTextSize.Width) + 20) ' Margen adicional
+            Next
+
+            ' Ajustar el ancho de las pestañas
+            Me.tabControl.ItemSize = New Size(maxTabWidth, Me.tabControl.ItemSize.Height)
+        End Using
+    End Sub
+    Private Sub TabControl_DrawItem(sender As Object, e As DrawItemEventArgs)
+        Dim g As Graphics = e.Graphics
+        Dim tabPage As TabPage = Me.tabControl.TabPages(e.Index)
+        Dim tabBounds As Rectangle = Me.tabControl.GetTabRect(e.Index)
+
+        ' Fuente personalizada para las pestañas
+        Dim tabFont As New Font("Microsoft Sans Serif", 15.0F, FontStyle.Regular, GraphicsUnit.Point)
+
+        ' Dibujar el texto de la pestaña con alineación centrada
+        TextRenderer.DrawText(g, tabPage.Text, tabFont, tabBounds, SystemColors.ControlText, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
     End Sub
 
     Private Sub StartConnection()
@@ -272,7 +307,7 @@ Public Class frmLector
     End Sub
 
     Private m_bIsInventoryProcessing As Boolean
-    Private Sub btnStartInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStartInventory.Click
+    Private Sub btnStartInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         StartInventory()
     End Sub
 
@@ -289,12 +324,12 @@ Public Class frmLector
         result = _ts800.StartInventory(tagPresentedType)
         If result Then
             m_bIsInventoryProcessing = True
-            btnStartInventory.Enabled = False
-            btnStopInventory.Enabled = True
+            'btnStartInventory.Enabled = False
+            'btnStopInventory.Enabled = True
         End If
     End Sub
 
-    Private Sub btnStopInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStopInventory.Click
+    Private Sub btnStopInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         StopInventory()
     End Sub
 
@@ -302,8 +337,8 @@ Public Class frmLector
         Dim result As Boolean = _ts800.StopInventory()
         If result Then
             m_bIsInventoryProcessing = False
-            btnStartInventory.Enabled = True
-            btnStopInventory.Enabled = False
+            'btnStartInventory.Enabled = True
+            'btnStopInventory.Enabled = False
         End If
     End Sub
 
@@ -312,14 +347,6 @@ Public Class frmLector
         _tagList.Clear()
         CountTags()
     End Sub
-
-    Private Sub btnClear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClear.Click
-        dgvTagList.Rows.Clear()
-        _tagList.Clear()
-        CountTags()
-        MsnVincular.Text = ""
-    End Sub
-
     Private Sub CountTags()
         lblTotalCount.Text = _tagList.Count
     End Sub
@@ -641,10 +668,6 @@ Public Class frmLector
     End Sub
 
     Private Sub btnGetFrequency_Click(sender As Object, e As EventArgs) Handles btnGetFrequency.Click
-        Dim objectName As String
-        Dim foundControls() As Control
-        Dim frequencyCheckBox As CheckBox
-        Dim checkBoxText As String
         Dim frequencySet As HashSet(Of Double) = New HashSet(Of Double)
         frequencySet = _ts800.GetFrequency(False)
     End Sub
@@ -845,8 +868,6 @@ Public Class frmLector
         Debug.Print("errorCode: " & errorCode & vbTab & "errorMessage: " & errorMessage)
     End Sub
     Private Sub cbxSession_SelectedIndexChanged(sender As Object, e As EventArgs)
-        Dim session As Session
-        Dim index As Integer
 
     End Sub
 
@@ -866,7 +887,6 @@ Public Class frmLector
 
     Private Sub btnSetQValue_Click(sender As Object, e As EventArgs)
         Dim result As Boolean = False
-        Dim qValue As Integer
     End Sub
 
 
@@ -895,7 +915,7 @@ Public Class frmLector
                 If portName.StartsWith("TCP:") Then
                     bIsNetPort = True
                 End If
-                If (iIndex = -1) Then       '-1就是還沒在comboBox內
+                If (iIndex = -1) Then       '-1 significa que aún no está en -comboBox-
                     iIndex = cbxPort.Items.Add(portName)
                     If cbxPort.SelectedIndex = (-1) Then
                         cbxPort.SelectedIndex = iIndex
@@ -906,12 +926,12 @@ Public Class frmLector
                     End If
                 End If
             Case Host.PortState.Removed, Host.PortState.RemovedAndClosed
-                If iIndex <> -1 Then    '該port是存在combobox中的
+                If iIndex <> -1 Then    'El puerto existe en -combobox-
                     cbxPort.Items.RemoveAt(iIndex)
                     If iIndex < cbxPort.Items.Count Then
-                        cbxPort.SelectedIndex = iIndex      '將combobox選擇項目選為拔除掉的下一項
+                        cbxPort.SelectedIndex = iIndex      'Seleccione el elemento -combobox-selected como el siguiente elemento para desconectar
                     Else
-                        cbxPort.SelectedIndex = (cbxPort.Items.Count - 1)       '如果移除的combobox是最後一項則選為新的最後一項
+                        cbxPort.SelectedIndex = (cbxPort.Items.Count - 1)       'Si el -combobox- eliminado es el último elemento, seleccione el nuevo último elemento
                     End If
                 End If
 
@@ -1009,9 +1029,119 @@ Public Class frmLector
 
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
         Dim selectedTab As TabPage = tabControl.SelectedTab
+
         If selectedTab.Name = "tpInventory" Then
+            ' Configuración específica para tpInventory
+            Me.WindowState = FormWindowState.Maximized
+            Me.tabControl.Dock = DockStyle.None
+
+            ' Ajustar tamaño y posición del TabControl
+            Me.tabControl.Height = Me.ClientSize.Height - pnlConnect.Height
+            Me.tabControl.Width = Me.ClientSize.Width
+            Me.tabControl.Location = New Point(0, 0)
+
+            ' Configuración de pnlConnect en la parte inferior
+            pnlConnect.Dock = DockStyle.None
+            pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
             CodBarras.Focus()
+            ' Redimensionar elementos dentro de TableLayoutPanel2
+            For Each control As Control In TableLayoutPanel2.Controls
+                Debug.Print($"Nombre etiqueta-->{control.Name}")
+
+                Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+                Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
+
+                If control.Name = "DataGridView1" Then
+                    Dim dgv As DataGridView = TryCast(control, DataGridView)
+                    If dgv IsNot Nothing Then
+                        ' Ajustar la fuente del DataGridView
+                        dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                        dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                        dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                    End If
+                ElseIf TypeOf control Is TableLayoutPanel Then
+                    ' Redimensionar controles dentro de TableLayoutPanel anidados
+                    ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+                End If
+            Next
+        Else
+            ' Configuración general para otras pestañas
+            Me.WindowState = FormWindowState.Normal
+            Me.tabControl.Dock = DockStyle.Fill
+
+            ' Restaurar pnlConnect en la parte inferior
+            pnlConnect.Dock = DockStyle.Bottom
         End If
+    End Sub
+
+    Private Sub ResizeTableLayoutPanelControls(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single)
+        For Each control As Control In panel.Controls
+            Debug.Print($"Aquien encuentro aqui-->{control.Name}")
+            If TypeOf control Is Button Then
+                Dim btn As Button = TryCast(control, Button)
+                If btn IsNot Nothing And control.Name = "btnClear" Then
+                    ' Ajustar el tamaño de la fuente del botón
+                    btn.Font = New Font(btn.Font.FontFamily, fontSize)
+
+                    ' Ajustar el ancho del botón al 100% de su celda en el TableLayoutPanel
+                    Dim columnIndex As Integer = panel.GetColumn(control)
+                    If columnIndex >= 0 Then
+                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
+                        btn.Width = cellWidth
+                    End If
+
+                    ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
+                    Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
+                    btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
+
+                    ' (Opcional) Asegurar que el botón esté centrado en su celda
+                    btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                End If
+            ElseIf TypeOf control Is TableLayoutPanel Then
+                ' Llamada recursiva para manejar anidamientos
+                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+            ElseIf TypeOf control Is DataGridView Then
+                Dim dgv As DataGridView = TryCast(control, DataGridView)
+                If dgv IsNot Nothing Then
+                    ' Ajustar la fuente del DataGridView
+                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                End If
+            ElseIf Not String.IsNullOrEmpty(control.Name) Then
+                ' Ajustar la fuente de otros controles si es necesario
+                If control.Name = "CodBarras" Then
+                    ' Ajustar el tamaño de la fuente del control CodBarras
+                    control.Font = New Font(control.Font.FontFamily, fontSize)
+                    ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
+                    If control.Parent IsNot Nothing Then
+                        control.Width = control.Parent.ClientSize.Width
+                    End If
+                ElseIf control.Name = "Label34" Then
+                    control.Font = New Font(control.Font.FontFamily, fontSize)
+                Else
+                    control.Font = New Font(control.Font.FontFamily, fontSize1)
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub posicion()
+        ' Coordenadas relativas al contenedor
+        Dim position As Point = pnlConnect.Location
+        Console.WriteLine("Relativo al contenedor:")
+        Console.WriteLine("X: " & position.X & ", Y: " & position.Y)
+
+        ' Coordenadas absolutas en pantalla
+        Dim screenPosition As Point = pnlConnect.PointToScreen(New Point(0, 0))
+        Console.WriteLine("Absoluto en pantalla:")
+        Console.WriteLine("X: " & screenPosition.X & ", Y: " & screenPosition.Y)
+
+        ' Otros detalles
+        Console.WriteLine("Ancho: " & pnlConnect.Width)
+        Console.WriteLine("Alto: " & pnlConnect.Height)
     End Sub
     'Private Sub LeerCodigoRFID()
     '    Debug.Print("Se ejecuta LeerCodigoRFID")
@@ -1103,7 +1233,6 @@ Public Class frmLector
 
 
     ' Método que devuelve el valor de szPCEPC
-    ' Método que devuelve el valor de szPCEPC
     Private Function ObtenerPCEPC() As String
         If dgvTagList.Rows.Count > 0 AndAlso Not dgvTagList.Rows(0).IsNewRow Then
             Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()
@@ -1136,7 +1265,7 @@ Public Class frmLector
     End Function
 
 
-    Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
+    Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then
             If enterPressed Then Exit Sub ' Prevenir múltiples ejecuciones
             enterPressed = True
@@ -1172,21 +1301,25 @@ Public Class frmLector
         StopInventory()
         Dim lsDatos As String = ""
         Dim mCodBarra As String = CodBarras.Text.Trim()
+        CodBarras_Bloqueado()
         Dim sCodigoRFID As String = ObtenerPCEPC()
-        Dim otroRFID As String = PrimerValorRFID()
+        Dim otroRFID As String = "" 'PrimerValorRFID()
 
-        CodBarras.Clear()
-        CodBarras.Focus()
         Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
 
         If String.IsNullOrWhiteSpace(sCodigoRFID) Then
-            MsnVincular.Text = "Por favor, lea un código RFID válido."
+            MsnVincular.Text = "Por favor, lea un código RFID."
+            CodBarras_Desbloqueado()
+            CodBarras_ClearFoco()
             Exit Sub
         End If
-        sCodigoRFID = "S40069990000700A8R407201"
+        'Prueba
+        sCodigoRFID = GenerarCadenaAleatoria(24)
 
         If String.IsNullOrWhiteSpace(mCodBarra) Then
             MsnVincular.Text = "Por favor, lea un código de barras."
+            CodBarras_Desbloqueado()
+            CodBarras_ClearFoco()
             Exit Sub
         End If
 
@@ -1202,11 +1335,15 @@ Public Class frmLector
             If dataRta.Rows.Count > 0 Then
                 lsDatos = BuildDataString(dataRta.Rows(0))
                 MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
+                CodBarras_Desbloqueado()
+                CodBarras_ClearFoco()
                 Exit Sub
             End If
         Catch ex As Exception
             Debug.Print($"Error al validar RFID: {ex.Message}")
             MsnVincular.Text = "Error al validar RFID. Verifique con el administrador."
+            CodBarras_Desbloqueado()
+            CodBarras_ClearFoco()
             Exit Sub
         End Try
         Debug.Print($"Sigue 2")
@@ -1216,6 +1353,8 @@ Public Class frmLector
         MsnVincular.Text = lsResult.Item2
         If lsResult.Item1 <> 0 Then
             Debug.Print($"Error al registrar en Sybase: {lsResult.Item2}")
+            CodBarras_Desbloqueado()
+            CodBarras_ClearFoco()
             Exit Sub
         End If
 
@@ -1225,6 +1364,8 @@ Public Class frmLector
             If dataTimbrado.Rows.Count = 0 Then
                 Debug.Print("No se encontraron registros.")
                 MsnVincular.Text = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
+                CodBarras_Desbloqueado()
+                CodBarras_ClearFoco()
                 Exit Sub
             End If
             Debug.Print($"Filas encontradas: {dataTimbrado.Rows.Count}")
@@ -1248,11 +1389,46 @@ Public Class frmLector
                 MsnVincular.Text = Msn(llReturn)
             Else
                 MsnVincular.Text = "Prenda registrada exitosamente."
+                ' Eliminar el elemento "id_barras" del diccionario insertData
+                insertData("fecha") = DateTime.Now
+                If insertData.ContainsKey("id_barras") Then
+                    insertData.Remove("id_barras")
+                    insertData.Remove("id_rfid")
+                    insertData.Remove("cod_talla")
+                    insertData.Remove("cod_combinacion")
+                    insertData.Remove("color")
+                    insertData.Remove("cod_trabajador")
+                End If
+                LlenarDataGridView(DataGridView1, insertData)
             End If
         Catch ex As Exception
             Debug.Print($"Error en el flujo de registro: {ex.Message}")
             MsnVincular.Text = "Error inesperado al registrar la prenda. Consulte con el administrador."
         End Try
+        CodBarras_Desbloqueado()
+        CodBarras_ClearFoco()
+    End Sub
+    Private Function GenerarCadenaAleatoria(longitud As Integer) As String
+        Dim caracteresPermitidos As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        Dim resultado As New Text.StringBuilder()
+        Dim random As New Random()
+
+        For i As Integer = 1 To longitud
+            Dim indice As Integer = random.Next(0, caracteresPermitidos.Length)
+            resultado.Append(caracteresPermitidos(indice))
+        Next
+
+        Return resultado.ToString()
+    End Function
+    ' Llenar el DataGridView con los datos del diccionario
+    Private Sub LlenarDataGridView(dataGridView As DataGridView, data As Dictionary(Of String, Object))
+        ' Agregar una nueva fila al DataGridView
+        Dim rowIndex As Integer = dataGridView.Rows.Add()
+
+        ' Asignar los valores del diccionario a la fila
+        For Each key As String In data.Keys
+            dataGridView.Rows(rowIndex).Cells(key).Value = data(key)
+        Next
     End Sub
 
     Private Function Msn(llReturn As Long) As String
@@ -1288,13 +1464,28 @@ Public Class frmLector
     End Function
 
     Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
-        ' Verificar si el texto tiene exactamente 20 caracteres
         If CodBarras.Text.Length = 20 Then
             LeerCodigoRFID() ' Llamar a la función de lectura
         End If
     End Sub
 
-    Private Sub frmLector_Resize(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Resize
+    Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        dgvTagList.Rows.Clear()
+        _tagList.Clear()
+        CountTags()
+        MsnVincular.Text = ""
+        CodBarras.Focus()
+    End Sub
 
+    Private Sub CodBarras_Bloqueado()
+        CodBarras.Enabled = False
+    End Sub
+    Private Sub CodBarras_Desbloqueado()
+        CodBarras.Enabled = True
+    End Sub
+
+    Private Sub CodBarras_ClearFoco()
+        CodBarras.Clear()
+        CodBarras.Focus()
     End Sub
 End Class
