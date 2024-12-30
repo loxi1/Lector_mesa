@@ -32,22 +32,6 @@ Public Class frmLector
         ' Ajustar automáticamente el tamaño de las pestañas según el texto
         Me.tabControl.SizeMode = TabSizeMode.Fixed
         AdjustTabWidth()
-        Debug.Print($"Load {pnlConnect.Height}")
-        posicion()
-        'Me.Height = Screen.PrimaryScreen.Bounds.Height
-        'Me.Width = Screen.PrimaryScreen.Bounds.Width
-        '' Asegurar que el formulario esté en la parte superior de la pantalla
-        'Me.Top = 0
-
-        '' (Opcional) Centrar horizontalmente el formulario
-        'Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) \ 2
-        '' Configuración del TabControl para ocupar todo el espacio disponible
-        'Me.tabControl.Dock = DockStyle.Fill
-
-        '' Configuración del Panel para siempre estar en la parte inferior
-        'Me.pnlConnect.Dock = DockStyle.Bottom
-        'Me.pnlConnect.Height = 100 ' Ajusta la altura del panel según lo que necesites
-
 
         _host = New Host()
         _ts800 = New TS800(TIME_OUT, RETRY_TIMES)
@@ -612,6 +596,10 @@ Public Class frmLector
 
         Dim formResponse As New FormTrabajador()
 
+        If formResponse.ShowDialog() <> DialogResult.OK Then
+            Exit Sub
+        End If
+
         mCodTrabajador = formResponse.CodTrabajador
         Dim dato_usuario As String = formResponse.Usuario
 
@@ -1041,7 +1029,6 @@ Public Class frmLector
             CodBarras.Focus()
             ' Redimensionar elementos dentro de TableLayoutPanel2
             For Each control As Control In TableLayoutPanel2.Controls
-                Debug.Print($"Nombre etiqueta-->{control.Name}")
 
                 Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
                 Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
@@ -1072,7 +1059,6 @@ Public Class frmLector
 
     Private Sub ResizeTableLayoutPanelControls(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single)
         For Each control As Control In panel.Controls
-            Debug.Print($"Aquien encuentro aqui-->{control.Name}")
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
                 If btn IsNot Nothing And control.Name = "btnClear" Then
@@ -1122,22 +1108,6 @@ Public Class frmLector
                 End If
             End If
         Next
-    End Sub
-
-    Private Sub posicion()
-        ' Coordenadas relativas al contenedor
-        Dim position As Point = pnlConnect.Location
-        Console.WriteLine("Relativo al contenedor:")
-        Console.WriteLine("X: " & position.X & ", Y: " & position.Y)
-
-        ' Coordenadas absolutas en pantalla
-        Dim screenPosition As Point = pnlConnect.PointToScreen(New Point(0, 0))
-        Console.WriteLine("Absoluto en pantalla:")
-        Console.WriteLine("X: " & screenPosition.X & ", Y: " & screenPosition.Y)
-
-        ' Otros detalles
-        Console.WriteLine("Ancho: " & pnlConnect.Width)
-        Console.WriteLine("Alto: " & pnlConnect.Height)
     End Sub
     'Private Sub LeerCodigoRFID()
     '    Debug.Print("Se ejecuta LeerCodigoRFID")
@@ -1291,7 +1261,7 @@ Public Class frmLector
     End Function
 
     Private Sub LeerCodigoRFID()
-        Debug.Print("Se ejecuta LeerCodigoRFID")
+        'Debug.Print("Se ejecuta LeerCodigoRFID")
         StartInventory()
         StopInventory()
         Dim lsDatos As String = ""
@@ -1300,7 +1270,7 @@ Public Class frmLector
         Dim sCodigoRFID As String = ObtenerPCEPC()
         Dim otroRFID As String = "" 'PrimerValorRFID()
 
-        Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
+        'Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
 
         If String.IsNullOrWhiteSpace(sCodigoRFID) Then
             MsnVincular.Text = "Por favor, lea un código RFID."
@@ -1318,7 +1288,7 @@ Public Class frmLector
             Exit Sub
         End If
 
-        Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+        'Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
 
         ' Validar si el RFID ya existe en la base de datos
         ' Validar si el RFID ya existe en la base de datos
@@ -1326,7 +1296,7 @@ Public Class frmLector
             Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
             Dim dataRta = m_BDPrendaScm.GetData(dictionary)
 
-            Debug.Print($"Filas devueltas por GetData: {dataRta.Rows.Count}")
+            'Debug.Print($"Filas devueltas por GetData: {dataRta.Rows.Count}")
             If dataRta.Rows.Count > 0 Then
                 lsDatos = BuildDataString(dataRta.Rows(0))
                 MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
@@ -1335,35 +1305,31 @@ Public Class frmLector
                 Exit Sub
             End If
         Catch ex As Exception
-            Debug.Print($"Error al validar RFID: {ex.Message}")
+            'Debug.Print($"Error al validar RFID: {ex.Message}")
             MsnVincular.Text = "Error al validar RFID. Verifique con el administrador."
             CodBarras_Desbloqueado()
             CodBarras_ClearFoco()
             Exit Sub
         End Try
-        Debug.Print($"Sigue 2")
 
-        Debug.Print("Registro en Sybase...")
         Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
         MsnVincular.Text = lsResult.Item2
         If lsResult.Item1 <> 0 Then
-            Debug.Print($"Error al registrar en Sybase: {lsResult.Item2}")
+            'Debug.Print($"Error al registrar en Sybase: {lsResult.Item2}")
             CodBarras_Desbloqueado()
             CodBarras_ClearFoco()
             Exit Sub
         End If
 
-        Debug.Print("Consulta de datos timbrados...")
         Try
             Dim dataTimbrado = m_BDPrenda.GetTimbradasByWorkerAndEtiqueta(mCodTrabajador, mCodBarra)
             If dataTimbrado.Rows.Count = 0 Then
-                Debug.Print("No se encontraron registros.")
                 MsnVincular.Text = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
                 CodBarras_Desbloqueado()
                 CodBarras_ClearFoco()
                 Exit Sub
             End If
-            Debug.Print($"Filas encontradas: {dataTimbrado.Rows.Count}")
+
             Dim row As DataRow = dataTimbrado.Rows(0)
             Dim insertData As New Dictionary(Of String, Object) From {
                 {"id_rfid", sCodigoRFID},

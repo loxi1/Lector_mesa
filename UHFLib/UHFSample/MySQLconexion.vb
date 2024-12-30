@@ -80,9 +80,19 @@ Public Class MySQLconexion
     ' Método para cargar configuración desde un archivo JSON
     Private Function LoadConfig(filePath As String) As Boolean
         Try
-            Debug.Print($"Intentando cargar configuración desde: {filePath}")
-            If File.Exists(filePath) Then
-                Dim json As String = File.ReadAllText(filePath)
+            ' Obtener el directorio base de ejecución
+            Dim baseDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+
+            ' Subir dos niveles para llegar a "bin"
+            Dim binDirectory As String = Directory.GetParent(Directory.GetParent(baseDirectory).FullName).FullName
+
+            ' Construir la ruta del archivo tsconfig.json
+            Dim iniDirectory As String = Path.Combine(binDirectory, "Ini")
+
+            Dim configPath As String = Path.Combine(iniDirectory, filePath)
+
+            If File.Exists(configPath) Then
+                Dim json As String = File.ReadAllText(configPath)
                 Debug.Print($"Contenido del archivo JSON: {json}")
                 Dim config As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
 

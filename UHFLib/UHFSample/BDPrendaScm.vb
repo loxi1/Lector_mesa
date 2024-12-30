@@ -14,19 +14,19 @@ Public Class BDPrendaScm
         Try
             Using connection = conexion.Connect()
                 If connection Is Nothing Then
-                    Debug.Print("La conexión es Nothing.")
+                    'Debug.Print("La conexión es Nothing.")
                     Throw New Exception("No se pudo establecer conexión con la base de datos.")
                 End If
-                Debug.Print($"Estado de la conexión: {connection.State}")
+                'Debug.Print($"Estado de la conexión: {connection.State}")
 
                 Dim query As String = "SELECT `id_prenda`, `id_rfid`, `id_barras`, `fecha_registro`, `cod_trabajador`, `op`, `corte`, `subcorte` AS `sub_corte`, `cod_talla`, `id_talla`, `talla`, `cod_combinacion`, `color`, `estado`, `id_contenedor` FROM `bd_ci_scm`.`prenda`"
                 Dim ls_where As String = BuildWhereClause(whereParameters)
-                Debug.Print($"El query inicial: {query}")
+                'Debug.Print($"El query inicial: {query}")
 
                 If Not String.IsNullOrEmpty(ls_where) Then
                     query &= " WHERE " & ls_where
                 End If
-                Debug.Print($"Query final: {query}")
+                'Debug.Print($"Query final: {query}")
 
                 Using comando As New MySqlCommand(query, connection)
                     For Each param In whereParameters
@@ -49,8 +49,8 @@ Public Class BDPrendaScm
     ' Método para insertar datos en la tabla
     Public Function Insert(columns As Dictionary(Of String, Object)) As Long
         Dim ll_return As Long = 0
-        Debug.Print("Iniciando Insert...")
-        Debug.Print($"Datos a insertar: {String.Join(", ", columns.Select(Function(kv) $"{kv.Key}={kv.Value}"))}")
+        'Debug.Print("Iniciando Insert...")
+        'Debug.Print($"Datos a insertar: {String.Join(", ", columns.Select(Function(kv) $"{kv.Key}={kv.Value}"))}")
 
         Try
             ' Asegúrate de que la conexión esté siempre abierta para cada operación
@@ -64,7 +64,7 @@ Public Class BDPrendaScm
                 Dim parameterNames As String = String.Join(", ", columns.Keys.Select(Function(key) $"@{key}"))
 
                 Dim sql As String = $"INSERT INTO {tableName} ({columnNames}) VALUES ({parameterNames})"
-                Debug.Print($"Consulta generada: {sql}")
+                'Debug.Print($"Consulta generada: {sql}")
 
                 Using comando As New MySqlCommand(sql, connection)
                     For Each param In columns
@@ -72,7 +72,7 @@ Public Class BDPrendaScm
                     Next
 
                     ll_return = comando.ExecuteNonQuery()
-                    Debug.Print($"Número de filas afectadas: {ll_return}")
+                    'Debug.Print($"Número de filas afectadas: {ll_return}")
                 End Using
             End Using
         Catch ex As Exception

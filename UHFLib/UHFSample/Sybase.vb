@@ -135,9 +135,19 @@ Public Class Sybase
     'End Function
     Private Function LoadConfig(filePath As String) As Boolean
         Try
-            Debug.Print($"Cargando configuración desde: {filePath}")
-            If File.Exists(filePath) Then
-                Dim json As String = File.ReadAllText(filePath)
+            ' Obtener el directorio base de ejecución
+            Dim baseDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+
+            ' Subir dos niveles para llegar a "bin"
+            Dim binDirectory As String = Directory.GetParent(Directory.GetParent(baseDirectory).FullName).FullName
+
+            ' Construir la ruta del archivo tsconfig.json
+            Dim iniDirectory As String = Path.Combine(binDirectory, "Ini")
+
+            Dim configPath As String = Path.Combine(iniDirectory, filePath)
+
+            If File.Exists(configPath) Then
+                Dim json As String = File.ReadAllText(configPath)
                 Dim config As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
 
                 ' Validar que las claves requeridas existan
@@ -152,7 +162,7 @@ Public Class Sybase
                     Return False
                 End If
 
-                Debug.Print($"Configuración cargada: Server={m_ServerName}, Port={m_Port}, Database={m_DataBase}")
+                'Debug.Print($"Configuración cargada: Server={m_ServerName}, Port={m_Port}, Database={m_DataBase}")
                 Return True
             Else
                 s_error = $"El archivo de configuración no existe: {filePath}"

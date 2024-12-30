@@ -16,7 +16,7 @@ Public Class CryptoHelper
             Try
                 _key = Create_Key(SECRET_KEY)
                 _iv = Create_IV(SECRET_IV)
-                Debug.Print($"_key->{BitConverter.ToString(_key)} _iv->{BitConverter.ToString(_iv)}")
+                'Debug.Print($"_key->{BitConverter.ToString(_key)} _iv->{BitConverter.ToString(_iv)}")
             Catch ex As Exception
                 Debug.Print("Error al generar claves: " & ex.Message)
             End Try

@@ -82,7 +82,7 @@ Public Class BDPrenda
 
         whereClause &= "estado = @estado"
         comando.Parameters.Add(New AseParameter("@estado", AseDbType.VarChar)).Value = ESTADO_EMBALAJE
-        Debug.Print($"pCodigoTrabajador-->{pCodigoTrabajador} petiqueta-->{petiqueta} query-->{query} whereClause-->{whereClause}")
+        'Debug.Print($"pCodigoTrabajador-->{pCodigoTrabajador} petiqueta-->{petiqueta} query-->{query} whereClause-->{whereClause}")
 
         Return If(String.IsNullOrEmpty(whereClause), query, $"{query} WHERE {whereClause}")
     End Function
@@ -92,18 +92,18 @@ Public Class BDPrenda
         Dim li_return As Integer = 0
         Dim s_mensaje As String = ""
         Dim tabla As New DataTable()
-        Debug.Print("Iniciando SetRfid...")
-        Debug.Print($"Parámetros recibidos: sCodBarra={sCodBarra}, sCompania={sCompania}, sCodTrabajador={sCodTrabajador}, sIDRfid={sIDRfid}")
+        'Debug.Print("Iniciando SetRfid...")
+        'Debug.Print($"Parámetros recibidos: sCodBarra={sCodBarra}, sCompania={sCompania}, sCodTrabajador={sCodTrabajador}, sIDRfid={sIDRfid}")
 
         Debug.Print($"Estado de la conexión al iniciar SetRfid: {connection?.State}")
         If connection Is Nothing OrElse connection.State <> ConnectionState.Open Then
-            Debug.Print("La conexión con la base de datos no pudo establecerse.")
+            'Debug.Print("La conexión con la base de datos no pudo establecerse.")
             Return Tuple.Create(-1, "Error en conexión", tabla)
         End If
 
         Try
             Using trans = connection.BeginTransaction()
-                Debug.Print("Transacción iniciada.")
+                'Debug.Print("Transacción iniciada.")
                 Dim command As New AseCommand("USP_SAL_EMB_CON_RFID", connection) With {
                     .CommandType = CommandType.StoredProcedure,
                     .Transaction = trans
@@ -133,9 +133,9 @@ Public Class BDPrenda
                 End Using
 
                 ' Llamar a Retrieve para obtener datos adicionales
-                Debug.Print("Llamando a Retrieve desde SetRfid...")
+                'Debug.Print("Llamando a Retrieve desde SetRfid...")
                 Dim retrievedData = Retrieve(connection, sCodTrabajador, "%", "%", sCodBarra)
-                Debug.Print($"Filas devueltas por Retrieve: {retrievedData.Rows.Count}")
+                'Debug.Print($"Filas devueltas por Retrieve: {retrievedData.Rows.Count}")
                 If retrievedData.Rows.Count > 0 Then
                     tabla = retrievedData
                 End If
@@ -192,7 +192,6 @@ Public Class BDPrenda
     'End Function
     Public Function GetTimbradasByWorkerAndEtiqueta(pCodigoTrabajador As String, petiqueta As String) As DataTable
         Dim resultTable As New DataTable()
-        Debug.Print("Iniciando GetTimbradasByWorkerAndEtiqueta...")
 
         Try
             Using connection = myConexion.Connect()
@@ -419,7 +418,7 @@ Public Class BDPrenda
     End Function
     Public Function GetTBTimbrado(pCodigoTrabajador As String, pOp As String, pNroCorte As String, petiqueta As String) As DataTable
         Dim tabla As New DataTable()
-        Debug.Print("Iniciando Retrieve...")
+
         Using connectionAse = myConexion.Connect()
             Debug.Print($"Estado de la conexión en Retrieve: {connectionAse?.State}")
             Try
