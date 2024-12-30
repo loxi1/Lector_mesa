@@ -58,7 +58,7 @@ Public Class FormTrabajador
     Private Sub txtCodTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCodTrabajador.KeyDown
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True
-            ButtonOk.Focus()
+            ClaveTrabajador.Focus()
         End If
     End Sub
 

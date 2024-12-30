@@ -612,10 +612,6 @@ Public Class frmLector
 
         Dim formResponse As New FormTrabajador()
 
-        If formResponse.ShowDialog() <> DialogResult.OK Then
-            Exit Sub
-        End If
-
         mCodTrabajador = formResponse.CodTrabajador
         Dim dato_usuario As String = formResponse.Usuario
 
@@ -626,7 +622,6 @@ Public Class frmLector
 
         ' Concatenar los datos al título de la ventana
         Me.Text = $"Vincular - Usuario: {dato_usuario} - Trabajador: {mCodTrabajador}"
-
 
         ' Configurar la pestaña de inventario
         tabControl.SelectedTab = tpInventory
@@ -1082,7 +1077,7 @@ Public Class frmLector
                 Dim btn As Button = TryCast(control, Button)
                 If btn IsNot Nothing And control.Name = "btnClear" Then
                     ' Ajustar el tamaño de la fuente del botón
-                    btn.Font = New Font(btn.Font.FontFamily, fontSize)
+                    btn.Font = New Font(btn.Font.FontFamily, fontSize1)
 
                     ' Ajustar el ancho del botón al 100% de su celda en el TableLayoutPanel
                     Dim columnIndex As Integer = panel.GetColumn(control)
@@ -1090,10 +1085,10 @@ Public Class frmLector
                         Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
                         btn.Width = cellWidth
                     End If
-
                     ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
                     Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
                     btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
+                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
 
                     ' (Opcional) Asegurar que el botón esté centrado en su celda
                     btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
@@ -1118,6 +1113,7 @@ Public Class frmLector
                     ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
                     If control.Parent IsNot Nothing Then
                         control.Width = control.Parent.ClientSize.Width
+                        control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
                     End If
                 ElseIf control.Name = "Label34" Then
                     control.Font = New Font(control.Font.FontFamily, fontSize)
@@ -1264,7 +1260,6 @@ Public Class frmLector
         Return String.Empty
     End Function
 
-
     Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then
             If enterPressed Then Exit Sub ' Prevenir múltiples ejecuciones
@@ -1400,6 +1395,7 @@ Public Class frmLector
                     insertData.Remove("cod_trabajador")
                 End If
                 LlenarDataGridView(DataGridView1, insertData)
+                CantidadFilas()
             End If
         Catch ex As Exception
             Debug.Print($"Error en el flujo de registro: {ex.Message}")
@@ -1429,6 +1425,12 @@ Public Class frmLector
         For Each key As String In data.Keys
             dataGridView.Rows(rowIndex).Cells(key).Value = data(key)
         Next
+    End Sub
+
+    Private Sub CantidadFilas()
+        Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
+        Console.WriteLine($"totalRegistros-->{totalRegistros}")
+        lblTotalCount.Text = CType(totalRegistros, String)
     End Sub
 
     Private Function Msn(llReturn As Long) As String
@@ -1471,6 +1473,7 @@ Public Class frmLector
 
     Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         dgvTagList.Rows.Clear()
+        DataGridView1.Rows.Clear()
         _tagList.Clear()
         CountTags()
         MsnVincular.Text = ""
