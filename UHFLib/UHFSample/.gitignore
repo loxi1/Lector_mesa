@@ -318,3 +318,5 @@ ASALocalRun/
 *.binlog
 
 .vs/UHFLibrary/v16/Server/sqlite3/db.lock
+bin/Release/
+bin/Debug/

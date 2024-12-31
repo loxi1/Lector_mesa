@@ -1268,7 +1268,7 @@ Public Class frmLector
         Dim mCodBarra As String = CodBarras.Text.Trim()
         CodBarras_Bloqueado()
         Dim sCodigoRFID As String = ObtenerPCEPC()
-        Dim otroRFID As String = "" 'PrimerValorRFID()
+        'Dim otroRFID As String = "" 'PrimerValorRFID()
 
         'Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
 
@@ -1279,7 +1279,7 @@ Public Class frmLector
             Exit Sub
         End If
         'Prueba
-        sCodigoRFID = GenerarCadenaAleatoria(24)
+        'sCodigoRFID = GenerarCadenaAleatoria(24)
 
         If String.IsNullOrWhiteSpace(mCodBarra) Then
             MsnVincular.Text = "Por favor, lea un código de barras."

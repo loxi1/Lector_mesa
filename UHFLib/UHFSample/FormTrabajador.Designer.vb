@@ -63,6 +63,7 @@ Partial Class FormTrabajador
         Me.ClaveTrabajador.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ClaveTrabajador.Location = New System.Drawing.Point(287, 60)
         Me.ClaveTrabajador.Name = "ClaveTrabajador"
+        Me.ClaveTrabajador.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.ClaveTrabajador.Size = New System.Drawing.Size(180, 38)
         Me.ClaveTrabajador.TabIndex = 1
         '

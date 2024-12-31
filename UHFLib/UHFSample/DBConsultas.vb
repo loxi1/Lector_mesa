@@ -16,10 +16,22 @@ Public Class DBConsultas
 
     ' Constructor que carga los valores desde un archivo JSON
     Public Sub New()
-        Dim jsonFilePath As String = "tsconfig.json"
+        Dim filePath As String = "tsconfig.json"
+        ' Obtener el directorio base de ejecución
+        Dim baseDirectory As String = AppDomain.CurrentDomain.BaseDirectory
+        Console.WriteLine($"baseDirectory-->{baseDirectory}")
+        ' Subir dos niveles para llegar a "bin"
+        Dim binDirectory As String = Directory.GetParent(Directory.GetParent(baseDirectory).FullName).FullName
+        Console.WriteLine($"binDirectory-->{binDirectory}")
+        ' Construir la ruta del archivo tsconfig.json
+        Dim iniDirectory As String = Path.Combine(binDirectory, "Ini")
+        Console.WriteLine($"iniDirectory-->{iniDirectory}")
+        Dim configPath As String = Path.Combine(iniDirectory, filePath)
+        Console.WriteLine($"configPath-->{configPath}")
+
         ' Leer y procesar el archivo JSON
-        If File.Exists(jsonFilePath) Then
-            Dim jsonContent As String = File.ReadAllText(jsonFilePath)
+        If File.Exists(configPath) Then
+            Dim jsonContent As String = File.ReadAllText(configPath)
             Dim config = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(jsonContent)
 
             ' Extraer los valores de configuración
@@ -31,7 +43,8 @@ Public Class DBConsultas
             key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(SECRET_KEY))
             iv = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(SECRET_IV)).Take(16).ToArray()
         Else
-            Throw New FileNotFoundException($"El archivo de configuración '{jsonFilePath}' no existe.")
+            Throw New FileNotFoundException($"baseDirectory->{baseDirectory} binDirectory->{binDirectory} iniDirectory->{iniDirectory} baseDirectory->{baseDirectory} configPath->{configPath} ")
+            'Throw New FileNotFoundException($"El archivo de configuración '{filePath}' no existe.")
         End If
     End Sub
 
