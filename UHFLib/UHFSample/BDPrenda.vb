@@ -32,6 +32,44 @@ Public Class BDPrenda
     '    End Try
     '    Return tabla
     'End Function
+    Public Function TieneRFID(pOp As String) As Integer
+        Dim esRFID As Integer = 0
+        Console.WriteLine("TieneRFID")
+        Try
+            Using connection = myConexion.Connect()
+                Dim query As String = "
+                SELECT COUNT(d.nnope) AS cantidad 
+                FROM avhcd d 
+                JOIN almart a ON a.ctpar = d.ctpar AND a.cartc = d.cartc 
+                JOIN alwart w ON w.ctpar = a.ctpar AND w.cartc = a.cartc 
+                WHERE d.ctpar = '11' 
+                AND d.nnope = @nnope 
+                AND a.tartc LIKE '%RFID%' 
+                AND a.ccrct1 = '21'"
+
+                Using comando As New AseCommand(query, connection)
+                    comando.Parameters.Add(New AseParameter("@nnope", AseDbType.VarChar)).Value = pOp
+
+                    Console.WriteLine($"Ejecutando consulta SQL...{query}")
+
+                    Using reader As AseDataReader = comando.ExecuteReader()
+                        If reader.Read() Then
+                            ' Verificar si el valor no es nulo antes de asignarlo
+                            esRFID = If(Not reader.IsDBNull(0), reader.GetInt32(0), 0)
+                            Console.WriteLine($"esRFID->{esRFID}")
+                        Else
+                            Console.WriteLine("No se encontraron resultados.")
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Debug.Print($"Error al ejecutar GetTimbradasByWorkerAndEtiqueta: {ex.Message}")
+            LogError("Error en GetTimbradasByWorkerAndEtiqueta", ex)
+        End Try
+
+        Return esRFID
+    End Function
     Public Function Retrieve(connection As AseConnection, pCodigoTrabajador As String, pOp As String, pNroCorte As String, petiqueta As String) As DataTable
         Dim tabla As New DataTable()
         If connection Is Nothing OrElse connection.State <> ConnectionState.Open Then

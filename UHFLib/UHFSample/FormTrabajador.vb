@@ -15,7 +15,7 @@ Public Class FormTrabajador
         Try
             ' Validar campos
             If String.IsNullOrWhiteSpace(txtCodTrabajador.Text) OrElse String.IsNullOrWhiteSpace(ClaveTrabajador.Text) Then
-                MessageBox.Show("Por favor, complete todos los campos.", "Error")
+                Alerta("Por favor, Complete todos los campos.", Color.Red, 3)
                 Exit Sub
             End If
 
@@ -32,7 +32,7 @@ Public Class FormTrabajador
             Dim ldtTrabajador As DataTable = usuario.ValidateUser(whereParameters)
 
             If ldtTrabajador Is Nothing OrElse ldtTrabajador.Rows.Count = 0 Then
-                MessageBox.Show("Código o password incorrecto, por favor verificar.", "Error")
+                Alerta("Código o password incorrecto, Verificar.", Color.Red, 3)
                 Exit Sub
             End If
 
@@ -46,13 +46,13 @@ Public Class FormTrabajador
             Me.DialogResult = DialogResult.OK
             Me.Close()
         Catch ex As Exception
-            MessageBox.Show("Ocurrió un error al validar el trabajador: " & ex.Message, "Error")
+            Alerta("Ocurrió un error al validar el trabajador: ", Color.Red, 3)
         End Try
     End Sub
 
     Private Sub buttonCancelar_Click(sender As Object, e As EventArgs) Handles buttonCancelar.Click
-        Me.DialogResult = DialogResult.Cancel
-        Me.Close()
+        txtCodTrabajador.Text = ""
+        ClaveTrabajador.Text = ""
     End Sub
 
     Private Sub txtCodTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCodTrabajador.KeyDown
@@ -84,5 +84,11 @@ Public Class FormTrabajador
             e.SuppressKeyPress = True
             ButtonOk.Focus()
         End If
+    End Sub
+
+    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer, Optional tiempo As Integer = 30)
+        Using alerta As New FormAlerta(mensaje, color_, tipo, tiempo)
+            alerta.ShowDialog()
+        End Using
     End Sub
 End Class

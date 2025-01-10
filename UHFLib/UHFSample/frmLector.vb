@@ -16,11 +16,27 @@ Public Class frmLector
     Private _FrequencyItems As List(Of CheckBox)
     Private mEmpresa As String = "COFACO"
     Private mCodTrabajador As String
+    Private mUsuTrabajador As String
     Dim enterPressed As Boolean = False ' Bandera para evitar ejecuciones múltiples
     Dim m_BDPrenda As New BDPrenda()
     Dim m_BDPrendaScm As New BDPrendaScm()
+    Private _tieneRFID As Boolean = False
+
+    Public Sub New(codTrabajador As String, datoUsuario As String)
+        ' Llamar al InitializeComponent para inicializar los componentes del formulario
+        InitializeComponent()
+
+        ' Asignar valores a propiedades privadas
+        mCodTrabajador = codTrabajador
+        mUsuTrabajador = datoUsuario
+
+        ' Configurar el título del formulario con los datos recibidos
+        Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
+    End Sub
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'DeshabilitarControles(tpInventory, False) ' Desactivar "tpInventory"
+        Console.WriteLine($"cantiad ledidas inicio-->{CantidadFilasLeidas()}")
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -109,9 +125,25 @@ Public Class frmLector
 
         ' Fuente personalizada para las pestañas
         Dim tabFont As New Font("Microsoft Sans Serif", 15.0F, FontStyle.Regular, GraphicsUnit.Point)
+        ' Determinar el color del texto
+        Dim textColor As Color = SystemColors.ControlText
+
+
+        ' Verificar si la pestaña está seleccionada
+        If e.Index = tabControl.SelectedIndex Then
+            ' Pestaña seleccionada: Fondo destacado
+            g.FillRectangle(Brushes.MediumSeaGreen, tabBounds)
+            ' Dibujar una sublínea en la parte inferior
+            g.DrawLine(Pens.White, tabBounds.Left, tabBounds.Bottom - 2, tabBounds.Right, tabBounds.Bottom - 2)
+            'Dibujar el texto con color blanco
+            textColor = Color.White
+        Else
+            ' Pestaña no seleccionada: Fondo estándar
+            g.FillRectangle(Brushes.White, tabBounds)
+        End If
 
         ' Dibujar el texto de la pestaña con alineación centrada
-        TextRenderer.DrawText(g, tabPage.Text, tabFont, tabBounds, SystemColors.ControlText, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
+        TextRenderer.DrawText(g, tabPage.Text, tabFont, tabBounds, textColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
     End Sub
 
     Private Sub StartConnection()
@@ -154,7 +186,7 @@ Public Class frmLector
                     Try
                         cbxPort.SelectedItem = oPort
                     Catch ex As Exception
-                        Debug.Print("Set CommPort Error: " & ex.ToString())
+                        Console.WriteLine("Set CommPort Error: " & ex.ToString())
                     End Try
                     bResult = True
                     Exit For
@@ -178,7 +210,8 @@ Public Class frmLector
             tabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
-            MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Alerta("Conexión exitosa al reader.", Color.FromArgb(16, 175, 76), 1)
+            'MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         _host.NetDeviceSearcherEnabled = True
         Me.Cursor = cursor
@@ -270,7 +303,7 @@ Public Class frmLector
             Try
                 .SelectedIndex = iSelectedItem
             Catch ex As Exception
-                Debug.Print("RefreshPortList: " & ex.ToString())
+                Console.WriteLine("RefreshPortList: " & ex.ToString())
             End Try
         End With
     End Sub
@@ -329,7 +362,7 @@ Public Class frmLector
     Private Sub ClearTagListView()
         dgvTagList.Rows.Clear()
         _tagList.Clear()
-        CountTags()
+        'CountTags()
     End Sub
     Private Sub CountTags()
         lblTotalCount.Text = _tagList.Count
@@ -351,7 +384,7 @@ Public Class frmLector
             oRow.Cells(0).Value = szPCEPC
             oRow.Cells(1).Value = szTID
             oRow.Cells(2).Value = 1
-            CountTags()
+            'CountTags()
         End If
     End Sub
 
@@ -577,7 +610,6 @@ Public Class frmLector
     End Sub
 
     Private Sub InitializeUI()
-
         tabControl.SelectedTab = tpPerformance
         btnGetRfPower.PerformClick()
         btnGetRfSensitivity.PerformClick()
@@ -593,23 +625,6 @@ Public Class frmLector
         End If
 
         cbxInventory.SelectedIndex = 0
-
-        Dim formResponse As New FormTrabajador()
-
-        If formResponse.ShowDialog() <> DialogResult.OK Then
-            Exit Sub
-        End If
-
-        mCodTrabajador = formResponse.CodTrabajador
-        Dim dato_usuario As String = formResponse.Usuario
-
-        If String.IsNullOrWhiteSpace(mCodTrabajador) OrElse String.IsNullOrWhiteSpace(dato_usuario) Then
-            MessageBox.Show("Por favor, complete todos los campos.", "Error")
-            Exit Sub
-        End If
-
-        ' Concatenar los datos al título de la ventana
-        Me.Text = $"Vincular - Usuario: {dato_usuario} - Trabajador: {mCodTrabajador}"
 
         ' Configurar la pestaña de inventario
         tabControl.SelectedTab = tpInventory
@@ -848,7 +863,7 @@ Public Class frmLector
     End Sub
 
     Private Sub _uhf_OnErrorOccurred(errorCode As ErrorCode, errorMessage As String) Handles _ts800.OnErrorOccurred
-        Debug.Print("errorCode: " & errorCode & vbTab & "errorMessage: " & errorMessage)
+        Console.WriteLine("errorCode: " & errorCode & vbTab & "errorMessage: " & errorMessage)
     End Sub
     Private Sub cbxSession_SelectedIndexChanged(sender As Object, e As EventArgs)
 
@@ -1014,6 +1029,14 @@ Public Class frmLector
         Dim selectedTab As TabPage = tabControl.SelectedTab
 
         If selectedTab.Name = "tpInventory" Then
+            'Validar de que exita contenido mCodTrabajador
+            If String.IsNullOrEmpty(mCodTrabajador) Then
+                Alerta("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36), 3)
+                'MessageBox.Show("Debe ingresar un trabajador antes de acceder a Inventario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                ' Redirigir al usuario a otra pestaña (por ejemplo, tpPerformance)
+                tabControl.SelectedTab = tpPerformance
+                Exit Sub
+            End If
             ' Configuración específica para tpInventory
             Me.WindowState = FormWindowState.Maximized
             Me.tabControl.Dock = DockStyle.None
@@ -1083,15 +1106,41 @@ Public Class frmLector
                 ' Llamada recursiva para manejar anidamientos
                 ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
             ElseIf TypeOf control Is DataGridView Then
-                Dim dgv As DataGridView = TryCast(control, DataGridView)
-                If dgv IsNot Nothing Then
-                    ' Ajustar la fuente del DataGridView
-                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
-                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                If (control.Name = "dgvTagList") Then
+                    Console.WriteLine($"<--Nombre-->{control.Name}")
+                    Dim dgv As DataGridView = TryCast(control, DataGridView)
+                    If dgv IsNot Nothing Then
+                        ' Ajustar la fuente del DataGridView
+                        'dgv.Font = New Font(dgv.Font.FontFamily, fontSize)
+                        'dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                        'dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                        'dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                    End If
+                End If
+            ElseIf TypeOf control Is CheckBox Then
+                Dim chkBox As CheckBox = TryCast(control, CheckBox)
+                Console.WriteLine("Redimenciona PUTO")
+                If chkBox IsNot Nothing Then
+                    chkBox.Font = New Font(chkBox.Font.FontFamily, fontSize1)
+
+                    ' Ajustar el ancho y altura del CheckBox
+                    Dim columnIndex As Integer = panel.GetColumn(chkBox)
+                    Dim rowIndex As Integer = panel.GetRow(chkBox)
+
+                    If columnIndex >= 0 And rowIndex >= 0 Then
+                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
+                        Dim cellHeight As Integer = panel.GetRowHeights()(rowIndex)
+
+                        chkBox.Width = CInt(cellWidth * 0.9) ' Ajustar al 90% del ancho de la celda
+                        chkBox.Height = CInt(cellHeight * 0.8) ' Ajustar al 80% de la altura de la celda
+                    End If
+
+                    ' Centrar el CheckBox en la celda
+                    chkBox.Anchor = AnchorStyles.None
+                    chkBox.Margin = New Padding(0)
                 End If
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
+                Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
                 If control.Name = "CodBarras" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
@@ -1110,7 +1159,7 @@ Public Class frmLector
         Next
     End Sub
     'Private Sub LeerCodigoRFID()
-    '    Debug.Print("Se ejecuta LeerCodigoRFID")
+    '    Console.WriteLine("Se ejecuta LeerCodigoRFID")
     '    btnStartInventory.PerformClick()
     '    btnStopInventory.PerformClick()
     '    Dim mCodBarra As String = CodBarras.Text.Trim()
@@ -1118,7 +1167,7 @@ Public Class frmLector
 
     '    CodBarras.Clear()
     '    CodBarras.Focus()
-    '    Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
+    '    Console.WriteLine($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
 
     '    If String.IsNullOrWhiteSpace(sCodigoRFID) Then
     '        MsnVincular.Text = "Por favor, lea un código RFID válido."
@@ -1130,32 +1179,32 @@ Public Class frmLector
     '        Exit Sub
     '    End If
 
-    '    Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+    '    Console.WriteLine($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
 
     '    ' Validar si el RFID ya existe en la base de datos
     '    Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
     '    Dim dataRta = m_BDPrendaScm.GetData(dictionary)
-    '    Debug.Print($"Sigue 1")
+    '    Console.WriteLine($"Sigue 1")
     '    If dataRta.Rows.Count > 0 Then
     '        Dim lsDatos = BuildDataString(dataRta.Rows(0))
     '        MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
     '        Exit Sub
     '    End If
-    '    Debug.Print($"Sigue 2")
+    '    Console.WriteLine($"Sigue 2")
 
     '    ' Manejar conexión explícita para Sybase
     '    Using connectionAse = m_BDPrenda.GetConnection()
-    '        Debug.Print($"Estado de la conexión antes de SetRfid: {connectionAse?.State}")
+    '        Console.WriteLine($"Estado de la conexión antes de SetRfid: {connectionAse?.State}")
 
     '        ' Enviar datos a Sybase
     '        Dim lsResult = m_BDPrenda.SetRfid(connectionAse, mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
-    '        Debug.Print($"Resultado de SetRfid: {lsResult.Item1}, Mensaje: {lsResult.Item2}")
-    '        Debug.Print($"Datos devueltos por SetRfid: Filas={lsResult.Item3.Rows.Count}")
+    '        Console.WriteLine($"Resultado de SetRfid: {lsResult.Item1}, Mensaje: {lsResult.Item2}")
+    '        Console.WriteLine($"Datos devueltos por SetRfid: Filas={lsResult.Item3.Rows.Count}")
 
     '        MsnVincular.Text = lsResult.Item2
-    '        Debug.Print($"Sigue 3")
+    '        Console.WriteLine($"Sigue 3")
     '        If lsResult.Item1 <> 0 Then
-    '            Debug.Print($"Error al registrar RFID en Sybase: {lsResult.Item2}")
+    '            Console.WriteLine($"Error al registrar RFID en Sybase: {lsResult.Item2}")
     '            MsnVincular.Text = $"Error al registrar RFID en Sybase: {lsResult.Item2}"
     '            Exit Sub
     '        End If
@@ -1180,20 +1229,20 @@ Public Class frmLector
     '        }
 
     '            Dim llReturn = m_BDPrendaScm.Insert(insertData)
-    '            Debug.Print($"Sigue 4")
+    '            Console.WriteLine($"Sigue 4")
     '            If llReturn = -1 Then
     '                MsnVincular.Text = $"Error al registrar en MySQL: {m_BDPrendaScm.GetError()}"
     '                Exit Sub
     '            End If
 
     '            Dim lsDatos = BuildDataString(row)
-    '            Debug.Print($"Sigue 5")
+    '            Console.WriteLine($"Sigue 5")
     '            MsnVincular.Text = $"Se registró correctamente: {lsDatos}"
     '        Else
-    '            Debug.Print("No se devolvieron datos de Retrieve.")
+    '            Console.WriteLine("No se devolvieron datos de Retrieve.")
     '            MsnVincular.Text = "Error al procesar datos. Verifique con el administrador."
     '        End If
-    '        Debug.Print($"Estado de la conexión después de SetRfid: {connectionAse?.State}")
+    '        Console.WriteLine($"Estado de la conexión después de SetRfid: {connectionAse?.State}")
     '    End Using
     'End Sub
 
@@ -1239,7 +1288,7 @@ Public Class frmLector
                 If dgvTagList Is Nothing Then Throw New Exception("dgvTagList no está inicializado.")
                 LeerCodigoRFID()
             Catch ex As Exception
-                Debug.Print($"Error en CodBarras_KeyDown: {ex.Message}")
+                Console.WriteLine($"Error en CodBarras_KeyDown: {ex.Message}")
                 MsnVincular.Text = "Error: " & ex.Message
             Finally
                 enterPressed = False
@@ -1261,61 +1310,73 @@ Public Class frmLector
     End Function
 
     Private Sub LeerCodigoRFID()
-        'Debug.Print("Se ejecuta LeerCodigoRFID")
-        StartInventory()
-        StopInventory()
-        Dim lsDatos As String = ""
+        dgvTagList.Rows.Clear()
         Dim mCodBarra As String = CodBarras.Text.Trim()
-        CodBarras_Bloqueado()
-        Dim sCodigoRFID As String = ObtenerPCEPC()
-        'Dim otroRFID As String = "" 'PrimerValorRFID()
+        Dim sCodigoRFID As String = ""
 
-        'Debug.Print($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID} otroRFID->{otroRFID}")
-
-        If String.IsNullOrWhiteSpace(sCodigoRFID) Then
-            MsnVincular.Text = "Por favor, lea un código RFID."
-            CodBarras_Desbloqueado()
-            CodBarras_ClearFoco()
-            Exit Sub
-        End If
-        'Prueba
-        'sCodigoRFID = GenerarCadenaAleatoria(24)
+        Dim M_S_N As String = ""
 
         If String.IsNullOrWhiteSpace(mCodBarra) Then
-            MsnVincular.Text = "Por favor, lea un código de barras."
+            MostrarAlerta("Por favor, lea un código de barras.")
             CodBarras_Desbloqueado()
             CodBarras_ClearFoco()
             Exit Sub
         End If
 
-        'Debug.Print($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+        Dim isChecked As Boolean = If(m_BDPrenda.TieneRFID(mCodBarra.Substring(0, 10)) > 0, True, False)
+        Console.WriteLine($"El valor es-->{isChecked}")
 
-        ' Validar si el RFID ya existe en la base de datos
-        ' Validar si el RFID ya existe en la base de datos
-        Try
-            Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
-            Dim dataRta = m_BDPrendaScm.GetData(dictionary)
+        If isChecked Then
+            StartInventory()
+            StopInventory()
+        End If
 
-            'Debug.Print($"Filas devueltas por GetData: {dataRta.Rows.Count}")
-            If dataRta.Rows.Count > 0 Then
-                lsDatos = BuildDataString(dataRta.Rows(0))
-                MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
+        CodBarras_Bloqueado()
+
+        If isChecked Then
+            Dim cantLeidas As Integer = CantidadFilasLeidas()
+            If (cantLeidas <> 1) Then
+                M_S_N = If(cantLeidas > 1, $"Por favor, verificar tienen: {cantLeidas} RFID.", "Por favor, verificar no teine RFID.")
+
+                MostrarAlerta(M_S_N)
                 CodBarras_Desbloqueado()
                 CodBarras_ClearFoco()
                 Exit Sub
             End If
-        Catch ex As Exception
-            'Debug.Print($"Error al validar RFID: {ex.Message}")
-            MsnVincular.Text = "Error al validar RFID. Verifique con el administrador."
-            CodBarras_Desbloqueado()
-            CodBarras_ClearFoco()
-            Exit Sub
-        End Try
+            sCodigoRFID = ObtenerPCEPC()
 
+            ' Validar si el RFID ya existe en la base de datos
+            Try
+                Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
+                Dim dataRta = m_BDPrendaScm.GetData(dictionary)
+
+                'Console.WriteLine($"Filas devueltas por GetData: {dataRta.Rows.Count}")
+                If dataRta.Rows.Count > 0 Then
+                    lsDatos = BuildDataString(dataRta.Rows(0))
+                    MostrarAlerta($"RFID ya registrado en: {lsDatos}. Verifique.")
+                    CodBarras_Desbloqueado()
+                    CodBarras_ClearFoco()
+                    Exit Sub
+                End If
+            Catch ex As Exception
+                'Console.WriteLine($"Error al validar RFID: {ex.Message}")
+                CodBarras_Desbloqueado()
+                CodBarras_ClearFoco()
+                MostrarAlerta("Error al validar RFID. Verifique con el administrador.")
+                Exit Sub
+            End Try
+        End If
+        'Prueba
+        'sCodigoRFID = GenerarCadenaAleatoria(24)
+
+        'Console.WriteLine($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+
+        'Se intertan los valores al procedimento almacenado USP_SAL_EMB_CON_RFID
+        'El procediento valida y muestra msn con codigo de error lugo se actualiza la taba ordenacabadostallasmov y inserta en tmp_etiq_timbradas
         Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
         MsnVincular.Text = lsResult.Item2
         If lsResult.Item1 <> 0 Then
-            'Debug.Print($"Error al registrar en Sybase: {lsResult.Item2}")
+            'Console.WriteLine($"Error al registrar en Sybase: {lsResult.Item2}")
             CodBarras_Desbloqueado()
             CodBarras_ClearFoco()
             Exit Sub
@@ -1324,9 +1385,10 @@ Public Class frmLector
         Try
             Dim dataTimbrado = m_BDPrenda.GetTimbradasByWorkerAndEtiqueta(mCodTrabajador, mCodBarra)
             If dataTimbrado.Rows.Count = 0 Then
-                MsnVincular.Text = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
+                M_S_N = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
                 CodBarras_Desbloqueado()
                 CodBarras_ClearFoco()
+                MostrarAlerta(M_S_N)
                 Exit Sub
             End If
 
@@ -1347,7 +1409,8 @@ Public Class frmLector
 
             Dim llReturn = m_BDPrendaScm.Insert(insertData)
             If llReturn <> 1 Then
-                MsnVincular.Text = Msn(llReturn)
+                M_S_N = Msn(llReturn)
+                MostrarAlerta(M_S_N)
             Else
                 MsnVincular.Text = "Prenda registrada exitosamente."
                 ' Eliminar el elemento "id_barras" del diccionario insertData
@@ -1364,12 +1427,36 @@ Public Class frmLector
                 CantidadFilas()
             End If
         Catch ex As Exception
-            Debug.Print($"Error en el flujo de registro: {ex.Message}")
+            Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
             MsnVincular.Text = "Error inesperado al registrar la prenda. Consulte con el administrador."
         End Try
         CodBarras_Desbloqueado()
         CodBarras_ClearFoco()
     End Sub
+    Private Sub MostrarAlerta(mensaje As String)
+        MsnVincular.Text = mensaje
+        Alerta(mensaje, Color.FromArgb(238, 26, 36), 3)
+    End Sub
+
+    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer)
+        Using alerta As New FormAlerta(mensaje, color_, tipo)
+            alerta.ShowDialog()
+        End Using
+    End Sub
+    Private Function ObtenerPrimerRFID() As String
+        ' Asegúrate de que el DataGridView tenga al menos una fila antes de intentar acceder al valor
+        Dim codigo As String = ""
+        If DataGridView1.Rows.Count > 0 Then
+            ' Accede al valor de la primera fila en la columna "clnEPC"
+            Dim firstValue As Object = DataGridView1.Rows(0).Cells(0).Value
+
+            ' Comprueba si el valor no es nulo
+            If firstValue IsNot Nothing Then
+                codigo = firstValue.ToString()
+            End If
+        End If
+        Return codigo
+    End Function
     Private Function GenerarCadenaAleatoria(longitud As Integer) As String
         Dim caracteresPermitidos As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         Dim resultado As New Text.StringBuilder()
@@ -1398,6 +1485,12 @@ Public Class frmLector
         Console.WriteLine($"totalRegistros-->{totalRegistros}")
         lblTotalCount.Text = CType(totalRegistros, String)
     End Sub
+
+    Private Function CantidadFilasLeidas() As Integer
+        Dim totalRegistrosLeidos As Integer = If(dgvTagList.AllowUserToAddRows, dgvTagList.Rows.Count - 1, dgvTagList.Rows.Count)
+        Console.WriteLine($"totalRegistros ledidos-->{totalRegistrosLeidos}")
+        Return totalRegistrosLeidos
+    End Function
 
     Private Function Msn(llReturn As Long) As String
         Dim message As String
@@ -1456,5 +1549,12 @@ Public Class frmLector
     Private Sub CodBarras_ClearFoco()
         CodBarras.Clear()
         CodBarras.Focus()
+    End Sub
+
+    ' Deshabilitar todos los controles dentro de un TabPage
+    Private Sub DeshabilitarControles(tabPage As TabPage, habilitar As Boolean)
+        For Each control As Control In tabPage.Controls
+            control.Enabled = habilitar
+        Next
     End Sub
 End Class

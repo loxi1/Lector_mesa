@@ -24,6 +24,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -36,7 +37,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -186,6 +186,30 @@
     <Compile Include="BDPrendaScm.vb" />
     <Compile Include="CryptoHelper.vb" />
     <Compile Include="DBConsultas.vb" />
+    <Compile Include="FormAlerta.Designer.vb">
+      <DependentUpon>FormAlerta.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAlerta.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAlertaError.Designer.vb">
+      <DependentUpon>FormAlertaError.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAlertaError.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAlertaOk.Designer.vb">
+      <DependentUpon>FormAlertaOk.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAlertaOk.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAviso.Designer.vb">
+      <DependentUpon>FormAviso.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAviso.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormInicio.Designer.vb">
       <DependentUpon>FormInicio.vb</DependentUpon>
     </Compile>
@@ -227,6 +251,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
+    <Compile Include="My Project\Prueba.Designer.vb">
+      <DependentUpon>Prueba.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Prueba.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -249,6 +279,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormAlerta.resx">
+      <DependentUpon>FormAlerta.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAlertaError.resx">
+      <DependentUpon>FormAlertaError.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAlertaOk.resx">
+      <DependentUpon>FormAlertaOk.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAviso.resx">
+      <DependentUpon>FormAviso.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormInicio.resx">
       <DependentUpon>FormInicio.vb</DependentUpon>
     </EmbeddedResource>
@@ -268,6 +310,9 @@
     <EmbeddedResource Include="frmTS100Sample.resx">
       <DependentUpon>frmTS100Sample.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Prueba.resx">
+      <DependentUpon>Prueba.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -308,6 +353,9 @@
     <None Include="Resources\conex_1.png" />
     <Content Include="icono_f.ico" />
     <Content Include="mirame_pus.ico" />
+    <None Include="Resources\advertencia_90.png" />
+    <None Include="Resources\eliminar_90.png" />
+    <None Include="Resources\ok_90.png" />
     <Content Include="SampleRevision.txt" />
   </ItemGroup>
   <ItemGroup>

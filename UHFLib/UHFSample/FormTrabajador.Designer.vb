@@ -88,7 +88,7 @@ Partial Class FormTrabajador
         Me.buttonCancelar.Name = "buttonCancelar"
         Me.buttonCancelar.Size = New System.Drawing.Size(148, 47)
         Me.buttonCancelar.TabIndex = 5
-        Me.buttonCancelar.Text = "Cancelar"
+        Me.buttonCancelar.Text = "Limpiar"
         Me.buttonCancelar.UseVisualStyleBackColor = False
         '
         'FormTrabajador
@@ -106,7 +106,7 @@ Partial Class FormTrabajador
         Me.MinimizeBox = False
         Me.Name = "FormTrabajador"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "FormTrabajador"
+        Me.Text = "Acceso al Sistema"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
