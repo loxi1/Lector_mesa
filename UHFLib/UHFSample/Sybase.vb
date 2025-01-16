@@ -68,7 +68,7 @@ Public Class Sybase
             ' Crear la conexión si es necesario
             If myConexion Is Nothing OrElse myConexion.State = ConnectionState.Closed OrElse myConexion.State = ConnectionState.Broken Then
                 Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
-                Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
+                Console.WriteLine($"Cadena de conexión generada: {sCadenaConexion}")
 
                 myConexion = New AseConnection(sCadenaConexion)
                 myConexion.Open()

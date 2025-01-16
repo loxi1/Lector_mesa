@@ -5,10 +5,10 @@
   "DB_USER_MY": "fjurado",
   "DB_PASSWORD_MY": "987960662",
   "Connection Lifetime": "300",
-  "SERVER_NAME_SY": "dbsybase10.cofaco.com",
+  "SERVER_NAME_SY": "dbsybase06",
   "PORT_SY": "6100",
   "DATA_BASE_SY": "nexus",
-  "METHOD":"AES-256-CBC",
-  "SECRET_IV":"101712",
-  "SECRET_KEY":"$BP@2017"
+  "METHOD": "AES-256-CBC",
+  "SECRET_IV": "101712",
+  "SECRET_KEY": "$BP@2017"
 }

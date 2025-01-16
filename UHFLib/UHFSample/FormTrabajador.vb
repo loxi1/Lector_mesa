@@ -15,7 +15,7 @@ Public Class FormTrabajador
         Try
             ' Validar campos
             If String.IsNullOrWhiteSpace(txtCodTrabajador.Text) OrElse String.IsNullOrWhiteSpace(ClaveTrabajador.Text) Then
-                Alerta("Por favor, Complete todos los campos.", Color.Red, 3)
+                AlertaError("Por favor, Complete todos los campos.", Color.Red)
                 Exit Sub
             End If
 
@@ -32,7 +32,7 @@ Public Class FormTrabajador
             Dim ldtTrabajador As DataTable = usuario.ValidateUser(whereParameters)
 
             If ldtTrabajador Is Nothing OrElse ldtTrabajador.Rows.Count = 0 Then
-                Alerta("Código o password incorrecto, Verificar.", Color.Red, 3)
+                AlertaError("Código o password incorrecto, Verificar.", Color.Red)
                 Exit Sub
             End If
 
@@ -46,7 +46,7 @@ Public Class FormTrabajador
             Me.DialogResult = DialogResult.OK
             Me.Close()
         Catch ex As Exception
-            Alerta("Ocurrió un error al validar el trabajador: ", Color.Red, 3)
+            AlertaError("Ocurrió un error al validar el trabajador: ", Color.Red)
         End Try
     End Sub
 
@@ -86,8 +86,8 @@ Public Class FormTrabajador
         End If
     End Sub
 
-    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer, Optional tiempo As Integer = 30)
-        Using alerta As New FormAlerta(mensaje, color_, tipo, tiempo)
+    Private Sub AlertaError(mensaje As String, color_ As Color)
+        Using alerta As New FormAlertaError("Upss...", mensaje, color_)
             alerta.ShowDialog()
         End Using
     End Sub

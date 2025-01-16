@@ -24,20 +24,20 @@ Partial Class FormAlertaOk
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.icon_ok = New System.Windows.Forms.PictureBox()
         Me.TituloAviso = New System.Windows.Forms.Label()
         Me.DescripcionAviso = New System.Windows.Forms.Label()
         Me.FranjaAbajo = New System.Windows.Forms.TableLayoutPanel()
-        Me.icon_error = New System.Windows.Forms.PictureBox()
         Me.Tiempo = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
-        CType(Me.icon_error, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.icon_ok, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.icon_error, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.icon_ok, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TituloAviso, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.DescripcionAviso, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.FranjaAbajo, 0, 3)
@@ -53,16 +53,28 @@ Partial Class FormAlertaOk
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(468, 252)
         Me.TableLayoutPanel1.TabIndex = 2
         '
+        'icon_ok
+        '
+        Me.icon_ok.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.icon_ok.Image = Global.UHF_Sample.My.Resources.Resources.ok_90
+        Me.icon_ok.Location = New System.Drawing.Point(189, 28)
+        Me.icon_ok.Margin = New System.Windows.Forms.Padding(0)
+        Me.icon_ok.Name = "icon_ok"
+        Me.icon_ok.Size = New System.Drawing.Size(90, 90)
+        Me.icon_ok.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.icon_ok.TabIndex = 0
+        Me.icon_ok.TabStop = False
+        '
         'TituloAviso
         '
         Me.TituloAviso.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.TituloAviso.AutoSize = True
         Me.TituloAviso.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TituloAviso.Location = New System.Drawing.Point(146, 154)
+        Me.TituloAviso.Location = New System.Drawing.Point(145, 154)
         Me.TituloAviso.Name = "TituloAviso"
-        Me.TituloAviso.Size = New System.Drawing.Size(175, 31)
+        Me.TituloAviso.Size = New System.Drawing.Size(177, 31)
         Me.TituloAviso.TabIndex = 1
-        Me.TituloAviso.Text = "¡Hola Bbita! "
+        Me.TituloAviso.Text = "¡Hola Loxi1! "
         Me.TituloAviso.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DescripcionAviso
@@ -92,17 +104,8 @@ Partial Class FormAlertaOk
         Me.FranjaAbajo.Size = New System.Drawing.Size(468, 7)
         Me.FranjaAbajo.TabIndex = 4
         '
-        'icon_error
+        'Tiempo
         '
-        Me.icon_error.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.icon_error.Image = Global.UHF_Sample.My.Resources.Resources.ok_90
-        Me.icon_error.Location = New System.Drawing.Point(189, 28)
-        Me.icon_error.Margin = New System.Windows.Forms.Padding(0)
-        Me.icon_error.Name = "icon_error"
-        Me.icon_error.Size = New System.Drawing.Size(90, 90)
-        Me.icon_error.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.icon_error.TabIndex = 0
-        Me.icon_error.TabStop = False
         '
         'FormAlertaOk
         '
@@ -110,17 +113,19 @@ Partial Class FormAlertaOk
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(468, 252)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.MaximizeBox = False
         Me.Name = "FormAlertaOk"
         Me.Text = "FormAlertaOk"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
-        CType(Me.icon_error, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.icon_ok, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents icon_error As PictureBox
+    Friend WithEvents icon_ok As PictureBox
     Friend WithEvents TituloAviso As Label
     Friend WithEvents DescripcionAviso As Label
     Friend WithEvents FranjaAbajo As TableLayoutPanel

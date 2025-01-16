@@ -36,7 +36,6 @@ Public Class frmLector
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'DeshabilitarControles(tpInventory, False) ' Desactivar "tpInventory"
-        Console.WriteLine($"cantiad ledidas inicio-->{CantidadFilasLeidas()}")
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -101,6 +100,9 @@ Public Class frmLector
         tabControl.Enabled = False
         _FrequencyItems = New List(Of CheckBox)
         _host.NetDeviceSearcherEnabled = True
+
+        ' Concatenar los datos al título de la ventana
+        Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
     End Sub
     Private Sub AdjustTabWidth()
         ' Ajustar el ancho de cada pestaña basado en el texto
@@ -210,7 +212,7 @@ Public Class frmLector
             tabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
-            Alerta("Conexión exitosa al reader.", Color.FromArgb(16, 175, 76), 1)
+            AlertaOk("Conexion", Color.FromArgb(16, 175, 76), 30, "Exitosa al reader.")
             'MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         _host.NetDeviceSearcherEnabled = True
@@ -1031,7 +1033,7 @@ Public Class frmLector
         If selectedTab.Name = "tpInventory" Then
             'Validar de que exita contenido mCodTrabajador
             If String.IsNullOrEmpty(mCodTrabajador) Then
-                Alerta("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36), 3)
+                AlertaError("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36))
                 'MessageBox.Show("Debe ingresar un trabajador antes de acceder a Inventario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 ' Redirigir al usuario a otra pestaña (por ejemplo, tpPerformance)
                 tabControl.SelectedTab = tpPerformance
@@ -1435,11 +1437,20 @@ Public Class frmLector
     End Sub
     Private Sub MostrarAlerta(mensaje As String)
         MsnVincular.Text = mensaje
-        Alerta(mensaje, Color.FromArgb(238, 26, 36), 3)
+        AlertaError(mensaje, Color.FromArgb(238, 26, 36))
     End Sub
-
+    Private Sub AlertaError(mensaje As String, color As Color)
+        Using alerta As New FormAlertaError("Error", mensaje, color)
+            alerta.ShowDialog()
+        End Using
+    End Sub
     Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer)
         Using alerta As New FormAlerta(mensaje, color_, tipo)
+            alerta.ShowDialog()
+        End Using
+    End Sub
+    Private Sub AlertaOk(titulo As String, color_ As Color, tiempo As Integer, descripcion As String)
+        Using alerta As New FormAlertaOk(titulo, color_, tiempo, descripcion)
             alerta.ShowDialog()
         End Using
     End Sub

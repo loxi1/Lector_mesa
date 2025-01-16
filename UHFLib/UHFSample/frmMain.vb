@@ -23,12 +23,12 @@ Public Class frmMain
 
             ' Validar que los datos no estén vacíos
             If String.IsNullOrWhiteSpace(mCodTrabajador) OrElse String.IsNullOrWhiteSpace(dato_usuario) Then
-                Alerta("Por favor, complete todos los campos.", Color.FromArgb(238, 26, 36), 3)
+                AlertaError("Por favor, complete todos los campos.", Color.FromArgb(238, 26, 36))
                 Me.Close()
                 Exit Sub
             End If
 
-            Alerta($"¡Hola {dato_usuario}! Qué bueno verte nuevamente.", Color.FromArgb(16, 175, 76), 1, 60)
+            AlertaOk($"¡Hola {dato_usuario}!", Color.FromArgb(16, 175, 76), 60)
             ' Abrir el formulario principal si el login es válido
             _MainForm = New frmLector(mCodTrabajador, dato_usuario)
             _MainForm.Show()
@@ -39,7 +39,7 @@ Public Class frmMain
         Else
             ' Mostrar alerta si la conexión no es por cable (Ethernet)
             Dim mensaje As String = If(Tipo_de_red = 1, "Está conectado por WiFi, debe usar una conexión por cable.", "No se detectó una conexión activa.")
-            Alerta(mensaje, Color.FromArgb(238, 26, 36), 3)
+            AlertaError(mensaje, Color.FromArgb(238, 26, 36))
             Me.Close()
         End If
     End Sub
@@ -74,8 +74,14 @@ Public Class frmMain
         End Try
     End Sub
 
-    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer, Optional tiempo As Integer = 30)
-        Using alerta As New FormAlerta(mensaje, color_, tipo, tiempo)
+    Private Sub AlertaError(mensaje As String, color_ As Color)
+        Using alerta As New FormAlertaError("Upss...", mensaje, color_)
+            alerta.ShowDialog()
+        End Using
+    End Sub
+
+    Private Sub AlertaOk(mensaje As String, color_ As Color, Optional tiempo As Integer = 30)
+        Using alerta As New FormAlertaOk(mensaje, color_, tiempo)
             alerta.ShowDialog()
         End Using
     End Sub
