@@ -228,6 +228,7 @@ Public Class BDPrenda
 
     '    Return resultTable
     'End Function
+
     Public Function GetTimbradasByWorkerAndEtiqueta(pCodigoTrabajador As String, petiqueta As String) As DataTable
         Dim resultTable As New DataTable()
 

@@ -1,5 +1,7 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.Linq
+Imports System.Threading
 Imports com.gigatms
 Imports com.gigatms.Parameters
 
@@ -20,6 +22,7 @@ Public Class frmLector
     Dim enterPressed As Boolean = False ' Bandera para evitar ejecuciones múltiples
     Dim m_BDPrenda As New BDPrenda()
     Dim m_BDPrendaScm As New BDPrendaScm()
+    Dim m_DBConsultarPrenda As New DBConsultarPrenda()
     Private _tieneRFID As Boolean = False
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
@@ -36,6 +39,7 @@ Public Class frmLector
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'DeshabilitarControles(tpInventory, False) ' Desactivar "tpInventory"
+        'tabControl.TabPages.Remove(tpPapper)
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -328,6 +332,7 @@ Public Class frmLector
     Private m_bIsInventoryProcessing As Boolean
     Private Sub btnStartInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         StartInventory()
+        Console.WriteLine($"Codigo RFID-->{ObtenerPCEPC()}")
     End Sub
 
     Private Sub StartInventory()
@@ -1029,8 +1034,7 @@ Public Class frmLector
 
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
         Dim selectedTab As TabPage = tabControl.SelectedTab
-
-        If selectedTab.Name = "tpInventory" Then
+        If selectedTab.Name IsNot "tpPerformance" Then
             'Validar de que exita contenido mCodTrabajador
             If String.IsNullOrEmpty(mCodTrabajador) Then
                 AlertaError("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36))
@@ -1051,27 +1055,20 @@ Public Class frmLector
             ' Configuración de pnlConnect en la parte inferior
             pnlConnect.Dock = DockStyle.None
             pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
-            CodBarras.Focus()
-            ' Redimensionar elementos dentro de TableLayoutPanel2
-            For Each control As Control In TableLayoutPanel2.Controls
 
-                Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
-                Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
+            Try
+                Me.BeginInvoke(Sub() InitializeInventoryTab())
+            Catch ex As Exception
+                Console.WriteLine($"Error al cambiar de pestaña: {ex.Message}")
+            End Try
 
-                If control.Name = "DataGridView1" Then
-                    Dim dgv As DataGridView = TryCast(control, DataGridView)
-                    If dgv IsNot Nothing Then
-                        ' Ajustar la fuente del DataGridView
-                        dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
-                        dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                        dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
-                    End If
-                ElseIf TypeOf control Is TableLayoutPanel Then
-                    ' Redimensionar controles dentro de TableLayoutPanel anidados
-                    ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
-                End If
-            Next
+            If selectedTab.Name = "tpInventory" Then
+                TabInventario()
+            ElseIf selectedTab.Name = "tpSearch" Then
+                TbBuscarPrenda()
+            ElseIf selectedTab.Name = "tpPapper" Then
+                TbHojaMarcacion()
+            End If
         Else
             ' Configuración general para otras pestañas
             Me.WindowState = FormWindowState.Normal
@@ -1081,12 +1078,151 @@ Public Class frmLector
             pnlConnect.Dock = DockStyle.Bottom
         End If
     End Sub
+    Private Sub AdjustDataGridView(dgv As DataGridView)
+        ' Desactivar ajuste automático antes de realizar cambios
+        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
 
+        Try
+            ' Realizar ajustes aquí (ejemplo: ajustar ancho de columnas)
+            For Each column As DataGridViewColumn In dgv.Columns
+                column.Width = 100 ' Ajusta el ancho según tus necesidades
+            Next
+        Catch ex As Exception
+            Console.WriteLine($"Error ajustando DataGridView: {ex.Message}")
+        Finally
+            ' Reactivar ajuste automático
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        End Try
+    End Sub
+    Private Sub InitializeInventoryTab()
+        ' Configurar controles dentro de tpInventory
+        Try
+            CodBarras.Focus()
+            AdjustDataGridView(dgvTagList)
+        Catch ex As Exception
+            Console.WriteLine($"Error inicializando pestaña de inventario: {ex.Message}")
+        End Try
+    End Sub
+    Private Sub TbHojaMarcacion()
+        TextBoxOP.Focus()
+        For Each control As Control In TablaContenedorHM.Controls
+            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
+            Dim fontSize2 As Single = Math.Max(10, Me.ClientSize.Width / 150)
+
+            If control.Name = "DataGridView3" Then
+                Dim dgv As DataGridView = TryCast(control, DataGridView)
+                If dgv IsNot Nothing Then
+                    ' Ajustar la fuente del DataGridView
+                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                End If
+            ElseIf TypeOf control Is TableLayoutPanel Then
+                ResizeTableLPCIHM(TryCast(control, TableLayoutPanel), fontSize, fontSize1, fontSize2)
+            End If
+        Next
+    End Sub
+    Private Sub TbBuscarPrenda()
+        BuscarCodBarras.Focus()
+        For Each control As Control In tablaBuscarPrenda.Controls
+            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
+
+            If control.Name = "DataGridView2" Then
+                Dim dgv As DataGridView = TryCast(control, DataGridView)
+                If dgv IsNot Nothing Then
+                    ' Ajustar la fuente del DataGridView
+                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                End If
+            ElseIf control.Name = "MsnBusquedaPrenda" Then
+                ' Ajustar el tamaño de la fuente del control CodBarras
+                control.Font = New Font(control.Font.FontFamily, fontSize1)
+                ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
+                If control.Parent IsNot Nothing Then
+                    control.Width = control.Parent.ClientSize.Width
+                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
+                End If
+            ElseIf TypeOf control Is TableLayoutPanel Then
+                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+            End If
+        Next
+    End Sub
+    Private Sub TabInventario()
+        CodBarras.Focus()
+        ' Redimensionar elementos dentro de TableLayoutPanel2
+        For Each control As Control In TableLayoutPanel2.Controls
+
+            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 120)
+
+            If control.Name = "DataGridView1" Then
+                Dim dgv As DataGridView = TryCast(control, DataGridView)
+                If dgv IsNot Nothing Then
+                    ' Ajustar la fuente del DataGridView
+                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                End If
+            ElseIf TypeOf control Is TableLayoutPanel Then
+                ' Redimensionar controles dentro de TableLayoutPanel anidados
+                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+            End If
+        Next
+    End Sub
+    Private Sub ResizeTableLPCIHM(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single, fontSize2 As Single)
+        For Each control As Control In panel.Controls
+            If TypeOf control Is Button Then
+                Dim btn As Button = TryCast(control, Button)
+                If btn IsNot Nothing And (control.Name = "BtnBuscarHM" Or control.Name = "BtnLimpiarHM") Then
+                    ' Ajustar el tamaño de la fuente del botón
+                    btn.Font = New Font(btn.Font.FontFamily, fontSize1)
+
+                    ' Ajustar el ancho del botón al 100% de su celda en el TableLayoutPanel
+                    Dim columnIndex As Integer = panel.GetColumn(control)
+                    If columnIndex >= 0 Then
+                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
+                        btn.Width = cellWidth
+                    End If
+                    ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
+                    Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
+                    btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
+                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
+
+                    ' (Opcional) Asegurar que el botón esté centrado en su celda
+                    btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                End If
+            ElseIf Not String.IsNullOrEmpty(control.Name) Then
+                Console.WriteLine($"Nombre-->{control.Name}")
+                ' Ajustar la fuente de otros controles si es necesario
+                If control.Name = "TextBoxOP" Or control.Name = "TextBoxHM" Then
+                    ' Ajustar el tamaño de la fuente del control CodBarras
+                    control.Font = New Font(control.Font.FontFamily, fontSize)
+                    ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
+                    If control.Parent IsNot Nothing Then
+                        control.Width = control.Parent.ClientSize.Width
+                        control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
+                    End If
+                ElseIf control.Name.StartsWith("text_", StringComparison.OrdinalIgnoreCase) Then
+                    control.Font = New Font(control.Font.FontFamily, fontSize2)
+                ElseIf control.Name.StartsWith("lbl_", StringComparison.OrdinalIgnoreCase) Then
+                    control.Font = New Font(control.Font.FontFamily, fontSize2, FontStyle.Bold)
+                Else
+                    control.Font = New Font(control.Font.FontFamily, fontSize1)
+                End If
+            End If
+        Next
+    End Sub
     Private Sub ResizeTableLayoutPanelControls(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single)
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
-                If btn IsNot Nothing And control.Name = "btnClear" Then
+                If btn IsNot Nothing And (control.Name = "btnClear") Then
                     ' Ajustar el tamaño de la fuente del botón
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
 
@@ -1119,32 +1255,10 @@ Public Class frmLector
                         'dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
                     End If
                 End If
-            ElseIf TypeOf control Is CheckBox Then
-                Dim chkBox As CheckBox = TryCast(control, CheckBox)
-                Console.WriteLine("Redimenciona PUTO")
-                If chkBox IsNot Nothing Then
-                    chkBox.Font = New Font(chkBox.Font.FontFamily, fontSize1)
-
-                    ' Ajustar el ancho y altura del CheckBox
-                    Dim columnIndex As Integer = panel.GetColumn(chkBox)
-                    Dim rowIndex As Integer = panel.GetRow(chkBox)
-
-                    If columnIndex >= 0 And rowIndex >= 0 Then
-                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
-                        Dim cellHeight As Integer = panel.GetRowHeights()(rowIndex)
-
-                        chkBox.Width = CInt(cellWidth * 0.9) ' Ajustar al 90% del ancho de la celda
-                        chkBox.Height = CInt(cellHeight * 0.8) ' Ajustar al 80% de la altura de la celda
-                    End If
-
-                    ' Centrar el CheckBox en la celda
-                    chkBox.Anchor = AnchorStyles.None
-                    chkBox.Margin = New Padding(0)
-                End If
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
                 Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
-                If control.Name = "CodBarras" Then
+                If control.Name = "CodBarras" Or control.Name = "BuscarCodBarras" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
                     control.Font = New Font(control.Font.FontFamily, fontSize)
                     ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
@@ -1152,7 +1266,7 @@ Public Class frmLector
                         control.Width = control.Parent.ClientSize.Width
                         control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
                     End If
-                ElseIf control.Name = "Label34" Then
+                ElseIf control.Name = "Label34" Or control.Name = "Label5" Then
                     control.Font = New Font(control.Font.FontFamily, fontSize)
                 Else
                     control.Font = New Font(control.Font.FontFamily, fontSize1)
@@ -1325,28 +1439,16 @@ Public Class frmLector
             Exit Sub
         End If
 
-        Dim isChecked As Boolean = If(m_BDPrenda.TieneRFID(mCodBarra.Substring(0, 10)) > 0, True, False)
-        Console.WriteLine($"El valor es-->{isChecked}")
-
-        If isChecked Then
-            StartInventory()
-            StopInventory()
-        End If
+        StartInventory()
+        Thread.Sleep(500)
+        StopInventory()
 
         CodBarras_Bloqueado()
-
-        If isChecked Then
-            Dim cantLeidas As Integer = CantidadFilasLeidas()
-            If (cantLeidas <> 1) Then
-                M_S_N = If(cantLeidas > 1, $"Por favor, verificar tienen: {cantLeidas} RFID.", "Por favor, verificar no teine RFID.")
-
-                MostrarAlerta(M_S_N)
-                CodBarras_Desbloqueado()
-                CodBarras_ClearFoco()
-                Exit Sub
-            End If
+        Dim cantLeidas As Integer = CantidadFilasLeidas()
+        Console.WriteLine($"cantLeidas->{cantLeidas}")
+        If (cantLeidas = 1) Then
             sCodigoRFID = ObtenerPCEPC()
-
+            Console.WriteLine($"RFID->{sCodigoRFID}")
             ' Validar si el RFID ya existe en la base de datos
             Try
                 Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
@@ -1368,6 +1470,7 @@ Public Class frmLector
                 Exit Sub
             End Try
         End If
+
         'Prueba
         'sCodigoRFID = GenerarCadenaAleatoria(24)
 
@@ -1427,6 +1530,7 @@ Public Class frmLector
                 End If
                 LlenarDataGridView(DataGridView1, insertData)
                 CantidadFilas()
+                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 5)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
@@ -1444,8 +1548,8 @@ Public Class frmLector
             alerta.ShowDialog()
         End Using
     End Sub
-    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer)
-        Using alerta As New FormAlerta(mensaje, color_, tipo)
+    Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer, Optional tiempo As Integer = 10)
+        Using alerta As New FormAlerta(mensaje, color_, tipo, tiempo)
             alerta.ShowDialog()
         End Using
     End Sub
@@ -1536,7 +1640,7 @@ Public Class frmLector
     End Function
 
     Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
-        If CodBarras.Text.Length = 20 Then
+        If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
             LeerCodigoRFID() ' Llamar a la función de lectura
         End If
     End Sub
@@ -1567,5 +1671,331 @@ Public Class frmLector
         For Each control As Control In tabPage.Controls
             control.Enabled = habilitar
         Next
+    End Sub
+
+    Private Sub BtnStartInventoryEx_Click(sender As Object, e As EventArgs) Handles btnStartInventoryEx.Click
+        StartInventory()
+    End Sub
+
+    Private Sub BtnStopInventoryEx_Click(sender As Object, e As EventArgs) Handles btnStopInventoryEx.Click
+        StopInventory()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        ClearTagListView()
+    End Sub
+    Private Sub BuscarPrenda()
+        Dim CodBarras As String = BuscarCodBarras.Text
+        Dim op As String
+        Dim corte As String
+        Dim subcorte As String
+        Dim talla As String
+        Dim idtalla As String
+        Dim ultimoValor As Object = Nothing
+        MsnBusquedaPrenda.Text = ""
+        BuscarCodBarras.Text = ""
+        op = CodBarras.Substring(0, 10)
+        corte = CodBarras.Substring(10, 4)
+        talla = CodBarras.Substring(14, 2)
+        idtalla = CodBarras.Substring(16)
+        subcorte = m_DBConsultarPrenda.ObtenerSubCorte(op, corte, talla, idtalla)
+        Thread.Sleep(500)
+
+        Dim l_return = m_DBConsultarPrenda.GetHistorialPrenda(op, corte, subcorte, talla, idtalla)
+
+        If l_return.Rows.Count > 0 Then
+            Dim ultimaFila = l_return.Rows(l_return.Rows.Count - 1)
+            If Not IsDBNull(ultimaFila("AREA")) Then
+                ultimoValor = ultimaFila("AREA")
+                MsnBusquedaPrenda.Text = $"La Prenda Timbrada Se Encuentra Actualmente En: {ultimoValor}"
+            End If
+        End If
+
+        ' Cargar los datos en el DataGridView
+        With DataGridView2
+            .AutoGenerateColumns = True ' Generar columnas automáticamente
+            .DataSource = l_return      ' Establecer el origen de datos
+
+            ' Ajustar los encabezados a letra capital
+            For Each column As DataGridViewColumn In .Columns
+                column.HeaderText = StrConv(column.HeaderText, VbStrConv.ProperCase)
+            Next
+
+            ' Configurar estilo de encabezado
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 15, FontStyle.Bold) ' Fuente Arial, tamaño 10, negrita
+        End With
+    End Sub
+    Private Sub BuscarCodBarras_TextChanged(sender As Object, e As EventArgs) Handles BuscarCodBarras.TextChanged
+        If BuscarCodBarras.TextLength = 20 Or BuscarCodBarras.TextLength = 21 Then
+            BuscarPrenda()
+        End If
+    End Sub
+
+    Private Sub TableCabecera_Paint(sender As Object, e As PaintEventArgs) Handles tableCabecera.Paint
+        ' Obtener las dimensiones del TableLayoutPanel
+        Dim panel As TableLayoutPanel = CType(sender, TableLayoutPanel)
+        Dim rect As Rectangle = panel.ClientRectangle
+
+        ' Ajustar el tamaño del rectángulo para evitar el borde interno
+        rect.Width -= 1
+        rect.Height -= 1
+
+        ' Dibujar el borde con el color y grosor deseado
+        Using pen As New Pen(Color.Black, 2) ' Cambia el color y grosor según sea necesario
+            e.Graphics.DrawRectangle(pen, rect)
+        End Using
+    End Sub
+
+    Private Sub TextBoxOP_TextChanged(sender As Object, e As EventArgs) Handles TextBoxOP.TextChanged
+        If TextBoxOP.TextLength = 5 Then
+            ' Preparar el diccionario de parámetros
+            Dim pOp As String = "10000" & TextBoxOP.Text
+            Dim tipo As String = "norpd"
+            Dim whereParameters As New Dictionary(Of String, Object) From {{tipo, pOp}}
+            Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
+            Console.WriteLine($"El valor es-->{valor}")
+
+            If String.IsNullOrWhiteSpace(valor) Then
+                TextBoxOP.Text = ""
+                TextBoxOP.Focus()
+                AlertaError($"Verificar la OP: {pOp} .", Color.FromArgb(238, 26, 36))
+            Else
+                TextBoxOP.Text = valor
+                TextBoxOP.Enabled = False
+                TextBoxHM.Enabled = True
+                TextBoxHM.Text = ""
+                TextBoxHM.Focus()
+            End If
+        End If
+    End Sub
+
+    Private Sub TextBoxOP_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxOP.KeyPress
+        ' Permitir números, punto decimal y teclas de control
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso e.KeyChar <> "." Then
+            e.Handled = True
+        End If
+
+        ' Asegurarse de que solo haya un punto decimal
+        If e.KeyChar = "." AndAlso TextBoxOP.Text.Contains(".") Then
+            e.Handled = True
+        End If
+    End Sub
+    Private Sub TextBoxHM_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxHM.KeyDown
+        ' Verificar si se presionó la tecla Enter o Tab
+        If e.KeyCode = Keys.Enter Then
+            Console.WriteLine($"Evento-->KeyDown Tab")
+            e.SuppressKeyPress = True ' Evitar el sonido "ding" del sistema
+            ' Acción a realizar cuando se presiona valida HM
+            ValidarHM()
+        End If
+        Dim controlConFoco As Control = Me.ActiveControl
+        Console.WriteLine($" KeyDown --> c {controlConFoco.Name}")
+    End Sub
+
+    Private Sub TextBoxHM_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxHM.KeyPress
+        ' Permitir números, punto decimal y teclas de control
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso e.KeyChar <> "." Then
+            e.Handled = True
+        End If
+
+        ' Asegurarse de que solo haya un punto decimal
+        If e.KeyChar = "." AndAlso TextBoxHM.Text.Contains(".") Then
+            e.Handled = True
+        End If
+
+        ' Limitar a 3 caracteres
+        If TextBoxHM.Text.Length >= 3 AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+
+        ' Manejar el carácter Tab si AcceptsTab es True
+        If e.KeyChar = Chr(Keys.Tab) Then
+            e.Handled = True ' Opcional: Evitar la inserción si no deseas un carácter Tab
+        End If
+    End Sub
+
+    Private Sub TextBoxHM_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles TextBoxHM.PreviewKeyDown
+        ' Capturar la tecla Tab en PreviewKeyDown
+        If e.KeyCode = Keys.Tab Then
+            ' Acción para la tecla Tab valida HM
+            ValidarHM()
+            e.IsInputKey = True ' Marca la tecla Tab como una entrada válida para personalizar el comportamiento
+        End If
+    End Sub
+
+    Private Sub ValidarHM()
+        Dim tipo As String = "nhjmr"
+        Dim pOp As String = TextBoxOP.Text
+        Dim pHm As String = TextBoxHM.Text
+
+        If pHm.Length = 0 Then
+            Return
+        End If
+
+        Dim whereParameters As New Dictionary(Of String, Object) From {{"norpd", pOp}, {tipo, pHm.PadLeft(3, "0"c)}}
+        Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
+
+        If String.IsNullOrWhiteSpace(valor) Then
+            TextBoxHM.Text = ""
+            TextBoxHM.Focus()
+            AlertaError($"Verificar la Hoja Marcación: {pHm} .", Color.FromArgb(238, 26, 36))
+        Else
+            TextBoxHM.Text = valor
+            TextBoxHM.Enabled = False
+            BtnBuscarHM.Focus()
+        End If
+    End Sub
+
+    Private Sub BuscarCabeceraHM()
+        Dim pOp As String = TextBoxOP.Text
+        Dim pHm As String = TextBoxHM.Text
+
+        Dim whereParameters As New Dictionary(Of String, Object) From {{"norpd", pOp}, {"nhjmr", pHm}}
+        Dim l_return As DataTable = m_DBConsultarPrenda.BuscarHMCabecera(whereParameters)
+
+        ' Validar si el DataTable tiene datos
+        If l_return Is Nothing OrElse l_return.Rows.Count = 0 Then
+            ' Si no hay datos, mostrar una alerta y salir del método
+            AlertaError($"No se encontraron registros para la OP: {pOp} {pHm}", Color.FromArgb(238, 26, 36))
+            Return
+        End If
+
+        CargarValoresEnLabels(l_return)
+    End Sub
+
+    Private Sub BtnLimpiarHM_Click(sender As Object, e As EventArgs) Handles BtnLimpiarHM.Click
+        TextBoxOP.Text = ""
+        TextBoxOP.Enabled = True
+        TextBoxHM.Text = ""
+        TextBoxHM.Enabled = False
+
+        For Each control As Control In tableCabecera.Controls
+            If control.Name.StartsWith("text_") Then
+                ' Aquí colocarás el código que deseas ejecutar si el nombre comienza con "text_"
+                ' Por ejemplo, para cambiar el texto de un label:
+                If TypeOf control Is Label Then
+                    DirectCast(control, Label).Text = ""
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub BtnBuscarHM_Click(sender As Object, e As EventArgs) Handles BtnBuscarHM.Click
+        BuscarCabeceraHM()
+        BuscarHMDetalle()
+    End Sub
+
+    Public Sub BuscarHMDetalle()
+        Dim pOp As String = TextBoxOP.Text
+        Dim pHm As String = TextBoxHM.Text
+
+        Dim whereParameters As New Dictionary(Of String, Object) From {{"norpd", pOp}, {"nhjmr", pHm}}
+        Dim l_return = m_DBConsultarPrenda.BuscarHMDetalle(whereParameters)
+
+        Console.WriteLine($"Item 1-->{l_return.Item1}")
+
+        If l_return.Item1 = 0 Then
+            Return
+        End If
+
+        ' Mostrar los datos en el DataGridView3
+        MostrarEnDataGridView3(l_return.Item2, l_return.Item3)
+
+        ' Recorrer l_return.Item2 (totalTalla)
+        Console.WriteLine("----- Total Talla -----")
+        For Each total In l_return.Item2
+            Dim cclrcl As String = total("cclrcl").ToString()
+            Dim tclrcl As String = total("tclrcl").ToString()
+            Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
+
+            Console.WriteLine($"Color: {cclrcl}, Descripción: {tclrcl}, Total: {totalCantidad}")
+        Next
+
+        ' Recorrer l_return.Item3 (detalleTalla)
+        Console.WriteLine("----- Detalle Talla -----")
+        For Each detalle In l_return.Item3
+            Dim cclrcl As String = detalle.Key ' Clave del diccionario (cclrcl)
+            Console.WriteLine($"Color: {cclrcl}")
+
+            ' Recorrer los detalles (Lista de diccionarios)
+            For Each tallaDetalle In detalle.Value
+                Dim talla As String = tallaDetalle("talla").ToString()
+                Dim cantidad As Integer = Convert.ToInt32(tallaDetalle("cantidad"))
+
+                Console.WriteLine($"  Talla: {talla}, Cantidad: {cantidad}")
+            Next
+        Next
+
+
+    End Sub
+
+    Private Sub CargarValoresEnLabels(dataTable As DataTable)
+        ' Obtener la primera fila del DataTable
+        Dim dataRow As DataRow = dataTable.Rows(0)
+
+        ' Iterar por cada columna del DataTable
+        For Each column As DataColumn In dataTable.Columns
+            Dim columnName As String = column.ColumnName
+            Dim controlName As String = "text_" & columnName ' Construir el nombre del LabelBox dinámicamente
+
+            ' Buscar el control en el formulario por su nombre
+            Dim labelControl As Control = Me.Controls.Find(controlName, True).FirstOrDefault()
+
+            ' Si se encuentra el control y es un Label, asignar el valor
+            If labelControl IsNot Nothing AndAlso TypeOf labelControl Is Label Then
+                CType(labelControl, Label).Text = dataRow(columnName).ToString()
+            End If
+        Next
+    End Sub
+
+    Private Sub MostrarEnDataGridView3(totalTalla As List(Of Dictionary(Of String, Object)), detalleTalla As Dictionary(Of String, List(Of Dictionary(Of String, Object))))
+        ' Limpiar cualquier configuración previa
+        DataGridView3.DataSource = Nothing
+        DataGridView3.Rows.Clear()
+        DataGridView3.Columns.Clear()
+
+        ' Configurar las columnas del DataGridView
+        DataGridView3.Columns.Add("Color", "Color")
+        DataGridView3.Columns.Add("Descripcion", "Descripción")
+        DataGridView3.Columns.Add("Talla", "Talla")
+        DataGridView3.Columns.Add("Cantidad", "Cantidad")
+        DataGridView3.Columns.Add("Total", "Total")
+
+        ' Iterar sobre los datos y agregar filas al DataGridView
+        For Each total In totalTalla
+            Dim cclrcl As String = total("cclrcl").ToString()
+            Dim tclrcl As String = total("tclrcl").ToString()
+            Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
+
+            ' Agregar fila del resumen (Color y Total)
+            Dim resumenRowIndex As Integer = DataGridView3.Rows.Add()
+            DataGridView3.Rows(resumenRowIndex).Cells("Color").Value = cclrcl
+            DataGridView3.Rows(resumenRowIndex).Cells("Descripcion").Value = tclrcl
+            DataGridView3.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad
+
+            ' Agregar filas de detalle (Talla y Cantidad)
+            If detalleTalla.ContainsKey(cclrcl) Then
+                For Each detalle In detalleTalla(cclrcl)
+                    Dim talla As String = detalle("talla").ToString()
+                    Dim cantidad As Integer = Convert.ToInt32(detalle("cantidad"))
+
+                    Dim detalleRowIndex As Integer = DataGridView3.Rows.Add()
+                    DataGridView3.Rows(detalleRowIndex).Cells("Talla").Value = talla
+                    DataGridView3.Rows(detalleRowIndex).Cells("Cantidad").Value = cantidad
+
+                    ' Dejar las celdas de Color y Total en blanco para que visualmente parezca un detalle
+                    DataGridView3.Rows(detalleRowIndex).Cells("Color").Value = ""
+                    DataGridView3.Rows(detalleRowIndex).Cells("Descripcion").Value = ""
+                    DataGridView3.Rows(detalleRowIndex).Cells("Total").Value = ""
+                Next
+            End If
+        Next
+
+        ' Ajustar el diseño visual del DataGridView
+        DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridView3.AllowUserToAddRows = False
+        DataGridView3.AllowUserToDeleteRows = False
+        DataGridView3.ReadOnly = True
+        DataGridView3.RowHeadersVisible = False
     End Sub
 End Class

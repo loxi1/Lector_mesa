@@ -185,6 +185,7 @@
     <Compile Include="BDPrenda.vb" />
     <Compile Include="BDPrendaScm.vb" />
     <Compile Include="CryptoHelper.vb" />
+    <Compile Include="DBConsultarPrenda.vb" />
     <Compile Include="DBConsultas.vb" />
     <Compile Include="FormAlerta.Designer.vb">
       <DependentUpon>FormAlerta.vb</DependentUpon>

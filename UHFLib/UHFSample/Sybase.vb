@@ -68,7 +68,7 @@ Public Class Sybase
             ' Crear la conexión si es necesario
             If myConexion Is Nothing OrElse myConexion.State = ConnectionState.Closed OrElse myConexion.State = ConnectionState.Broken Then
                 Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
-                Console.WriteLine($"Cadena de conexión generada: {sCadenaConexion}")
+                'Console.WriteLine($"Cadena de conexión generada: {sCadenaConexion}")
 
                 myConexion = New AseConnection(sCadenaConexion)
                 myConexion.Open()
@@ -137,15 +137,15 @@ Public Class Sybase
         Try
             ' Obtener el directorio base de ejecución
             Dim baseDirectory As String = AppDomain.CurrentDomain.BaseDirectory
-            Console.WriteLine($"baseDirectory-->{baseDirectory}")
+            'Console.WriteLine($"baseDirectory-->{baseDirectory}")
             ' Subir dos niveles para llegar a "bin"
             Dim binDirectory As String = Directory.GetParent(Directory.GetParent(baseDirectory).FullName).FullName
-            Console.WriteLine($"binDirectory-->{binDirectory}")
+            'Console.WriteLine($"binDirectory-->{binDirectory}")
             ' Construir la ruta del archivo tsconfig.json
             Dim iniDirectory As String = Path.Combine(binDirectory, "Ini")
-            Console.WriteLine($"iniDirectory-->{iniDirectory}")
+            'Console.WriteLine($"iniDirectory-->{iniDirectory}")
             Dim configPath As String = Path.Combine(iniDirectory, filePath)
-            Console.WriteLine($"configPath-->{configPath}")
+            'Console.WriteLine($"configPath-->{configPath}")
             If File.Exists(configPath) Then
                 Dim json As String = File.ReadAllText(configPath)
                 Dim config As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(json)
