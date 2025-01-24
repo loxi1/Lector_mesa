@@ -1,4 +1,5 @@
 ﻿Imports System.Net.NetworkInformation
+
 Public Class frmMain
     Private Tipo_de_red As Integer = 0
     Private WithEvents _MainForm As System.Windows.Forms.Form

@@ -4,6 +4,8 @@ Imports System.Linq
 Imports System.Threading
 Imports com.gigatms
 Imports com.gigatms.Parameters
+Imports System.Collections.Concurrent
+Imports System.Threading.Tasks
 
 Public Class frmLector
     Private Const TIME_OUT As Integer = 3
@@ -24,6 +26,10 @@ Public Class frmLector
     Dim m_BDPrendaScm As New BDPrendaScm()
     Dim m_DBConsultarPrenda As New DBConsultarPrenda()
     Private _tieneRFID As Boolean = False
+
+    ' Cola concurrente para almacenar los valores de CodBarras
+    Private CodBarrasQueue As New ConcurrentQueue(Of String)()
+    Private IsProcessingQueue As Boolean = False
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
@@ -98,6 +104,18 @@ Public Class frmLector
             .Clear()
             .Add(New ComboBoxItem(True, TagPresentedType.PC_EPC, "EPC"))
             .Add(New ComboBoxItem(TagPresentedType.PC_EPC_TID, "EPC + TID"))
+        End With
+
+        With cbxScanMode.Items
+            .Clear()
+            .Add(New ComboBoxItem(True, TS800.ScanMode.AlwaysScan, "Escanear siempre"))
+            .Add(New ComboBoxItem(TS800.ScanMode.Trigger_A_LevelControl, "Activar un control de nivel"))
+        End With
+
+        With cbxActiveMode.Items
+            .Clear()
+            .Add(New ComboBoxItem(True, ActiveMode.READ, "Read"))
+            .Add(New ComboBoxItem(False, ActiveMode.COMMAND, "Command"))
         End With
 
         'CodBarras.Text = ""
@@ -216,15 +234,18 @@ Public Class frmLector
             tabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
+            ObtenerInvActivo()
+            SaveInvActivo()
             AlertaOk("Conexion", Color.FromArgb(16, 175, 76), 30, "Exitosa al reader.")
-            'MessageBox.Show("Conexión exitosa al reader.", "Resultado de conexión", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         _host.NetDeviceSearcherEnabled = True
         Me.Cursor = cursor
     End Sub
 
     Private Sub DisconnectDevice()
+        Console.WriteLine($"este es el elmento _ts800 <-->{_ts800}")
         With _ts800
+            Console.WriteLine($"Estaddo IsConnected<-->{ .IsConnected}")
             If .IsConnected = True Then
                 If .Disconnect() Then
                     changeDisconnectionStatus()
@@ -245,6 +266,7 @@ Public Class frmLector
     End Sub
 
     Private Sub btnConnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConnect.Click
+        Console.WriteLine($"Nombre text {btnConnect.Text}")
         Select Case btnConnect.Text
             Case "Conectar"
                 ConnectDevice()
@@ -637,7 +659,7 @@ Public Class frmLector
         tabControl.SelectedTab = tpInventory
     End Sub
 
-    Private Sub btnSetRfPower_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetRfPower.Click
+    Private Sub btnSetRfPower_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim power As Integer
         Dim result As Boolean = False
         power = tbRfPower.Value
@@ -649,20 +671,18 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnGetRfPower_Click(sender As Object, e As EventArgs) Handles btnGetRfPower.Click
+    Private Sub btnGetRfPower_Click(sender As Object, e As EventArgs)
         Dim power As Integer
         power = _ts800.GetRfPower(False)
         tbRfPower.Value = power
     End Sub
 
-    Private Sub tbRfPower_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbRfPower.ValueChanged
+    Private Sub tbRfPower_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         lblRfPower.Text = tbRfPower.Value & " dBm"
     End Sub
 
-    Private Sub btnSetFrequency_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetFrequency.Click
+    Private Sub btnSetFrequency_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim frequencySet As HashSet(Of Double) = New HashSet(Of Double)
-        For Each oControl In gbFrequency.Controls
-        Next oControl
         If frequencySet.Count > 0 Then
             If (_ts800.SetFrequency(False, frequencySet)) Then
                 MsgBox("Set Frequency Successful.")
@@ -672,7 +692,7 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnGetFrequency_Click(sender As Object, e As EventArgs) Handles btnGetFrequency.Click
+    Private Sub btnGetFrequency_Click(sender As Object, e As EventArgs)
         Dim frequencySet As HashSet(Of Double) = New HashSet(Of Double)
         frequencySet = _ts800.GetFrequency(False)
     End Sub
@@ -693,11 +713,11 @@ Public Class frmLector
         buzzerOperationMode = _ts800.GetBuzzerOperationMode(False)
     End Sub
 
-    Private Sub tbRfSensitivity_ValueChanged(sender As Object, e As EventArgs) Handles tbRfSensitivity.ValueChanged
+    Private Sub tbRfSensitivity_ValueChanged(sender As Object, e As EventArgs)
         lblRfSensitivity.Text = "Level " & tbRfSensitivity.Value
     End Sub
 
-    Private Sub btnSetRfSensitivity_Click(sender As Object, e As EventArgs) Handles btnSetRfSensitivity.Click
+    Private Sub btnSetRfSensitivity_Click(sender As Object, e As EventArgs)
         Dim rfSensitivityValue As RfSensitivityLevel = RfSensitivityLevel.LEVEL_7
         Dim result As Boolean = False
         Select Case tbRfSensitivity.Value
@@ -738,7 +758,7 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnGetRfSensitivity_Click(sender As Object, e As EventArgs) Handles btnGetRfSensitivity.Click
+    Private Sub btnGetRfSensitivity_Click(sender As Object, e As EventArgs)
         Dim sensitivity As Integer
         sensitivity = _ts800.GetRfSensitivity(False)
         If sensitivity <> 0 Then
@@ -776,7 +796,7 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnSetRxDecode_Click(sender As Object, e As EventArgs) Handles btnSetRxDecode.Click
+    Private Sub btnSetRxDecode_Click(sender As Object, e As EventArgs)
         Dim rxDecodeValue As RxDecodeType = RxDecodeType.Miller_4
         Dim result As Boolean = False
         Select Case cbxRxDecode.SelectedIndex
@@ -797,13 +817,13 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnGetRxDecode_Click(sender As Object, e As EventArgs) Handles btnGetRxDecode.Click
+    Private Sub btnGetRxDecode_Click(sender As Object, e As EventArgs)
         Dim rxDecodeValue As RxDecodeType = RxDecodeType.Miller_4
         rxDecodeValue = _ts800.GetRxDecode(False)
         cbxRxDecode.SelectedIndex = rxDecodeValue
     End Sub
 
-    Private Sub btnSetLinkFrequency_Click(sender As Object, e As EventArgs) Handles btnSetLinkFrequency.Click
+    Private Sub btnSetLinkFrequency_Click(sender As Object, e As EventArgs)
         Dim linkFrequencyValue As LinkFrequencyType = LinkFrequencyType.LF_256kHz
         Dim result As Boolean = False
         Select Case cbxLinkFrequency.SelectedIndex
@@ -830,7 +850,7 @@ Public Class frmLector
         End If
     End Sub
 
-    Private Sub btnGetLinkFrequency_Click(sender As Object, e As EventArgs) Handles btnGetLinkFrequency.Click
+    Private Sub btnGetLinkFrequency_Click(sender As Object, e As EventArgs)
         Dim linkFrequencyValue As LinkFrequencyType = LinkFrequencyType.LF_256kHz
         linkFrequencyValue = _ts800.GetLinkFrequency(False)
         Select Case linkFrequencyValue
@@ -849,24 +869,6 @@ Public Class frmLector
             Case LinkFrequencyType.LF_640kHz
                 cbxLinkFrequency.SelectedIndex = 6
         End Select
-    End Sub
-
-    Private Sub btnSetTriggerType_Click(sender As Object, e As EventArgs)
-        Dim result As Boolean
-        Dim triggerTypes As New HashSet(Of TriggerType)
-
-        result = _ts800.SetTriggerType(False, triggerTypes)
-        If result Then
-            MsgBox("Set TriggerType Successful.")
-        Else
-            MsgBox("Set TriggerType Failed.")
-        End If
-    End Sub
-
-    Private Sub btnGetTriggerType_Click(sender As Object, e As EventArgs)
-        Dim triggerTypes As New HashSet(Of TriggerType)
-        triggerTypes = _ts800.GetTriggerType(False)
-
     End Sub
 
     Private Sub _uhf_OnErrorOccurred(errorCode As ErrorCode, errorMessage As String) Handles _ts800.OnErrorOccurred
@@ -964,69 +966,19 @@ Public Class frmLector
         'ComboBoxItem.SelectItemByValue(cbxEventType, eventType)
     End Sub
 
-    Private Sub btnGetTagPresentRepeatInterval_Click(sender As Object, e As EventArgs) Handles btnGetTagPresentRepeatInterval.Click
+    Private Sub btnGetTagPresentRepeatInterval_Click(sender As Object, e As EventArgs)
         Dim tagPresentedRepeatInterval As Integer
         tagPresentedRepeatInterval = _ts800.GetTagPresentedRepeatInterval(False)
         nudTagPresentRepeatInterval.Value = tagPresentedRepeatInterval
     End Sub
 
-    Private Sub btnGetRemoveThreshold_Click(sender As Object, e As EventArgs) Handles btnGetRemoveThreshold.Click
+    Private Sub btnGetRemoveThreshold_Click(sender As Object, e As EventArgs)
         Dim tagRemoveThreshold As Integer
         tagRemoveThreshold = _ts800.GetTagRemovedThreshold(False)
         nudTagRemoveThreshold.Value = tagRemoveThreshold
     End Sub
 
-    Private Sub BtnSetMemoryBankSelection_Click(sender As Object, e As EventArgs)
-        'Dim memoryBankSet As New HashSet(Of MemoryBankSelection)
-        'Dim result As Boolean
-        'If chkBankPC.Checked Then
-        '    memoryBankSet.Add(MemoryBankSelection.PC)
-        'End If
-        'If chkBankEPC.Checked Then
-        '    memoryBankSet.Add(MemoryBankSelection.EPC)
-        'End If
-        'If chkBankTID.Checked Then
-        '    memoryBankSet.Add(MemoryBankSelection.TID)
-        'End If
-        'If chkBankUser.Checked Then
-        '    memoryBankSet.Add(MemoryBankSelection.USER)
-        'End If
-        'If chkBankEPCASCII.Checked Then
-        '    memoryBankSet.Add(MemoryBankSelection.EPC_ASCII)
-        'End If
-        'result = _ts100.SetMemoryBankSelection(False, memoryBankSet)
-        'If result Then
-        '    MsgBox("Set Memory Bank Selection Successful.")
-        'Else
-        '    MsgBox("Set Memory Bank Selection Failed.")
-        'End If
-    End Sub
-
-    Private Sub btnGetMemoryBankSelection_Click(sender As Object, e As EventArgs)
-        'Dim memoryBankSet As HashSet(Of MemoryBankSelection)
-        'memoryBankSet = _ts100.GetMemoryBankSelection(False)
-        'chkBankPC.Checked = False
-        'chkBankEPC.Checked = False
-        'chkBankTID.Checked = False
-        'chkBankUser.Checked = False
-        'chkBankEPCASCII.Checked = False
-        'For Each memoryBank As MemoryBankSelection In memoryBankSet
-        '    Select Case memoryBank
-        '        Case MemoryBankSelection.PC
-        '            chkBankPC.Checked = True
-        '        Case MemoryBankSelection.EPC
-        '            chkBankEPC.Checked = True
-        '        Case MemoryBankSelection.TID
-        '            chkBankTID.Checked = True
-        '        Case MemoryBankSelection.USER
-        '            chkBankUser.Checked = True
-        '        Case MemoryBankSelection.EPC_ASCII
-        '            chkBankEPCASCII.Checked = True
-        '    End Select
-        'Next memoryBank
-    End Sub
-
-    Private Sub btnGetInvnetoryRoundInterval_Click(sender As Object, e As EventArgs) Handles btnGetInvnetoryRoundInterval.Click
+    Private Sub btnGetInvnetoryRoundInterval_Click(sender As Object, e As EventArgs)
         Dim inventoryRoundInterval As Integer
         inventoryRoundInterval = _ts800.GetInventoryRoundInterval(False)
         nudInventoryRoundInterval.Value = inventoryRoundInterval
@@ -1034,48 +986,38 @@ Public Class frmLector
 
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
         Dim selectedTab As TabPage = tabControl.SelectedTab
-        If selectedTab.Name IsNot "tpPerformance" Then
-            'Validar de que exita contenido mCodTrabajador
-            If String.IsNullOrEmpty(mCodTrabajador) Then
-                AlertaError("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36))
-                'MessageBox.Show("Debe ingresar un trabajador antes de acceder a Inventario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                ' Redirigir al usuario a otra pestaña (por ejemplo, tpPerformance)
-                tabControl.SelectedTab = tpPerformance
-                Exit Sub
-            End If
-            ' Configuración específica para tpInventory
-            Me.WindowState = FormWindowState.Maximized
-            Me.tabControl.Dock = DockStyle.None
+        'Validar de que exita contenido mCodTrabajador
+        If String.IsNullOrEmpty(mCodTrabajador) Then
+            AlertaError("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36))
+            'MessageBox.Show("Debe ingresar un trabajador antes de acceder a Inventario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            ' Redirigir al usuario a otra pestaña (por ejemplo, tpPerformance)
+            tabControl.SelectedTab = tpPerformance
+            Exit Sub
+        End If
+        ' Configuración específica para tpInventory
+        Me.tabControl.Dock = DockStyle.None
 
-            ' Ajustar tamaño y posición del TabControl
-            Me.tabControl.Height = Me.ClientSize.Height - pnlConnect.Height
-            Me.tabControl.Width = Me.ClientSize.Width
-            Me.tabControl.Location = New Point(0, 0)
+        ' Ajustar tamaño y posición del TabControl
+        Me.tabControl.Height = Me.ClientSize.Height - pnlConnect.Height
+        Me.tabControl.Width = Me.ClientSize.Width
+        Me.tabControl.Location = New Point(0, 0)
 
-            ' Configuración de pnlConnect en la parte inferior
-            pnlConnect.Dock = DockStyle.None
-            pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
+        ' Configuración de pnlConnect en la parte inferior
+        pnlConnect.Dock = DockStyle.None
+        pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
 
-            Try
-                Me.BeginInvoke(Sub() InitializeInventoryTab())
-            Catch ex As Exception
-                Console.WriteLine($"Error al cambiar de pestaña: {ex.Message}")
-            End Try
+        Try
+            Me.BeginInvoke(Sub() InitializeInventoryTab())
+        Catch ex As Exception
+            Console.WriteLine($"Error al cambiar de pestaña: {ex.Message}")
+        End Try
 
-            If selectedTab.Name = "tpInventory" Then
-                TabInventario()
-            ElseIf selectedTab.Name = "tpSearch" Then
-                TbBuscarPrenda()
-            ElseIf selectedTab.Name = "tpPapper" Then
-                TbHojaMarcacion()
-            End If
-        Else
-            ' Configuración general para otras pestañas
-            Me.WindowState = FormWindowState.Normal
-            Me.tabControl.Dock = DockStyle.Fill
-
-            ' Restaurar pnlConnect en la parte inferior
-            pnlConnect.Dock = DockStyle.Bottom
+        If selectedTab.Name = "tpInventory" Then
+            TabInventario()
+        ElseIf selectedTab.Name = "tpSearch" Then
+            TbBuscarPrenda()
+        ElseIf selectedTab.Name = "tpPapper" Then
+            TbHojaMarcacion()
         End If
     End Sub
     Private Sub AdjustDataGridView(dgv As DataGridView)
@@ -1222,7 +1164,7 @@ Public Class frmLector
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
-                If btn IsNot Nothing And (control.Name = "btnClear") Then
+                If btn IsNot Nothing And (control.Name = "btnClear" Or control.Name = "btnLimpiarRFID") Then
                     ' Ajustar el tamaño de la fuente del botón
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
 
@@ -1641,9 +1583,41 @@ Public Class frmLector
 
     Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
         If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
-            LeerCodigoRFID() ' Llamar a la función de lectura
+            Dim barcode As String = CodBarras.Text.Trim()
+            CodBarrasQueue.Enqueue(barcode) ' Encolar el valor
+            StartProcessingQueue() ' Iniciar el procesamiento si no está activo
         End If
     End Sub
+
+    Private Sub StartProcessingQueue()
+        ' Evitar múltiples procesadores concurrentes
+        If IsProcessingQueue Then Return
+        IsProcessingQueue = True
+
+        Task.Run(Sub()
+                     While Not CodBarrasQueue.IsEmpty
+                         Dim barcode As String
+                         If CodBarrasQueue.TryDequeue(barcode) Then
+                             ProcessBarcode(barcode)
+                         End If
+                     End While
+                     IsProcessingQueue = False
+                 End Sub)
+    End Sub
+
+    ' Método para procesar un código de barras
+    Private Sub ProcessBarcode(barcode As String)
+        Try
+            ' Aquí colocas la lógica que procesará cada código de barras.
+            ' Por ejemplo, llamar a LeerCodigoRFID con el código.
+            Console.WriteLine($"Procesando: {barcode}")
+            ' Simula el procesamiento
+            Thread.Sleep(100) ' Simulación de tarea
+        Catch ex As Exception
+            Console.WriteLine($"Error procesando el código {barcode}: {ex.Message}")
+        End Try
+    End Sub
+
 
     Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         dgvTagList.Rows.Clear()
@@ -1681,7 +1655,7 @@ Public Class frmLector
         StopInventory()
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnLimpiarRFID.Click
         ClearTagListView()
     End Sub
     Private Sub BuscarPrenda()
@@ -1998,4 +1972,85 @@ Public Class frmLector
         DataGridView3.ReadOnly = True
         DataGridView3.RowHeadersVisible = False
     End Sub
+    Private Function SaveInvActivo() As Boolean
+        Dim activeMode As ActiveMode
+        Console.WriteLine($"Imprimier valor {ComboBoxItem.GetCurrentItemValue(cbxActiveMode)} {activeMode}")
+
+        ' Convertir explícitamente el valor devuelto al tipo ActiveMode
+        activeMode = CType(ComboBoxItem.GetCurrentItemValue(cbxActiveMode), ActiveMode)
+        Return _ts800.SetInventoryActiveMode(False, activeMode)
+    End Function
+    Private Sub BtnSetScanMode_Click(sender As Object, e As EventArgs)
+        Dim result As Boolean
+        Dim scanMode As TS800.ScanMode
+        scanMode = ComboBoxItem.GetCurrentItemValue(cbxScanMode)
+        result = _ts800.SetScanMode(False, scanMode)
+        If result Then
+            MsgBox("Set Scan Mode Successful.")
+        Else
+            MsgBox("Set Scan Mode Failed.")
+        End If
+    End Sub
+
+    Private Sub BtnGetScanMode_Click(sender As Object, e As EventArgs)
+        Dim scanMode As TS800.ScanMode
+        scanMode = _ts800.GetScanMode(False)
+        ComboBoxItem.SelectItemByValue(cbxScanMode, scanMode)
+    End Sub
+
+    Private Sub BtnSetActiveMode_Click(sender As Object, e As EventArgs)
+        Dim result As Boolean = SaveInvActivo()
+
+        If result Then
+            MsgBox("Set Inventory Active Mode Successful.")
+        Else
+            MsgBox("Set Inventory Active Mode Failed.")
+        End If
+    End Sub
+    Private Sub ObtenerInvActivo()
+        Dim inventoryActiveMode As ActiveMode
+        inventoryActiveMode = _ts800.GetInventoryActiveMode(False)
+        ComboBoxItem.SelectItemByValue(cbxActiveMode, inventoryActiveMode)
+    End Sub
+
+    Private Sub BtnGetActiveMode_Click(sender As Object, e As EventArgs)
+        ObtenerInvActivo()
+    End Sub
+
+    'Private Sub BtnSetTriggerType_Click(sender As Object, e As EventArgs)
+    '    Dim result As Boolean
+    '    Dim triggerTypes As New HashSet(Of TriggerType)
+    '    If chkCommand.Checked Then
+    '        triggerTypes.Add(TriggerType.Command)
+    '    End If
+    '    If chkSensor.Checked Then
+    '        triggerTypes.Add(TriggerType.Sensor)
+    '    End If
+    '    If chkDigitalInput.Checked Then
+    '        triggerTypes.Add(TriggerType.DigitalInput)
+    '    End If
+    '    result = _ts800.SetTriggerType(False, triggerTypes)
+    '    If result Then
+    '        MsgBox("Set TriggerType Successful.")
+    '    Else
+    '        MsgBox("Set TriggerType Failed.")
+    '    End If
+    'End Sub
+
+    'Private Sub BtnGetTriggerType_Click(sender As Object, e As EventArgs)
+    '    Dim triggerTypes As New HashSet(Of TriggerType)
+    '    triggerTypes = _ts800.GetTriggerType(False)
+    '    chkCommand.Checked = False
+    '    chkSensor.Checked = False
+    '    chkDigitalInput.Checked = False
+    '    For Each type As TriggerType In triggerTypes
+    '        If type = TriggerType.Command Then
+    '            chkCommand.Checked = True
+    '        ElseIf type = TriggerType.Sensor Then
+    '            chkSensor.Checked = True
+    '        ElseIf type = TriggerType.DigitalInput Then
+    '            chkDigitalInput.Checked = True
+    '        End If
+    '    Next type
+    'End Sub
 End Class
