@@ -126,6 +126,7 @@ Public Class frmLector
         ' Concatenar los datos al título de la ventana
         Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
     End Sub
+
     Private Sub AdjustTabWidth()
         ' Ajustar el ancho de cada pestaña basado en el texto
         Using g As Graphics = Me.tabControl.CreateGraphics()
@@ -1481,8 +1482,122 @@ Public Class frmLector
         CodBarras_Desbloqueado()
         CodBarras_ClearFoco()
     End Sub
+    Private Sub SafeUpdateLabel(control As Label, text As String)
+        If control.InvokeRequired Then
+            ' Si no estamos en el subproceso principal, usar Invoke para ejecutar en el hilo adecuado
+            control.Invoke(New Action(Of Label, String)(AddressOf SafeUpdateLabel), control, text)
+        Else
+            ' Si ya estamos en el subproceso principal, actualizar directamente
+            control.Text = text
+        End If
+    End Sub
+
+    Private Sub SafeUpdateTextBox(control As TextBox, text As String)
+        If control.InvokeRequired Then
+            ' Si no estamos en el subproceso principal, usar Invoke para ejecutar en el hilo adecuado
+            control.Invoke(New Action(Of TextBox, String)(AddressOf SafeUpdateTextBox), control, text)
+        Else
+            ' Si ya estamos en el subproceso principal, actualizar directamente
+            control.Text = text
+        End If
+    End Sub
+
+
+    Private Sub SaveCodigoRFID(cadena As String)
+
+        Dim partes() As String = cadena.Split("~"c) ' Divide la cadena por el símbolo ~
+
+        Dim mCodBarra As String = partes(0)
+        Dim sCodigoRFID As String = partes(1)
+        Console.WriteLine($"Elemento que va guardar {mCodBarra} -- {sCodigoRFID}")
+        Dim M_S_N As String = ""
+
+        Dim cantLeidas As Integer = CantidadFilasLeidas()
+        Console.WriteLine($"cantLeidas->{cantLeidas}")
+        If (sCodigoRFID.Length > 1) Then
+            Try
+                Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
+                Dim dataRta = m_BDPrendaScm.GetData(dictionary)
+
+                'Console.WriteLine($"Filas devueltas por GetData: {dataRta.Rows.Count}")
+                If dataRta.Rows.Count > 0 Then
+                    lsDatos = BuildDataString(dataRta.Rows(0))
+                    MostrarAlerta($"RFID ya registrado en: {lsDatos}. Verifique.")
+                    Exit Sub
+                End If
+            Catch ex As Exception
+                'Console.WriteLine($"Error al validar RFID: {ex.Message}")
+                MostrarAlerta("Error al validar RFID. Verifique con el administrador.")
+                Exit Sub
+            End Try
+        End If
+
+        'Prueba
+        'sCodigoRFID = GenerarCadenaAleatoria(24)
+
+        'Console.WriteLine($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
+
+        'Se intertan los valores al procedimento almacenado USP_SAL_EMB_CON_RFID
+        'El procediento valida y muestra msn con codigo de error lugo se actualiza la taba ordenacabadostallasmov y inserta en tmp_etiq_timbradas
+        Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
+        ' Actualizar el control 'MsnVincular' de forma segura
+        SafeUpdateLabel(MsnVincular, lsResult.Item2)
+        If lsResult.Item1 <> 0 Then
+            SafeUpdateTextBox(CodBarras, "")
+            MostrarAlerta($"Error al registrar en Sybase: {lsResult.Item2}")
+            Exit Sub
+        End If
+
+        Try
+            Dim dataTimbrado = m_BDPrenda.GetTimbradasByWorkerAndEtiqueta(mCodTrabajador, mCodBarra)
+            If dataTimbrado.Rows.Count = 0 Then
+                M_S_N = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
+                MostrarAlerta(M_S_N)
+                Exit Sub
+            End If
+
+            Dim row As DataRow = dataTimbrado.Rows(0)
+            Dim insertData As New Dictionary(Of String, Object) From {
+                {"id_rfid", sCodigoRFID},
+                {"id_barras", row("etiqueta")},
+                {"op", row("op")},
+                {"corte", row("corte")},
+                {"subcorte", row("sub_corte")},
+                {"cod_talla", row("cod_talla")},
+                {"id_talla", row("id_talla")},
+                {"talla", row("talla")},
+                {"cod_combinacion", row("cod_comb")},
+                {"color", row("color")},
+                {"cod_trabajador", row("fotocheck")}
+            }
+
+            Dim llReturn = m_BDPrendaScm.Insert(insertData)
+            If llReturn <> 1 Then
+                M_S_N = Msn(llReturn)
+                MostrarAlerta(M_S_N)
+            Else
+                SafeUpdateLabel(MsnVincular, "Prenda registrada exitosamente.")
+                ' Eliminar el elemento "id_barras" del diccionario insertData
+                insertData("fecha") = DateTime.Now
+                If insertData.ContainsKey("id_barras") Then
+                    insertData.Remove("id_barras")
+                    insertData.Remove("id_rfid")
+                    insertData.Remove("cod_talla")
+                    insertData.Remove("cod_combinacion")
+                    insertData.Remove("color")
+                    insertData.Remove("cod_trabajador")
+                End If
+                LlenarDataGridView(DataGridView1, insertData)
+                CantidadFilas()
+                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 5)
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
+            SafeUpdateLabel(MsnVincular, "Error inesperado al registrar la prenda. Consulte con el administrador.")
+        End Try
+    End Sub
     Private Sub MostrarAlerta(mensaje As String)
-        MsnVincular.Text = mensaje
+        SafeUpdateLabel(MsnVincular, mensaje)
         AlertaError(mensaje, Color.FromArgb(238, 26, 36))
     End Sub
     Private Sub AlertaError(mensaje As String, color As Color)
@@ -1582,11 +1697,26 @@ Public Class frmLector
     End Function
 
     Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
-        If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
-            Dim barcode As String = CodBarras.Text.Trim()
-            CodBarrasQueue.Enqueue(barcode) ' Encolar el valor
-            StartProcessingQueue() ' Iniciar el procesamiento si no está activo
-        End If
+        ' Obtener el código RFID
+        Try
+            Dim cantLeidas As Integer = CantidadFilasLeidas()
+            If cantLeidas > 1 Then
+                MostrarAlerta("Verificar existen 2 RFID")
+                Exit Sub
+            End If
+
+            Dim rfidCode As String = ObtenerPCEPC()
+
+            If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
+                Dim barcode As String = CodBarras.Text.Trim() + "~" + rfidCode
+                CodBarrasQueue.Enqueue(barcode) ' Encolar el valor
+                StartProcessingQueue() ' Iniciar el procesamiento si no está activo
+                dgvTagList.Rows.Clear()
+            End If
+
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub StartProcessingQueue()
@@ -1596,14 +1726,16 @@ Public Class frmLector
 
         Task.Run(Sub()
                      While Not CodBarrasQueue.IsEmpty
-                         Dim barcode As String
-                         If CodBarrasQueue.TryDequeue(barcode) Then
-                             ProcessBarcode(barcode)
+                         Dim barcode As String = Nothing ' Inicialización explícita de la variable
+                         If Not CodBarrasQueue.TryDequeue(barcode) Then
+                             Continue While
                          End If
+                         SaveCodigoRFID(barcode) ' Procesar la transacción
                      End While
                      IsProcessingQueue = False
                  End Sub)
     End Sub
+
 
     ' Método para procesar un código de barras
     Private Sub ProcessBarcode(barcode As String)
@@ -1840,6 +1972,7 @@ Public Class frmLector
     Private Sub BtnLimpiarHM_Click(sender As Object, e As EventArgs) Handles BtnLimpiarHM.Click
         TextBoxOP.Text = ""
         TextBoxOP.Enabled = True
+        TextBoxOP.Focus()
         TextBoxHM.Text = ""
         TextBoxHM.Enabled = False
 
@@ -1852,6 +1985,9 @@ Public Class frmLector
                 End If
             End If
         Next
+        DataGridView3.DataSource = Nothing
+        DataGridView3.Rows.Clear()
+        DataGridView3.Columns.Clear()
     End Sub
 
     Private Sub BtnBuscarHM_Click(sender As Object, e As EventArgs) Handles BtnBuscarHM.Click
