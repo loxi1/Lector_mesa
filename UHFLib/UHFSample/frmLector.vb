@@ -125,6 +125,10 @@ Public Class frmLector
 
         ' Concatenar los datos al título de la ventana
         Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
+
+        ConfigurarEstiloDataGridView(DataGridView1)
+        ConfigurarEstiloDataGridView(DataGridView2)
+        ConfigurarEstiloDataGridView(DataGridView3)
     End Sub
 
     Private Sub AdjustTabWidth()
@@ -1053,16 +1057,7 @@ Public Class frmLector
             Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
             Dim fontSize2 As Single = Math.Max(10, Me.ClientSize.Width / 150)
 
-            If control.Name = "DataGridView3" Then
-                Dim dgv As DataGridView = TryCast(control, DataGridView)
-                If dgv IsNot Nothing Then
-                    ' Ajustar la fuente del DataGridView
-                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
-                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
-                End If
-            ElseIf TypeOf control Is TableLayoutPanel Then
+            If TypeOf control Is TableLayoutPanel Then
                 ResizeTableLPCIHM(TryCast(control, TableLayoutPanel), fontSize, fontSize1, fontSize2)
             End If
         Next
@@ -1502,19 +1497,17 @@ Public Class frmLector
         End If
     End Sub
 
-
     Private Sub SaveCodigoRFID(cadena As String)
-
         Dim partes() As String = cadena.Split("~"c) ' Divide la cadena por el símbolo ~
-
         Dim mCodBarra As String = partes(0)
         Dim sCodigoRFID As String = partes(1)
+
         Console.WriteLine($"Elemento que va guardar {mCodBarra} -- {sCodigoRFID}")
         Dim M_S_N As String = ""
 
         Dim cantLeidas As Integer = CantidadFilasLeidas()
         Console.WriteLine($"cantLeidas->{cantLeidas}")
-        If (sCodigoRFID.Length > 1) Then
+        If (sCodigoRFID <> "") Then
             Try
                 Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
                 Dim dataRta = m_BDPrendaScm.GetData(dictionary)
@@ -1589,7 +1582,8 @@ Public Class frmLector
                 End If
                 LlenarDataGridView(DataGridView1, insertData)
                 CantidadFilas()
-                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 5)
+                SafeUpdateTextBox(CodBarras, "")
+                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 15)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
@@ -1641,26 +1635,45 @@ Public Class frmLector
 
         Return resultado.ToString()
     End Function
-    ' Llenar el DataGridView con los datos del diccionario
     Private Sub LlenarDataGridView(dataGridView As DataGridView, data As Dictionary(Of String, Object))
-        ' Agregar una nueva fila al DataGridView
-        Dim rowIndex As Integer = dataGridView.Rows.Add()
+        If data Is Nothing OrElse data.Count = 0 Then
+            MostrarAlerta("No hay datos para llenar el DataGridView.")
+            Return
+        End If
 
-        ' Asignar los valores del diccionario a la fila
-        For Each key As String In data.Keys
-            dataGridView.Rows(rowIndex).Cells(key).Value = data(key)
-        Next
+        Try
+            ' Verifica si la llamada está en un subproceso diferente
+            If dataGridView.InvokeRequired Then
+                dataGridView.Invoke(New Action(Of DataGridView, Dictionary(Of String, Object))(AddressOf LlenarDataGridView), dataGridView, data)
+            Else
+                Dim rowIndex As Integer = dataGridView.Rows.Add()
+
+                For Each key As String In data.Keys
+                    If dataGridView.Columns.Contains(key) Then
+                        dataGridView.Rows(rowIndex).Cells(key).Value = data(key)
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error al llenar el DataGridView: {ex.Message}")
+            MostrarAlerta("Error inesperado al llenar los datos. Consulte con el administrador.")
+        End Try
     End Sub
+
+
 
     Private Sub CantidadFilas()
         Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
         Console.WriteLine($"totalRegistros-->{totalRegistros}")
-        lblTotalCount.Text = CType(totalRegistros, String)
+        SafeUpdateLabel(lblTotalCount, CType(totalRegistros, String))
     End Sub
 
     Private Function CantidadFilasLeidas() As Integer
-        Dim totalRegistrosLeidos As Integer = If(dgvTagList.AllowUserToAddRows, dgvTagList.Rows.Count - 1, dgvTagList.Rows.Count)
-        Console.WriteLine($"totalRegistros ledidos-->{totalRegistrosLeidos}")
+        Dim totalRegistrosLeidos As Integer = -1
+        SafeUpdateControl(dgvTagList, Sub(dgv)
+                                          totalRegistrosLeidos = If(dgv.AllowUserToAddRows, dgv.Rows.Count - 1, dgv.Rows.Count)
+                                      End Sub)
+        Console.WriteLine($"totalRegistros leídos: {totalRegistrosLeidos}")
         Return totalRegistrosLeidos
     End Function
 
@@ -1715,26 +1728,31 @@ Public Class frmLector
             End If
 
         Catch ex As Exception
-
+            MostrarAlerta($"Error al procesar código de barras: {ex.Message}")
         End Try
     End Sub
 
     Private Sub StartProcessingQueue()
-        ' Evitar múltiples procesadores concurrentes
         If IsProcessingQueue Then Return
         IsProcessingQueue = True
 
         Task.Run(Sub()
                      While Not CodBarrasQueue.IsEmpty
-                         Dim barcode As String = Nothing ' Inicialización explícita de la variable
+                         Dim barcode As String = Nothing ' Inicialización explícita
                          If Not CodBarrasQueue.TryDequeue(barcode) Then
                              Continue While
                          End If
-                         SaveCodigoRFID(barcode) ' Procesar la transacción
+
+                         ' Llama a SaveCodigoRFID de forma segura
+                         SafeUpdateControl(Me, Sub(form)
+                                                   form.SaveCodigoRFID(barcode)
+                                               End Sub)
                      End While
                      IsProcessingQueue = False
                  End Sub)
     End Sub
+
+
 
 
     ' Método para procesar un código de barras
@@ -2002,41 +2020,12 @@ Public Class frmLector
         Dim whereParameters As New Dictionary(Of String, Object) From {{"norpd", pOp}, {"nhjmr", pHm}}
         Dim l_return = m_DBConsultarPrenda.BuscarHMDetalle(whereParameters)
 
-        Console.WriteLine($"Item 1-->{l_return.Item1}")
-
         If l_return.Item1 = 0 Then
             Return
         End If
 
         ' Mostrar los datos en el DataGridView3
         MostrarEnDataGridView3(l_return.Item2, l_return.Item3)
-
-        ' Recorrer l_return.Item2 (totalTalla)
-        Console.WriteLine("----- Total Talla -----")
-        For Each total In l_return.Item2
-            Dim cclrcl As String = total("cclrcl").ToString()
-            Dim tclrcl As String = total("tclrcl").ToString()
-            Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
-
-            Console.WriteLine($"Color: {cclrcl}, Descripción: {tclrcl}, Total: {totalCantidad}")
-        Next
-
-        ' Recorrer l_return.Item3 (detalleTalla)
-        Console.WriteLine("----- Detalle Talla -----")
-        For Each detalle In l_return.Item3
-            Dim cclrcl As String = detalle.Key ' Clave del diccionario (cclrcl)
-            Console.WriteLine($"Color: {cclrcl}")
-
-            ' Recorrer los detalles (Lista de diccionarios)
-            For Each tallaDetalle In detalle.Value
-                Dim talla As String = tallaDetalle("talla").ToString()
-                Dim cantidad As Integer = Convert.ToInt32(tallaDetalle("cantidad"))
-
-                Console.WriteLine($"  Talla: {talla}, Cantidad: {cantidad}")
-            Next
-        Next
-
-
     End Sub
 
     Private Sub CargarValoresEnLabels(dataTable As DataTable)
@@ -2081,7 +2070,18 @@ Public Class frmLector
             Dim resumenRowIndex As Integer = DataGridView3.Rows.Add()
             DataGridView3.Rows(resumenRowIndex).Cells("Color").Value = cclrcl
             DataGridView3.Rows(resumenRowIndex).Cells("Descripcion").Value = tclrcl
-            DataGridView3.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad
+            DataGridView3.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad.ToString("N0") ' Formato numérico
+
+            ' Aplicar estilos para resaltar la fila de resumen
+            With DataGridView3.Rows(resumenRowIndex)
+                .DefaultCellStyle.BackColor = Color.LightGray
+                .DefaultCellStyle.Font = New Font(DataGridView3.Font, FontStyle.Bold)
+
+                ' Resaltar totales altos
+                If totalCantidad > 500 Then
+                    .DefaultCellStyle.ForeColor = Color.DarkGreen
+                End If
+            End With
 
             ' Agregar filas de detalle (Talla y Cantidad)
             If detalleTalla.ContainsKey(cclrcl) Then
@@ -2091,22 +2091,22 @@ Public Class frmLector
 
                     Dim detalleRowIndex As Integer = DataGridView3.Rows.Add()
                     DataGridView3.Rows(detalleRowIndex).Cells("Talla").Value = talla
-                    DataGridView3.Rows(detalleRowIndex).Cells("Cantidad").Value = cantidad
+                    DataGridView3.Rows(detalleRowIndex).Cells("Cantidad").Value = cantidad.ToString("N0") ' Formato numérico
 
                     ' Dejar las celdas de Color y Total en blanco para que visualmente parezca un detalle
                     DataGridView3.Rows(detalleRowIndex).Cells("Color").Value = ""
                     DataGridView3.Rows(detalleRowIndex).Cells("Descripcion").Value = ""
                     DataGridView3.Rows(detalleRowIndex).Cells("Total").Value = ""
+
+                    ' Alternar color para las filas de detalle
+                    If detalleRowIndex Mod 2 = 0 Then
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = Color.White
+                    Else
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = Color.LightBlue
+                    End If
                 Next
             End If
         Next
-
-        ' Ajustar el diseño visual del DataGridView
-        DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        DataGridView3.AllowUserToAddRows = False
-        DataGridView3.AllowUserToDeleteRows = False
-        DataGridView3.ReadOnly = True
-        DataGridView3.RowHeadersVisible = False
     End Sub
     Private Function SaveInvActivo() As Boolean
         Dim activeMode As ActiveMode
@@ -2122,9 +2122,9 @@ Public Class frmLector
         scanMode = ComboBoxItem.GetCurrentItemValue(cbxScanMode)
         result = _ts800.SetScanMode(False, scanMode)
         If result Then
-            MsgBox("Set Scan Mode Successful.")
+            AlertaOk("Establecer el modo escaneo", Color.FromArgb(16, 175, 76), 30, "Exitoso.")
         Else
-            MsgBox("Set Scan Mode Failed.")
+            MostrarAlerta("Error al configurar el modo de escaneo.")
         End If
     End Sub
 
@@ -2138,9 +2138,9 @@ Public Class frmLector
         Dim result As Boolean = SaveInvActivo()
 
         If result Then
-            MsgBox("Set Inventory Active Mode Successful.")
+            AlertaOk("Establecer el modo activo", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
         Else
-            MsgBox("Set Inventory Active Mode Failed.")
+            MostrarAlerta("Error al establecer el modo activo de inventario.")
         End If
     End Sub
     Private Sub ObtenerInvActivo()
@@ -2189,4 +2189,58 @@ Public Class frmLector
     '        End If
     '    Next type
     'End Sub
+    Private Sub SafeUpdateControl(Of T As Control)(control As T, updateAction As Action(Of T))
+        If control.InvokeRequired Then
+            control.Invoke(New Action(Of T, Action(Of T))(AddressOf SafeUpdateControl), control, updateAction)
+        Else
+            updateAction(control)
+        End If
+    End Sub
+
+    Private Sub ActualizarDataGridView1(fila As Object())
+        SafeUpdateControl(DataGridView1, Sub(dgv)
+                                             dgv.Rows.Add(fila)
+                                         End Sub)
+    End Sub
+
+    Private Sub ConfigurarEstiloDataGridView(dataGridView As DataGridView)
+        With dataGridView
+            ' Fondo general y bordes
+            .BackgroundColor = Color.White
+            .BorderStyle = BorderStyle.Fixed3D
+
+            ' Estilo de las celdas por defecto
+            .DefaultCellStyle.Font = New Font("Arial", 10.0!)
+            .DefaultCellStyle.Padding = New Padding(5)
+            .DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue
+            .DefaultCellStyle.SelectionForeColor = Color.Black
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+
+            ' Encabezados de columna
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12.0!, FontStyle.Bold)
+            .ColumnHeadersDefaultCellStyle.BackColor = Color.Navy
+            .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
+            .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised
+
+            ' Habilitar estilos personalizados
+            .EnableHeadersVisualStyles = False
+
+            ' Alineación y tamaño de columnas
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+            .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+
+            ' Estilo de filas
+            .RowTemplate.Height = 30
+            .AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue
+            .GridColor = Color.Gray
+
+            ' Propiedades adicionales
+            .AllowUserToAddRows = False
+            .AllowUserToDeleteRows = False
+            .ReadOnly = True
+            .RowHeadersVisible = False
+            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        End With
+    End Sub
 End Class
