@@ -148,13 +148,13 @@ Partial Class PruebaConfiguracion
         Me.TableLayoutPanel2.Controls.Add(Me.btnSetFrequency, 2, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.gbJapanFrequency, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 288)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 360)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(639, 72)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(639, 90)
         Me.TableLayoutPanel2.TabIndex = 33
         '
         'gbTaiwanFrequency
@@ -162,7 +162,7 @@ Partial Class PruebaConfiguracion
         Me.gbTaiwanFrequency.Controls.Add(Me.cb920_25)
         Me.gbTaiwanFrequency.Controls.Add(Me.cb922_25)
         Me.gbTaiwanFrequency.Controls.Add(Me.Button2)
-        Me.gbTaiwanFrequency.Location = New System.Drawing.Point(2, 38)
+        Me.gbTaiwanFrequency.Location = New System.Drawing.Point(2, 47)
         Me.gbTaiwanFrequency.Margin = New System.Windows.Forms.Padding(2)
         Me.gbTaiwanFrequency.Name = "gbTaiwanFrequency"
         Me.gbTaiwanFrequency.Padding = New System.Windows.Forms.Padding(2)
@@ -202,7 +202,7 @@ Partial Class PruebaConfiguracion
         '
         'btnGetFrequency
         '
-        Me.btnGetFrequency.Location = New System.Drawing.Point(322, 39)
+        Me.btnGetFrequency.Location = New System.Drawing.Point(322, 48)
         Me.btnGetFrequency.Name = "btnGetFrequency"
         Me.btnGetFrequency.Size = New System.Drawing.Size(94, 25)
         Me.btnGetFrequency.TabIndex = 21
@@ -211,7 +211,7 @@ Partial Class PruebaConfiguracion
         '
         'btnSetFrequency
         '
-        Me.btnSetFrequency.Location = New System.Drawing.Point(481, 39)
+        Me.btnSetFrequency.Location = New System.Drawing.Point(481, 48)
         Me.btnSetFrequency.Name = "btnSetFrequency"
         Me.btnSetFrequency.Size = New System.Drawing.Size(94, 25)
         Me.btnSetFrequency.TabIndex = 22
@@ -566,7 +566,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBoxRxDecode.Controls.Add(Me.btnSetRxDecode)
         Me.GroupBoxRxDecode.Controls.Add(Me.cbxRxDecode)
         Me.GroupBoxRxDecode.Controls.Add(Me.Label49)
-        Me.GroupBoxRxDecode.Location = New System.Drawing.Point(3, 75)
+        Me.GroupBoxRxDecode.Location = New System.Drawing.Point(3, 93)
         Me.GroupBoxRxDecode.Name = "GroupBoxRxDecode"
         Me.GroupBoxRxDecode.Size = New System.Drawing.Size(394, 50)
         Me.GroupBoxRxDecode.TabIndex = 26
@@ -614,7 +614,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBoxLinkFrequency.Controls.Add(Me.cbxLinkFrequency)
         Me.GroupBoxLinkFrequency.Controls.Add(Me.btnSetLinkFrequency)
         Me.GroupBoxLinkFrequency.Controls.Add(Me.Label50)
-        Me.GroupBoxLinkFrequency.Location = New System.Drawing.Point(642, 75)
+        Me.GroupBoxLinkFrequency.Location = New System.Drawing.Point(642, 93)
         Me.GroupBoxLinkFrequency.Name = "GroupBoxLinkFrequency"
         Me.GroupBoxLinkFrequency.Size = New System.Drawing.Size(394, 50)
         Me.GroupBoxLinkFrequency.TabIndex = 27
@@ -662,7 +662,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBox2.Controls.Add(Me.nudTagPresentRepeatInterval)
         Me.GroupBox2.Controls.Add(Me.btnSetTagPresentRepeatInterval)
         Me.GroupBox2.Controls.Add(Me.Label35)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 147)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 183)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(394, 50)
         Me.GroupBox2.TabIndex = 28
@@ -709,7 +709,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBox4.Controls.Add(Me.nudTagRemoveThreshold)
         Me.GroupBox4.Controls.Add(Me.btnSetRemoveThreshold)
         Me.GroupBox4.Controls.Add(Me.Label37)
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 219)
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 273)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(394, 50)
         Me.GroupBox4.TabIndex = 29
@@ -756,7 +756,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBox5.Controls.Add(Me.nudInventoryRoundInterval)
         Me.GroupBox5.Controls.Add(Me.btnSetInvnetoryRoundInterval)
         Me.GroupBox5.Controls.Add(Me.Label38)
-        Me.GroupBox5.Location = New System.Drawing.Point(642, 147)
+        Me.GroupBox5.Location = New System.Drawing.Point(642, 183)
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.Size = New System.Drawing.Size(394, 50)
         Me.GroupBox5.TabIndex = 30
@@ -802,7 +802,7 @@ Partial Class PruebaConfiguracion
         Me.gbxScanMode.Controls.Add(Me.btnGetScanMode)
         Me.gbxScanMode.Controls.Add(Me.btnSetScanMode)
         Me.gbxScanMode.Controls.Add(Me.cbxScanMode)
-        Me.gbxScanMode.Location = New System.Drawing.Point(642, 219)
+        Me.gbxScanMode.Location = New System.Drawing.Point(642, 273)
         Me.gbxScanMode.Name = "gbxScanMode"
         Me.gbxScanMode.Size = New System.Drawing.Size(394, 50)
         Me.gbxScanMode.TabIndex = 31
@@ -842,7 +842,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBox8.Controls.Add(Me.btnSetActiveMode)
         Me.GroupBox8.Controls.Add(Me.cbxActiveMode)
         Me.GroupBox8.Controls.Add(Me.Label44)
-        Me.GroupBox8.Location = New System.Drawing.Point(642, 291)
+        Me.GroupBox8.Location = New System.Drawing.Point(642, 363)
         Me.GroupBox8.Name = "GroupBox8"
         Me.GroupBox8.Size = New System.Drawing.Size(394, 51)
         Me.GroupBox8.TabIndex = 34
@@ -911,7 +911,7 @@ Partial Class PruebaConfiguracion
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1278, 450)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1278, 563)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'GroupBox6
@@ -935,7 +935,7 @@ Partial Class PruebaConfiguracion
         Me.GroupBox6.Controls.Add(Me.CheckBox17)
         Me.GroupBox6.Controls.Add(Me.CheckBox18)
         Me.GroupBox6.Controls.Add(Me.Button3)
-        Me.GroupBox6.Location = New System.Drawing.Point(2, 362)
+        Me.GroupBox6.Location = New System.Drawing.Point(2, 452)
         Me.GroupBox6.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox6.Name = "GroupBox6"
         Me.GroupBox6.Padding = New System.Windows.Forms.Padding(2)
@@ -1137,7 +1137,7 @@ Partial Class PruebaConfiguracion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1278, 450)
+        Me.ClientSize = New System.Drawing.Size(1278, 563)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "PruebaConfiguracion"
         Me.Text = "PruebaConfiguracion"

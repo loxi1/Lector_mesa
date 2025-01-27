@@ -1092,8 +1092,8 @@ Public Class frmLector
     End Sub
     Private Sub TabInventario()
         CodBarras.Focus()
-        ' Redimensionar elementos dentro de TableLayoutPanel2
-        For Each control As Control In TableLayoutPanel2.Controls
+        ' Redimensionar elementos dentro de tablaContenedorTimbrado
+        For Each control As Control In tablaContenedorTimbrado.Controls
 
             Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
             Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 120)
