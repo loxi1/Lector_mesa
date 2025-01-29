@@ -127,8 +127,13 @@ Public Class frmLector
         Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
 
         ConfigurarEstiloDataGridView(DataGridView1)
-        ConfigurarEstiloDataGridView(DataGridView2)
-        ConfigurarEstiloDataGridView(DataGridView3)
+        MejorarDataGridView(DataGridView2)
+        MejorarDataGridView(DataGridView3)
+        EstiloBoton(btnClear)
+        EstiloBoton(btnLimpiarRFID, "#E0E0E0", "#000000", "#BDBDBD")
+        EstiloContenedorTablaRFID()
+        EstiloBoton(BtnBuscarHM)
+        EstiloBoton(BtnLimpiarHM, "#E0E0E0", "#000000", "#BDBDBD")
     End Sub
 
     Private Sub AdjustTabWidth()
@@ -151,29 +156,40 @@ Public Class frmLector
         Dim g As Graphics = e.Graphics
         Dim tabPage As TabPage = Me.tabControl.TabPages(e.Index)
         Dim tabBounds As Rectangle = Me.tabControl.GetTabRect(e.Index)
+        Dim isSelected As Boolean = (e.Index = tabControl.SelectedIndex)
 
-        ' Fuente personalizada para las pestañas
-        Dim tabFont As New Font("Microsoft Sans Serif", 15.0F, FontStyle.Regular, GraphicsUnit.Point)
-        ' Determinar el color del texto
-        Dim textColor As Color = SystemColors.ControlText
+        ' Fuente mejorada
+        Dim tabFont As New Font("Arial", 12.0F, FontStyle.Bold, GraphicsUnit.Point)
+        Dim textColor As Color = Color.Black
 
+        ' Definir colores de pestañas
+        Dim activeTabColor As Color = ColorTranslator.FromHtml("#1ABC9C") ' Verde turquesa
+        Dim inactiveTabColor As Color = ColorTranslator.FromHtml("#BDC3C7") ' Gris claro
+        Dim hoverTabColor As Color = ColorTranslator.FromHtml("#16A085") ' Verde oscuro
 
-        ' Verificar si la pestaña está seleccionada
-        If e.Index = tabControl.SelectedIndex Then
-            ' Pestaña seleccionada: Fondo destacado
-            g.FillRectangle(Brushes.MediumSeaGreen, tabBounds)
-            ' Dibujar una sublínea en la parte inferior
-            g.DrawLine(Pens.White, tabBounds.Left, tabBounds.Bottom - 2, tabBounds.Right, tabBounds.Bottom - 2)
-            'Dibujar el texto con color blanco
-            textColor = Color.White
-        Else
-            ' Pestaña no seleccionada: Fondo estándar
-            g.FillRectangle(Brushes.White, tabBounds)
+        ' Determinar si está en hover
+        Dim mousePosition As Point = tabControl.PointToClient(Cursor.Position)
+        Dim isHovered As Boolean = tabBounds.Contains(mousePosition)
+
+        ' Color de fondo de la pestaña
+        Dim bgColor As Color = If(isSelected, activeTabColor, If(isHovered, hoverTabColor, inactiveTabColor))
+        textColor = If(isSelected, Color.White, Color.Black)
+
+        ' Dibujar fondo de pestaña
+        Using brush As New SolidBrush(bgColor)
+            g.FillRectangle(brush, tabBounds)
+        End Using
+
+        ' Dibujar línea inferior para pestaña activa
+        If isSelected Then
+            g.DrawLine(New Pen(Color.White, 3), tabBounds.Left, tabBounds.Bottom - 2, tabBounds.Right, tabBounds.Bottom - 2)
         End If
 
-        ' Dibujar el texto de la pestaña con alineación centrada
+        ' Dibujar el texto centrado
         TextRenderer.DrawText(g, tabPage.Text, tabFont, tabBounds, textColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
     End Sub
+
+
 
     Private Sub StartConnection()
         Dim oPortList As New List(Of Object)
@@ -999,6 +1015,7 @@ Public Class frmLector
             tabControl.SelectedTab = tpPerformance
             Exit Sub
         End If
+
         ' Configuración específica para tpInventory
         Me.tabControl.Dock = DockStyle.None
 
@@ -1011,11 +1028,6 @@ Public Class frmLector
         pnlConnect.Dock = DockStyle.None
         pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
 
-        Try
-            Me.BeginInvoke(Sub() InitializeInventoryTab())
-        Catch ex As Exception
-            Console.WriteLine($"Error al cambiar de pestaña: {ex.Message}")
-        End Try
 
         If selectedTab.Name = "tpInventory" Then
             TabInventario()
@@ -1056,64 +1068,13 @@ Public Class frmLector
             Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
             Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
             Dim fontSize2 As Single = Math.Max(10, Me.ClientSize.Width / 150)
-
+            Console.WriteLine($" <control555---{control.Name}--5555>")
             If TypeOf control Is TableLayoutPanel Then
-                ResizeTableLPCIHM(TryCast(control, TableLayoutPanel), fontSize, fontSize1, fontSize2)
+                ResizeTableLPCIHM2(TryCast(control, TableLayoutPanel), fontSize, fontSize1, fontSize2)
             End If
         Next
     End Sub
-    Private Sub TbBuscarPrenda()
-        BuscarCodBarras.Focus()
-        For Each control As Control In tablaBuscarPrenda.Controls
-            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
-            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
-
-            If control.Name = "DataGridView2" Then
-                Dim dgv As DataGridView = TryCast(control, DataGridView)
-                If dgv IsNot Nothing Then
-                    ' Ajustar la fuente del DataGridView
-                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
-                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
-                End If
-            ElseIf control.Name = "MsnBusquedaPrenda" Then
-                ' Ajustar el tamaño de la fuente del control CodBarras
-                control.Font = New Font(control.Font.FontFamily, fontSize1)
-                ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
-                If control.Parent IsNot Nothing Then
-                    control.Width = control.Parent.ClientSize.Width
-                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
-                End If
-            ElseIf TypeOf control Is TableLayoutPanel Then
-                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
-            End If
-        Next
-    End Sub
-    Private Sub TabInventario()
-        CodBarras.Focus()
-        ' Redimensionar elementos dentro de tablaContenedorTimbrado
-        For Each control As Control In tablaContenedorTimbrado.Controls
-
-            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
-            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 120)
-
-            If control.Name = "DataGridView1" Then
-                Dim dgv As DataGridView = TryCast(control, DataGridView)
-                If dgv IsNot Nothing Then
-                    ' Ajustar la fuente del DataGridView
-                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
-                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
-                End If
-            ElseIf TypeOf control Is TableLayoutPanel Then
-                ' Redimensionar controles dentro de TableLayoutPanel anidados
-                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
-            End If
-        Next
-    End Sub
-    Private Sub ResizeTableLPCIHM(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single, fontSize2 As Single)
+    Private Sub ResizeTableLPCIHM2(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single, fontSize2 As Single)
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
@@ -1156,6 +1117,100 @@ Public Class frmLector
             End If
         Next
     End Sub
+    Private Sub TbBuscarPrenda()
+        BuscarCodBarras.Focus()
+        For Each control As Control In tablaBuscarPrenda.Controls
+            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
+
+            If control.Name = "DataGridView2" Then
+                Dim dgv As DataGridView = TryCast(control, DataGridView)
+                If dgv IsNot Nothing Then
+                    ' Ajustar la fuente del DataGridView
+                    dgv.Font = New Font(dgv.Font.FontFamily, fontSize1)
+                    dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
+                End If
+            ElseIf control.Name = "MsnBusquedaPrenda" Then
+                ' Ajustar el tamaño de la fuente del control CodBarras
+                control.Font = New Font(control.Font.FontFamily, fontSize1)
+                ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
+                If control.Parent IsNot Nothing Then
+                    control.Width = control.Parent.ClientSize.Width
+                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
+                End If
+            ElseIf TypeOf control Is TableLayoutPanel Then
+                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+            End If
+        Next
+    End Sub
+    Private Sub TabInventario()
+        CodBarras.Focus()
+        ' Redimensionar elementos dentro de tablaContenedorTimbrado
+        For Each control As Control In tablaContenedorTimbrado.Controls
+
+            Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
+            Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 120)
+
+            If TypeOf control Is TableLayoutPanel Then
+                ' Redimensionar controles dentro de TableLayoutPanel anidados
+                ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
+            End If
+        Next
+    End Sub
+    Private Sub ResizeTableLPCIHM(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single, fontSize2 As Single)
+        For Each control As Control In panel.Controls
+            Console.WriteLine($"mideme--{control.Name}")
+
+            If Not String.IsNullOrEmpty(control.Name) Then
+                Console.WriteLine($"Nombre-->{control.Name}")
+                ' Ajustar la fuente de otros controles si es necesario
+                If TypeOf control Is TableLayoutPanel Then
+                    For Each control2 As Control In control.Controls
+                        If control2.Name = "TextBoxOP" Or control2.Name = "TextBoxHM" Then
+                            ' Ajustar el tamaño de la fuente del control CodBarras
+                            control2.Font = New Font(control2.Font.FontFamily, fontSize)
+                            ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
+                            If control2.Parent IsNot Nothing Then
+                                control2.Width = control2.Parent.ClientSize.Width
+                                control2.Top = (control2.Parent.ClientSize.Height - control.Height) \ 2
+                            End If
+                        ElseIf TypeOf control2 Is Button Then
+                            Dim btn As Button = TryCast(control2, Button)
+                            If btn IsNot Nothing And (control2.Name = "BtnBuscarHM" Or control2.Name = "BtnLimpiarHM") Then
+                                ' Ajustar el tamaño de la fuente del botón
+                                btn.Font = New Font(btn.Font.FontFamily, fontSize1)
+
+                                ' Obtener el TableLayoutPanel correcto (el que contiene a control2)
+                                Dim parentTable As TableLayoutPanel = TryCast(control2.Parent, TableLayoutPanel)
+                                If parentTable IsNot Nothing Then
+                                    Dim columnIndex As Integer = parentTable.GetColumn(control2)
+                                    If columnIndex >= 0 Then
+                                        Dim cellWidth As Integer = parentTable.GetColumnWidths()(columnIndex)
+                                        btn.Width = cellWidth
+                                    End If
+                                End If
+                                ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
+                                Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
+                                btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
+                                control2.Top = (control2.Parent.ClientSize.Height - control2.Height) \ 2
+
+                                ' (Opcional) Asegurar que el botón esté centrado en su celda
+                                btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                            End If
+                        ElseIf control2.Name.StartsWith("text_", StringComparison.OrdinalIgnoreCase) Then
+                            control2.Font = New Font(control.Font.FontFamily, fontSize2)
+                        ElseIf control2.Name.StartsWith("lbl_", StringComparison.OrdinalIgnoreCase) Then
+                            control2.Font = New Font(control.Font.FontFamily, fontSize2, FontStyle.Bold)
+                        Else
+                            control2.Font = New Font(control2.Font.FontFamily, fontSize1)
+                        End If
+                    Next
+                End If
+            End If
+        Next
+    End Sub
     Private Sub ResizeTableLayoutPanelControls(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single)
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
@@ -1181,18 +1236,6 @@ Public Class frmLector
             ElseIf TypeOf control Is TableLayoutPanel Then
                 ' Llamada recursiva para manejar anidamientos
                 ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
-            ElseIf TypeOf control Is DataGridView Then
-                If (control.Name = "dgvTagList") Then
-                    Console.WriteLine($"<--Nombre-->{control.Name}")
-                    Dim dgv As DataGridView = TryCast(control, DataGridView)
-                    If dgv IsNot Nothing Then
-                        ' Ajustar la fuente del DataGridView
-                        'dgv.Font = New Font(dgv.Font.FontFamily, fontSize)
-                        'dgv.RowTemplate.Height = TextRenderer.MeasureText("Test", dgv.Font).Height + 5 ' Margen adicional
-                        'dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                        'dgv.ColumnHeadersDefaultCellStyle.Font = New Font(dgv.ColumnHeadersDefaultCellStyle.Font.FontFamily, fontSize1)
-                    End If
-                End If
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
                 Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
@@ -1515,6 +1558,7 @@ Public Class frmLector
                 'Console.WriteLine($"Filas devueltas por GetData: {dataRta.Rows.Count}")
                 If dataRta.Rows.Count > 0 Then
                     lsDatos = BuildDataString(dataRta.Rows(0))
+                    SafeUpdateTextBox(CodBarras, "")
                     MostrarAlerta($"RFID ya registrado en: {lsDatos}. Verifique.")
                     Exit Sub
                 End If
@@ -1537,7 +1581,7 @@ Public Class frmLector
         SafeUpdateLabel(MsnVincular, lsResult.Item2)
         If lsResult.Item1 <> 0 Then
             SafeUpdateTextBox(CodBarras, "")
-            MostrarAlerta($"Error al registrar en Sybase: {lsResult.Item2}")
+            MostrarAlerta($"Verificar: {lsResult.Item2}")
             Exit Sub
         End If
 
@@ -2202,14 +2246,12 @@ Public Class frmLector
                                              dgv.Rows.Add(fila)
                                          End Sub)
     End Sub
-
-    Private Sub ConfigurarEstiloDataGridView(dataGridView As DataGridView)
-        With dataGridView
-            ' Fondo general y bordes
+    Private Sub ConfigurarEstiloDataGridView(dgv As DataGridView)
+        With dgv
             .BackgroundColor = Color.White
             .BorderStyle = BorderStyle.Fixed3D
 
-            ' Estilo de las celdas por defecto
+            ' Fuente y alineación
             .DefaultCellStyle.Font = New Font("Arial", 10.0!)
             .DefaultCellStyle.Padding = New Padding(5)
             .DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue
@@ -2218,29 +2260,79 @@ Public Class frmLector
 
             ' Encabezados de columna
             .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12.0!, FontStyle.Bold)
-            .ColumnHeadersDefaultCellStyle.BackColor = Color.Navy
+            .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(44, 62, 80) ' Azul oscuro
             .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
             .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised
-
-            ' Habilitar estilos personalizados
             .EnableHeadersVisualStyles = False
 
-            ' Alineación y tamaño de columnas
-            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
-            .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
-
-            ' Estilo de filas
+            ' Filas alternas
+            .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241) ' Gris claro
             .RowTemplate.Height = 30
-            .AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue
-            .GridColor = Color.Gray
+        End With
+    End Sub
+    Private Sub MejorarDataGridView(ByVal dgv As DataGridView)
+        ' Hacer que el DataGridView ocupe el 100% del espacio disponible
+        dgv.Dock = DockStyle.Fill
 
-            ' Propiedades adicionales
-            .AllowUserToAddRows = False
-            .AllowUserToDeleteRows = False
-            .ReadOnly = True
-            .RowHeadersVisible = False
-            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        ' Ajustar automáticamente las columnas al contenido
+        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+
+        ' Asegurar que la columna "Descripción" se expanda para mostrar el texto completo
+        If dgv.Columns.Contains("Descripción") Then
+            dgv.Columns("Descripción").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+        End If
+
+        ' Evitar que el usuario redimensione manualmente las columnas
+        dgv.AllowUserToResizeColumns = False
+
+        ' Alinear el texto de las celdas al centro
+        For Each col As DataGridViewColumn In dgv.Columns
+            col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        Next
+
+        ' Ajustar la altura de las filas automáticamente según el contenido
+        dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+
+        ' Aplicar el estilo personalizado
+        ConfigurarEstiloDataGridView(dgv)
+    End Sub
+
+
+    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
+        ' Configuración mejorada para el botón btnClear
+        With btnViste
+            .Anchor = System.Windows.Forms.AnchorStyles.Left
+            .BackColor = ColorTranslator.FromHtml(bkcolor)
+            .ForeColor = ColorTranslator.FromHtml(txtcolor)
+            .FlatStyle = FlatStyle.Flat
+            .FlatAppearance.BorderSize = 1 ' Sin borde
+            .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
+            .Font = New Font("Arial", 12, FontStyle.Bold) ' Fuente más grande y negrita
+            .Size = New Size(150, 40) ' Aumentar el tamaño del botón
+            .TextAlign = ContentAlignment.MiddleCenter
+            .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
+        End With
+    End Sub
+
+    Private Sub EstiloContenedorTablaRFID()
+        With dgvTagList
+            .BackgroundColor = Color.White
+            .GridColor = Color.Gray
+            .DefaultCellStyle.BackColor = Color.White
+            .DefaultCellStyle.ForeColor = Color.Black
+            .DefaultCellStyle.Font = New Font("Arial", 10)
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12, FontStyle.Bold)
+            .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(250, 250, 250) ' Fondo gris muy claro para filas alternas
+            .RowTemplate.Height = 30
+
+            ' Ocultar la columna clnTID
+            If .Columns.Contains("clnTID") Then
+                .Columns("clnTID").Visible = False
+            End If
         End With
     End Sub
 End Class

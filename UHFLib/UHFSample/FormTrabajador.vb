@@ -91,4 +91,24 @@ Public Class FormTrabajador
             alerta.ShowDialog()
         End Using
     End Sub
+    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
+        ' Configuración mejorada para el botón btnClear
+        With btnViste
+            .Anchor = System.Windows.Forms.AnchorStyles.Left
+            .BackColor = ColorTranslator.FromHtml(bkcolor)
+            .ForeColor = ColorTranslator.FromHtml(txtcolor)
+            .FlatStyle = FlatStyle.Flat
+            .FlatAppearance.BorderSize = 1 ' Sin borde
+            .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
+            .Font = New Font("Arial", 12, FontStyle.Bold) ' Fuente más grande y negrita
+            .Size = New Size(150, 40) ' Aumentar el tamaño del botón
+            .TextAlign = ContentAlignment.MiddleCenter
+            .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
+        End With
+    End Sub
+
+    Private Sub FormTrabajador_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        EstiloBoton(ButtonOk)
+        EstiloBoton(buttonCancelar, "#E0E0E0", "#000000", "#BDBDBD")
+    End Sub
 End Class

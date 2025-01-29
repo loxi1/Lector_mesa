@@ -22,6 +22,7 @@ Partial Class FormTrabajador
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormTrabajador))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtCodTrabajador = New System.Windows.Forms.TextBox()
@@ -72,11 +73,11 @@ Partial Class FormTrabajador
         Me.ButtonOk.BackColor = System.Drawing.Color.MediumSeaGreen
         Me.ButtonOk.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonOk.ForeColor = System.Drawing.Color.White
-        Me.ButtonOk.Location = New System.Drawing.Point(115, 135)
+        Me.ButtonOk.Location = New System.Drawing.Point(315, 135)
         Me.ButtonOk.Name = "ButtonOk"
         Me.ButtonOk.Size = New System.Drawing.Size(131, 47)
         Me.ButtonOk.TabIndex = 4
-        Me.ButtonOk.Text = "Aceptar"
+        Me.ButtonOk.Text = "Acceder"
         Me.ButtonOk.UseVisualStyleBackColor = False
         '
         'buttonCancelar
@@ -84,7 +85,7 @@ Partial Class FormTrabajador
         Me.buttonCancelar.BackColor = System.Drawing.Color.MediumSeaGreen
         Me.buttonCancelar.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.buttonCancelar.ForeColor = System.Drawing.Color.White
-        Me.buttonCancelar.Location = New System.Drawing.Point(262, 135)
+        Me.buttonCancelar.Location = New System.Drawing.Point(14, 134)
         Me.buttonCancelar.Name = "buttonCancelar"
         Me.buttonCancelar.Size = New System.Drawing.Size(148, 47)
         Me.buttonCancelar.TabIndex = 5
@@ -102,6 +103,7 @@ Partial Class FormTrabajador
         Me.Controls.Add(Me.txtCodTrabajador)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "FormTrabajador"

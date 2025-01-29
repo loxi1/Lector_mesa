@@ -21,12 +21,12 @@ Public Class BDPrendaScm
 
                 Dim query As String = "SELECT `id_prenda`, `id_rfid`, `id_barras`, `fecha_registro`, `cod_trabajador`, `op`, `corte`, `subcorte` AS `sub_corte`, `cod_talla`, `id_talla`, `talla`, `cod_combinacion`, `color`, `estado`, `id_contenedor` FROM `bd_ci_scm`.`prenda`"
                 Dim ls_where As String = BuildWhereClause(whereParameters)
-                'Debug.Print($"El query inicial: {query}")
+                Console.WriteLine($"El query inicial: {query}")
 
                 If Not String.IsNullOrEmpty(ls_where) Then
                     query &= " WHERE " & ls_where
                 End If
-                'Debug.Print($"Query final: {query}")
+                Console.WriteLine($"Query final: {query}")
 
                 Using comando As New MySqlCommand(query, connection)
                     For Each param In whereParameters

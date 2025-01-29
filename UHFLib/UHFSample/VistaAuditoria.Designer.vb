@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class frmLector
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class VistaAuditoria
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()>
+    <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,21 +20,11 @@ Partial Class frmLector
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()>
+    <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmLector))
-        Me.pnlConnect = New System.Windows.Forms.Panel()
-        Me.lblRomVersion = New System.Windows.Forms.Label()
-        Me.lblSdkVersion = New System.Windows.Forms.Label()
-        Me.btnConnect = New System.Windows.Forms.Button()
-        Me.btnWifiSetting = New System.Windows.Forms.Button()
-        Me.cbxBaudrate = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.cbxPort = New System.Windows.Forms.ComboBox()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.tabControl = New System.Windows.Forms.TabControl()
         Me.tpPerformance = New System.Windows.Forms.TabPage()
         Me.tablaContenConf = New System.Windows.Forms.TableLayoutPanel()
@@ -115,30 +105,22 @@ Partial Class frmLector
         Me.gbxInventoryEx = New System.Windows.Forms.GroupBox()
         Me.tablaContenedorTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.tabaLadoTimbrado = New System.Windows.Forms.TableLayoutPanel()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnStopInventoryEx = New System.Windows.Forms.Button()
+        Me.btnLimpiarRFID = New System.Windows.Forms.Button()
+        Me.cbxInventory = New System.Windows.Forms.ComboBox()
+        Me.btnStartInventoryEx = New System.Windows.Forms.Button()
         Me.dgvTagList = New System.Windows.Forms.DataGridView()
         Me.clnEPC = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnTID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.CodBarras = New System.Windows.Forms.TextBox()
-        Me.btnLimpiarRFID = New System.Windows.Forms.Button()
         Me.btnClear = New System.Windows.Forms.Button()
-        Me.MsnVincular = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.CodBarras = New System.Windows.Forms.TextBox()
+        Me.tableLadoContador = New System.Windows.Forms.TableLayoutPanel()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.tableCount = New System.Windows.Forms.TableLayoutPanel()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.btnStopInventoryEx = New System.Windows.Forms.Button()
-        Me.cbxInventory = New System.Windows.Forms.ComboBox()
-        Me.btnStartInventoryEx = New System.Windows.Forms.Button()
+        Me.MsnVincular = New System.Windows.Forms.Label()
         Me.tpSearch = New System.Windows.Forms.TabPage()
         Me.gbxBuscarPrenda = New System.Windows.Forms.GroupBox()
         Me.tablaBuscarPrenda = New System.Windows.Forms.TableLayoutPanel()
@@ -203,7 +185,15 @@ Partial Class frmLector
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-        Me.pnlConnect.SuspendLayout()
+        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.comentario = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.estado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabControl.SuspendLayout()
         Me.tpPerformance.SuspendLayout()
         Me.tablaContenConf.SuspendLayout()
@@ -228,11 +218,10 @@ Partial Class frmLector
         Me.gbxInventoryEx.SuspendLayout()
         Me.tablaContenedorTimbrado.SuspendLayout()
         Me.tabaLadoTimbrado.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel2.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
+        Me.tableLadoContador.SuspendLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tableCount.SuspendLayout()
         Me.tpSearch.SuspendLayout()
         Me.gbxBuscarPrenda.SuspendLayout()
         Me.tablaBuscarPrenda.SuspendLayout()
@@ -245,98 +234,6 @@ Partial Class frmLector
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'pnlConnect
-        '
-        Me.pnlConnect.Controls.Add(Me.lblRomVersion)
-        Me.pnlConnect.Controls.Add(Me.lblSdkVersion)
-        Me.pnlConnect.Controls.Add(Me.btnConnect)
-        Me.pnlConnect.Controls.Add(Me.btnWifiSetting)
-        Me.pnlConnect.Controls.Add(Me.cbxBaudrate)
-        Me.pnlConnect.Controls.Add(Me.Label2)
-        Me.pnlConnect.Controls.Add(Me.Label1)
-        Me.pnlConnect.Controls.Add(Me.cbxPort)
-        Me.pnlConnect.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pnlConnect.Location = New System.Drawing.Point(0, 683)
-        Me.pnlConnect.Margin = New System.Windows.Forms.Padding(13, 3, 3, 3)
-        Me.pnlConnect.Name = "pnlConnect"
-        Me.pnlConnect.Size = New System.Drawing.Size(884, 76)
-        Me.pnlConnect.TabIndex = 1
-        '
-        'lblRomVersion
-        '
-        Me.lblRomVersion.AutoSize = True
-        Me.lblRomVersion.Location = New System.Drawing.Point(273, 13)
-        Me.lblRomVersion.Name = "lblRomVersion"
-        Me.lblRomVersion.Size = New System.Drawing.Size(73, 13)
-        Me.lblRomVersion.TabIndex = 8
-        Me.lblRomVersion.Text = "ROM Version:"
-        '
-        'lblSdkVersion
-        '
-        Me.lblSdkVersion.AutoSize = True
-        Me.lblSdkVersion.Location = New System.Drawing.Point(23, 13)
-        Me.lblSdkVersion.Name = "lblSdkVersion"
-        Me.lblSdkVersion.Size = New System.Drawing.Size(70, 13)
-        Me.lblSdkVersion.TabIndex = 7
-        Me.lblSdkVersion.Text = "SDK Version:"
-        '
-        'btnConnect
-        '
-        Me.btnConnect.Location = New System.Drawing.Point(460, 36)
-        Me.btnConnect.Name = "btnConnect"
-        Me.btnConnect.Size = New System.Drawing.Size(98, 27)
-        Me.btnConnect.TabIndex = 6
-        Me.btnConnect.Text = "Conectar"
-        Me.btnConnect.UseVisualStyleBackColor = True
-        '
-        'btnWifiSetting
-        '
-        Me.btnWifiSetting.Enabled = False
-        Me.btnWifiSetting.Location = New System.Drawing.Point(15, 37)
-        Me.btnWifiSetting.Name = "btnWifiSetting"
-        Me.btnWifiSetting.Size = New System.Drawing.Size(95, 27)
-        Me.btnWifiSetting.TabIndex = 5
-        Me.btnWifiSetting.Text = "Wi-Fi Setting"
-        Me.btnWifiSetting.UseVisualStyleBackColor = True
-        '
-        'cbxBaudrate
-        '
-        Me.cbxBaudrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbxBaudrate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
-        Me.cbxBaudrate.FormattingEnabled = True
-        Me.cbxBaudrate.Location = New System.Drawing.Point(350, 39)
-        Me.cbxBaudrate.Name = "cbxBaudrate"
-        Me.cbxBaudrate.Size = New System.Drawing.Size(84, 23)
-        Me.cbxBaudrate.TabIndex = 4
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(295, 44)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(56, 13)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Baudrate :"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(116, 46)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(32, 13)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Port :"
-        '
-        'cbxPort
-        '
-        Me.cbxPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbxPort.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
-        Me.cbxPort.FormattingEnabled = True
-        Me.cbxPort.Location = New System.Drawing.Point(151, 39)
-        Me.cbxPort.Name = "cbxPort"
-        Me.cbxPort.Size = New System.Drawing.Size(130, 23)
-        Me.cbxPort.TabIndex = 1
-        '
         'tabControl
         '
         Me.tabControl.Controls.Add(Me.tpPerformance)
@@ -348,9 +245,9 @@ Partial Class frmLector
         Me.tabControl.Location = New System.Drawing.Point(0, 0)
         Me.tabControl.Name = "tabControl"
         Me.tabControl.SelectedIndex = 0
-        Me.tabControl.Size = New System.Drawing.Size(884, 683)
+        Me.tabControl.Size = New System.Drawing.Size(952, 663)
         Me.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
-        Me.tabControl.TabIndex = 8
+        Me.tabControl.TabIndex = 9
         Me.tabControl.TabStop = False
         '
         'tpPerformance
@@ -359,7 +256,7 @@ Partial Class frmLector
         Me.tpPerformance.Location = New System.Drawing.Point(4, 44)
         Me.tpPerformance.Name = "tpPerformance"
         Me.tpPerformance.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpPerformance.Size = New System.Drawing.Size(876, 635)
+        Me.tpPerformance.Size = New System.Drawing.Size(944, 615)
         Me.tpPerformance.TabIndex = 3
         Me.tpPerformance.Text = "Configuración"
         Me.tpPerformance.UseVisualStyleBackColor = True
@@ -367,21 +264,21 @@ Partial Class frmLector
         '
         'tablaContenConf
         '
-        Me.tablaContenConf.ColumnCount = 2
-        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.tablaContenConf.Controls.Add(Me.GroupBox8, 1, 4)
-        Me.tablaContenConf.Controls.Add(Me.gbxScanMode, 1, 3)
-        Me.tablaContenConf.Controls.Add(Me.GroupBox5, 1, 2)
-        Me.tablaContenConf.Controls.Add(Me.GroupBox4, 0, 3)
-        Me.tablaContenConf.Controls.Add(Me.GroupBox2, 0, 2)
-        Me.tablaContenConf.Controls.Add(Me.GroupBoxLinkFrequency, 1, 1)
-        Me.tablaContenConf.Controls.Add(Me.GroupBoxRxDecode, 0, 1)
-        Me.tablaContenConf.Controls.Add(Me.GroupBox1, 1, 0)
-        Me.tablaContenConf.Controls.Add(Me.GroupBox3, 0, 0)
-        Me.tablaContenConf.Controls.Add(Me.TableLayoutPanel5, 0, 4)
+        Me.tablaContenConf.ColumnCount = 4
+        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
+        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
+        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
+        Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
+        Me.tablaContenConf.Controls.Add(Me.GroupBox8, 2, 4)
+        Me.tablaContenConf.Controls.Add(Me.gbxScanMode, 2, 3)
+        Me.tablaContenConf.Controls.Add(Me.GroupBox5, 2, 2)
+        Me.tablaContenConf.Controls.Add(Me.GroupBox4, 1, 3)
+        Me.tablaContenConf.Controls.Add(Me.GroupBox2, 1, 2)
+        Me.tablaContenConf.Controls.Add(Me.GroupBoxLinkFrequency, 2, 1)
+        Me.tablaContenConf.Controls.Add(Me.GroupBoxRxDecode, 1, 1)
+        Me.tablaContenConf.Controls.Add(Me.GroupBox1, 2, 0)
+        Me.tablaContenConf.Controls.Add(Me.GroupBox3, 1, 0)
+        Me.tablaContenConf.Controls.Add(Me.TableLayoutPanel5, 1, 4)
         Me.tablaContenConf.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tablaContenConf.Location = New System.Drawing.Point(3, 3)
         Me.tablaContenConf.Name = "tablaContenConf"
@@ -392,7 +289,7 @@ Partial Class frmLector
         Me.tablaContenConf.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.tablaContenConf.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.0!))
         Me.tablaContenConf.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.tablaContenConf.Size = New System.Drawing.Size(870, 629)
+        Me.tablaContenConf.Size = New System.Drawing.Size(938, 609)
         Me.tablaContenConf.TabIndex = 1
         '
         'GroupBox8
@@ -402,9 +299,9 @@ Partial Class frmLector
         Me.GroupBox8.Controls.Add(Me.cbxActiveMode)
         Me.GroupBox8.Controls.Add(Me.Label44)
         Me.GroupBox8.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBox8.Location = New System.Drawing.Point(438, 403)
+        Me.GroupBox8.Location = New System.Drawing.Point(471, 391)
         Me.GroupBox8.Name = "GroupBox8"
-        Me.GroupBox8.Size = New System.Drawing.Size(429, 51)
+        Me.GroupBox8.Size = New System.Drawing.Size(322, 51)
         Me.GroupBox8.TabIndex = 34
         Me.GroupBox8.TabStop = False
         Me.GroupBox8.Text = "Modo activo de inventario"
@@ -451,9 +348,9 @@ Partial Class frmLector
         Me.gbxScanMode.Controls.Add(Me.btnSetScanMode)
         Me.gbxScanMode.Controls.Add(Me.cbxScanMode)
         Me.gbxScanMode.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbxScanMode.Location = New System.Drawing.Point(438, 303)
+        Me.gbxScanMode.Location = New System.Drawing.Point(471, 294)
         Me.gbxScanMode.Name = "gbxScanMode"
-        Me.gbxScanMode.Size = New System.Drawing.Size(429, 49)
+        Me.gbxScanMode.Size = New System.Drawing.Size(322, 49)
         Me.gbxScanMode.TabIndex = 31
         Me.gbxScanMode.TabStop = False
         Me.gbxScanMode.Text = "Modo de escaneo"
@@ -493,9 +390,9 @@ Partial Class frmLector
         Me.GroupBox5.Controls.Add(Me.nudInventoryRoundInterval)
         Me.GroupBox5.Controls.Add(Me.btnSetInvnetoryRoundInterval)
         Me.GroupBox5.Controls.Add(Me.Label38)
-        Me.GroupBox5.Location = New System.Drawing.Point(438, 203)
+        Me.GroupBox5.Location = New System.Drawing.Point(471, 197)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(429, 49)
+        Me.GroupBox5.Size = New System.Drawing.Size(322, 49)
         Me.GroupBox5.TabIndex = 30
         Me.GroupBox5.TabStop = False
         '
@@ -542,9 +439,9 @@ Partial Class frmLector
         Me.GroupBox4.Controls.Add(Me.nudTagRemoveThreshold)
         Me.GroupBox4.Controls.Add(Me.btnSetRemoveThreshold)
         Me.GroupBox4.Controls.Add(Me.Label37)
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 303)
+        Me.GroupBox4.Location = New System.Drawing.Point(143, 294)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(429, 49)
+        Me.GroupBox4.Size = New System.Drawing.Size(322, 49)
         Me.GroupBox4.TabIndex = 29
         Me.GroupBox4.TabStop = False
         '
@@ -591,9 +488,9 @@ Partial Class frmLector
         Me.GroupBox2.Controls.Add(Me.nudTagPresentRepeatInterval)
         Me.GroupBox2.Controls.Add(Me.btnSetTagPresentRepeatInterval)
         Me.GroupBox2.Controls.Add(Me.Label35)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 203)
+        Me.GroupBox2.Location = New System.Drawing.Point(143, 197)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(429, 49)
+        Me.GroupBox2.Size = New System.Drawing.Size(322, 49)
         Me.GroupBox2.TabIndex = 28
         Me.GroupBox2.TabStop = False
         '
@@ -640,9 +537,9 @@ Partial Class frmLector
         Me.GroupBoxLinkFrequency.Controls.Add(Me.cbxLinkFrequency)
         Me.GroupBoxLinkFrequency.Controls.Add(Me.btnSetLinkFrequency)
         Me.GroupBoxLinkFrequency.Controls.Add(Me.Label50)
-        Me.GroupBoxLinkFrequency.Location = New System.Drawing.Point(438, 103)
+        Me.GroupBoxLinkFrequency.Location = New System.Drawing.Point(471, 100)
         Me.GroupBoxLinkFrequency.Name = "GroupBoxLinkFrequency"
-        Me.GroupBoxLinkFrequency.Size = New System.Drawing.Size(429, 49)
+        Me.GroupBoxLinkFrequency.Size = New System.Drawing.Size(322, 49)
         Me.GroupBoxLinkFrequency.TabIndex = 27
         Me.GroupBoxLinkFrequency.TabStop = False
         '
@@ -690,9 +587,9 @@ Partial Class frmLector
         Me.GroupBoxRxDecode.Controls.Add(Me.btnSetRxDecode)
         Me.GroupBoxRxDecode.Controls.Add(Me.cbxRxDecode)
         Me.GroupBoxRxDecode.Controls.Add(Me.Label49)
-        Me.GroupBoxRxDecode.Location = New System.Drawing.Point(3, 103)
+        Me.GroupBoxRxDecode.Location = New System.Drawing.Point(143, 100)
         Me.GroupBoxRxDecode.Name = "GroupBoxRxDecode"
-        Me.GroupBoxRxDecode.Size = New System.Drawing.Size(429, 49)
+        Me.GroupBoxRxDecode.Size = New System.Drawing.Size(322, 49)
         Me.GroupBoxRxDecode.TabIndex = 26
         Me.GroupBoxRxDecode.TabStop = False
         '
@@ -741,9 +638,9 @@ Partial Class frmLector
         Me.GroupBox1.Controls.Add(Me.btnSetRfSensitivity)
         Me.GroupBox1.Controls.Add(Me.tbRfSensitivity)
         Me.GroupBox1.Controls.Add(Me.Label4)
-        Me.GroupBox1.Location = New System.Drawing.Point(438, 3)
+        Me.GroupBox1.Location = New System.Drawing.Point(471, 3)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(429, 58)
+        Me.GroupBox1.Size = New System.Drawing.Size(322, 58)
         Me.GroupBox1.TabIndex = 22
         Me.GroupBox1.TabStop = False
         '
@@ -804,9 +701,9 @@ Partial Class frmLector
         Me.GroupBox3.Controls.Add(Me.tbRfPower)
         Me.GroupBox3.Controls.Add(Me.Label28)
         Me.GroupBox3.Controls.Add(Me.lblRfPower)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 3)
+        Me.GroupBox3.Location = New System.Drawing.Point(143, 3)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(429, 58)
+        Me.GroupBox3.Size = New System.Drawing.Size(322, 58)
         Me.GroupBox3.TabIndex = 21
         Me.GroupBox3.TabStop = False
         '
@@ -871,7 +768,7 @@ Partial Class frmLector
         Me.TableLayoutPanel5.Controls.Add(Me.gbTaiwanFrequency, 2, 0)
         Me.TableLayoutPanel5.Controls.Add(Me.btnGetFrequency, 2, 1)
         Me.TableLayoutPanel5.Controls.Add(Me.btnSetFrequency, 1, 1)
-        Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 400)
+        Me.TableLayoutPanel5.Location = New System.Drawing.Point(140, 388)
         Me.TableLayoutPanel5.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel5.Name = "TableLayoutPanel5"
         Me.TableLayoutPanel5.RowCount = 1
@@ -879,7 +776,7 @@ Partial Class frmLector
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53.0!))
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel5.Size = New System.Drawing.Size(435, 229)
+        Me.TableLayoutPanel5.Size = New System.Drawing.Size(328, 221)
         Me.TableLayoutPanel5.TabIndex = 33
         '
         'gbJapanFrequency
@@ -909,7 +806,7 @@ Partial Class frmLector
         Me.gbJapanFrequency.Margin = New System.Windows.Forms.Padding(2)
         Me.gbJapanFrequency.Name = "gbJapanFrequency"
         Me.gbJapanFrequency.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbJapanFrequency.Size = New System.Drawing.Size(321, 172)
+        Me.gbJapanFrequency.Size = New System.Drawing.Size(242, 164)
         Me.gbJapanFrequency.TabIndex = 32
         Me.gbJapanFrequency.TabStop = False
         Me.gbJapanFrequency.Text = "Japon"
@@ -1109,11 +1006,11 @@ Partial Class frmLector
         Me.gbTaiwanFrequency.Controls.Add(Me.cb922_25)
         Me.gbTaiwanFrequency.Controls.Add(Me.Button2)
         Me.gbTaiwanFrequency.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbTaiwanFrequency.Location = New System.Drawing.Point(327, 2)
+        Me.gbTaiwanFrequency.Location = New System.Drawing.Point(248, 2)
         Me.gbTaiwanFrequency.Margin = New System.Windows.Forms.Padding(2)
         Me.gbTaiwanFrequency.Name = "gbTaiwanFrequency"
         Me.gbTaiwanFrequency.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbTaiwanFrequency.Size = New System.Drawing.Size(106, 172)
+        Me.gbTaiwanFrequency.Size = New System.Drawing.Size(78, 164)
         Me.gbTaiwanFrequency.TabIndex = 19
         Me.gbTaiwanFrequency.TabStop = False
         Me.gbTaiwanFrequency.Text = "Taiwan"
@@ -1149,7 +1046,7 @@ Partial Class frmLector
         '
         'btnGetFrequency
         '
-        Me.btnGetFrequency.Location = New System.Drawing.Point(328, 179)
+        Me.btnGetFrequency.Location = New System.Drawing.Point(249, 171)
         Me.btnGetFrequency.Name = "btnGetFrequency"
         Me.btnGetFrequency.Size = New System.Drawing.Size(70, 25)
         Me.btnGetFrequency.TabIndex = 21
@@ -1159,7 +1056,7 @@ Partial Class frmLector
         'btnSetFrequency
         '
         Me.btnSetFrequency.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSetFrequency.Location = New System.Drawing.Point(252, 179)
+        Me.btnSetFrequency.Location = New System.Drawing.Point(173, 171)
         Me.btnSetFrequency.Name = "btnSetFrequency"
         Me.btnSetFrequency.Size = New System.Drawing.Size(70, 25)
         Me.btnSetFrequency.TabIndex = 22
@@ -1172,9 +1069,9 @@ Partial Class frmLector
         Me.tpInventory.Location = New System.Drawing.Point(4, 44)
         Me.tpInventory.Name = "tpInventory"
         Me.tpInventory.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpInventory.Size = New System.Drawing.Size(876, 635)
+        Me.tpInventory.Size = New System.Drawing.Size(944, 615)
         Me.tpInventory.TabIndex = 2
-        Me.tpInventory.Text = "Vincular"
+        Me.tpInventory.Text = "Auditar"
         Me.tpInventory.UseVisualStyleBackColor = True
         '
         'gbxInventoryEx
@@ -1185,162 +1082,131 @@ Partial Class frmLector
         Me.gbxInventoryEx.Location = New System.Drawing.Point(3, 3)
         Me.gbxInventoryEx.Margin = New System.Windows.Forms.Padding(0)
         Me.gbxInventoryEx.Name = "gbxInventoryEx"
-        Me.gbxInventoryEx.Size = New System.Drawing.Size(870, 629)
+        Me.gbxInventoryEx.Size = New System.Drawing.Size(938, 609)
         Me.gbxInventoryEx.TabIndex = 8
         Me.gbxInventoryEx.TabStop = False
         '
         'tablaContenedorTimbrado
         '
-        Me.tablaContenedorTimbrado.ColumnCount = 1
-        Me.tablaContenedorTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tablaContenedorTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.tablaContenedorTimbrado.ColumnCount = 2
+        Me.tablaContenedorTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.tablaContenedorTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
         Me.tablaContenedorTimbrado.Controls.Add(Me.tabaLadoTimbrado, 0, 0)
+        Me.tablaContenedorTimbrado.Controls.Add(Me.tableLadoContador, 1, 0)
         Me.tablaContenedorTimbrado.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tablaContenedorTimbrado.Location = New System.Drawing.Point(3, 16)
         Me.tablaContenedorTimbrado.Margin = New System.Windows.Forms.Padding(0)
         Me.tablaContenedorTimbrado.Name = "tablaContenedorTimbrado"
         Me.tablaContenedorTimbrado.RowCount = 1
         Me.tablaContenedorTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tablaContenedorTimbrado.Size = New System.Drawing.Size(864, 610)
+        Me.tablaContenedorTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 620.0!))
+        Me.tablaContenedorTimbrado.Size = New System.Drawing.Size(932, 590)
         Me.tablaContenedorTimbrado.TabIndex = 30
         '
         'tabaLadoTimbrado
         '
-        Me.tabaLadoTimbrado.ColumnCount = 1
-        Me.tabaLadoTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tabaLadoTimbrado.Controls.Add(Me.DataGridView1, 0, 4)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel1, 0, 0)
-        Me.tabaLadoTimbrado.Controls.Add(Me.MsnVincular, 0, 1)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel2, 0, 2)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel3, 0, 3)
+        Me.tabaLadoTimbrado.ColumnCount = 2
+        Me.tabaLadoTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.0!))
+        Me.tabaLadoTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
+        Me.tabaLadoTimbrado.Controls.Add(Me.btnStopInventoryEx, 0, 3)
+        Me.tabaLadoTimbrado.Controls.Add(Me.btnLimpiarRFID, 1, 1)
+        Me.tabaLadoTimbrado.Controls.Add(Me.cbxInventory, 1, 2)
+        Me.tabaLadoTimbrado.Controls.Add(Me.btnStartInventoryEx, 0, 2)
+        Me.tabaLadoTimbrado.Controls.Add(Me.dgvTagList, 0, 1)
+        Me.tabaLadoTimbrado.Controls.Add(Me.btnClear, 1, 0)
+        Me.tabaLadoTimbrado.Controls.Add(Me.CodBarras, 0, 0)
         Me.tabaLadoTimbrado.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tabaLadoTimbrado.Location = New System.Drawing.Point(0, 0)
         Me.tabaLadoTimbrado.Margin = New System.Windows.Forms.Padding(0)
         Me.tabaLadoTimbrado.Name = "tabaLadoTimbrado"
         Me.tabaLadoTimbrado.RowCount = 5
         Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3.0!))
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.0!))
         Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 81.0!))
-        Me.tabaLadoTimbrado.Size = New System.Drawing.Size(864, 610)
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 68.0!))
+        Me.tabaLadoTimbrado.Size = New System.Drawing.Size(372, 590)
         Me.tabaLadoTimbrado.TabIndex = 0
         '
-        'DataGridView1
+        'btnStopInventoryEx
         '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.linea, Me.id_talla, Me.fecha})
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 118)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(858, 489)
-        Me.DataGridView1.TabIndex = 41
+        Me.btnStopInventoryEx.Location = New System.Drawing.Point(3, 161)
+        Me.btnStopInventoryEx.Name = "btnStopInventoryEx"
+        Me.btnStopInventoryEx.Size = New System.Drawing.Size(65, 21)
+        Me.btnStopInventoryEx.TabIndex = 30
+        Me.btnStopInventoryEx.TabStop = False
+        Me.btnStopInventoryEx.Text = "Stop"
+        Me.btnStopInventoryEx.UseVisualStyleBackColor = True
+        Me.btnStopInventoryEx.Visible = False
         '
-        'op
+        'btnLimpiarRFID
         '
-        Me.op.HeaderText = "OP"
-        Me.op.Name = "op"
-        Me.op.ReadOnly = True
+        Me.btnLimpiarRFID.Location = New System.Drawing.Point(263, 62)
+        Me.btnLimpiarRFID.Name = "btnLimpiarRFID"
+        Me.btnLimpiarRFID.Size = New System.Drawing.Size(92, 25)
+        Me.btnLimpiarRFID.TabIndex = 3
+        Me.btnLimpiarRFID.Text = "Limpiar"
+        Me.btnLimpiarRFID.UseVisualStyleBackColor = True
         '
-        'corte
+        'cbxInventory
         '
-        Me.corte.HeaderText = "Corte"
-        Me.corte.Name = "corte"
-        Me.corte.ReadOnly = True
+        Me.cbxInventory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxInventory.FormattingEnabled = True
+        Me.cbxInventory.Location = New System.Drawing.Point(262, 131)
+        Me.cbxInventory.Margin = New System.Windows.Forms.Padding(2)
+        Me.cbxInventory.Name = "cbxInventory"
+        Me.cbxInventory.Size = New System.Drawing.Size(93, 21)
+        Me.cbxInventory.TabIndex = 34
+        Me.cbxInventory.Visible = False
         '
-        'subcorte
+        'btnStartInventoryEx
         '
-        Me.subcorte.HeaderText = "Sub Corte"
-        Me.subcorte.Name = "subcorte"
-        Me.subcorte.ReadOnly = True
-        '
-        'talla
-        '
-        Me.talla.HeaderText = "Talla"
-        Me.talla.Name = "talla"
-        Me.talla.ReadOnly = True
-        '
-        'linea
-        '
-        Me.linea.HeaderText = "Linea"
-        Me.linea.Name = "linea"
-        Me.linea.ReadOnly = True
-        '
-        'id_talla
-        '
-        Me.id_talla.HeaderText = "ID"
-        Me.id_talla.Name = "id_talla"
-        Me.id_talla.ReadOnly = True
-        '
-        'fecha
-        '
-        Me.fecha.HeaderText = "Fecha"
-        Me.fecha.Name = "fecha"
-        Me.fecha.ReadOnly = True
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 4
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.dgvTagList, 2, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.CodBarras, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnLimpiarRFID, 3, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnClear, 1, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(864, 61)
-        Me.TableLayoutPanel1.TabIndex = 44
+        Me.btnStartInventoryEx.Location = New System.Drawing.Point(3, 132)
+        Me.btnStartInventoryEx.Name = "btnStartInventoryEx"
+        Me.btnStartInventoryEx.Size = New System.Drawing.Size(65, 20)
+        Me.btnStartInventoryEx.TabIndex = 29
+        Me.btnStartInventoryEx.TabStop = False
+        Me.btnStartInventoryEx.Text = "Start"
+        Me.btnStartInventoryEx.UseVisualStyleBackColor = True
+        Me.btnStartInventoryEx.Visible = False
         '
         'dgvTagList
         '
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray
-        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray
+        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvTagList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvTagList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTagList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.SteelBlue
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.SteelBlue
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgvTagList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvTagList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clnEPC, Me.clnTID, Me.clnCount})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Arial", 9.0!)
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(5)
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightBlue
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Arial", 9.0!)
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle6.Padding = New System.Windows.Forms.Padding(5)
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightBlue
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle6
         Me.dgvTagList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvTagList.EnableHeadersVisualStyles = False
         Me.dgvTagList.GridColor = System.Drawing.Color.LightGray
-        Me.dgvTagList.Location = New System.Drawing.Point(434, 3)
+        Me.dgvTagList.Location = New System.Drawing.Point(3, 62)
         Me.dgvTagList.Name = "dgvTagList"
         Me.dgvTagList.ReadOnly = True
         Me.dgvTagList.RowHeadersVisible = False
         Me.dgvTagList.RowTemplate.Height = 24
         Me.dgvTagList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvTagList.Size = New System.Drawing.Size(296, 55)
-        Me.dgvTagList.TabIndex = 47
+        Me.dgvTagList.Size = New System.Drawing.Size(254, 64)
+        Me.dgvTagList.TabIndex = 40
         '
         'clnEPC
         '
@@ -1366,6 +1232,18 @@ Partial Class frmLector
         Me.clnCount.Name = "clnCount"
         Me.clnCount.ReadOnly = True
         '
+        'btnClear
+        '
+        Me.btnClear.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.btnClear.BackColor = System.Drawing.Color.MediumSeaGreen
+        Me.btnClear.ForeColor = System.Drawing.Color.White
+        Me.btnClear.Location = New System.Drawing.Point(263, 17)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(92, 25)
+        Me.btnClear.TabIndex = 2
+        Me.btnClear.Text = "Nueva Auditoria"
+        Me.btnClear.UseVisualStyleBackColor = False
+        '
         'CodBarras
         '
         Me.CodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1374,66 +1252,63 @@ Partial Class frmLector
         Me.CodBarras.Size = New System.Drawing.Size(171, 30)
         Me.CodBarras.TabIndex = 25
         '
-        'btnLimpiarRFID
+        'tableLadoContador
         '
-        Me.btnLimpiarRFID.Location = New System.Drawing.Point(736, 3)
-        Me.btnLimpiarRFID.Name = "btnLimpiarRFID"
-        Me.btnLimpiarRFID.Size = New System.Drawing.Size(92, 25)
-        Me.btnLimpiarRFID.TabIndex = 3
-        Me.btnLimpiarRFID.Text = "Limpiar"
-        Me.btnLimpiarRFID.UseVisualStyleBackColor = True
+        Me.tableLadoContador.ColumnCount = 1
+        Me.tableLadoContador.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tableLadoContador.Controls.Add(Me.DataGridView1, 0, 2)
+        Me.tableLadoContador.Controls.Add(Me.tableCount, 0, 1)
+        Me.tableLadoContador.Controls.Add(Me.MsnVincular, 0, 0)
+        Me.tableLadoContador.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tableLadoContador.Location = New System.Drawing.Point(372, 0)
+        Me.tableLadoContador.Margin = New System.Windows.Forms.Padding(0)
+        Me.tableLadoContador.Name = "tableLadoContador"
+        Me.tableLadoContador.RowCount = 3
+        Me.tableLadoContador.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
+        Me.tableLadoContador.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
+        Me.tableLadoContador.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.0!))
+        Me.tableLadoContador.Size = New System.Drawing.Size(560, 590)
+        Me.tableLadoContador.TabIndex = 1
         '
-        'btnClear
+        'DataGridView1
         '
-        Me.btnClear.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.btnClear.BackColor = System.Drawing.Color.MediumSeaGreen
-        Me.btnClear.ForeColor = System.Drawing.Color.White
-        Me.btnClear.Location = New System.Drawing.Point(305, 18)
-        Me.btnClear.Name = "btnClear"
-        Me.btnClear.Size = New System.Drawing.Size(92, 25)
-        Me.btnClear.TabIndex = 2
-        Me.btnClear.Text = "Nuevo Timbrado"
-        Me.btnClear.UseVisualStyleBackColor = False
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.linea, Me.id_talla, Me.fecha, Me.comentario, Me.estado})
+        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridView1.Location = New System.Drawing.Point(3, 61)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridView1.Size = New System.Drawing.Size(554, 526)
+        Me.DataGridView1.TabIndex = 37
         '
-        'MsnVincular
+        'tableCount
         '
-        Me.MsnVincular.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.MsnVincular.AutoSize = True
-        Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsnVincular.Location = New System.Drawing.Point(754, 61)
-        Me.MsnVincular.Name = "MsnVincular"
-        Me.MsnVincular.Size = New System.Drawing.Size(107, 18)
-        Me.MsnVincular.TabIndex = 28
-        Me.MsnVincular.Text = "MsnVincular"
-        Me.MsnVincular.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 4
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.lblTotalCount, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 79)
-        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(864, 30)
-        Me.TableLayoutPanel2.TabIndex = 46
+        Me.tableCount.ColumnCount = 2
+        Me.tableCount.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.tableCount.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.0!))
+        Me.tableCount.Controls.Add(Me.lblTotalCount, 0, 0)
+        Me.tableCount.Controls.Add(Me.Label3, 0, 0)
+        Me.tableCount.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tableCount.Location = New System.Drawing.Point(0, 29)
+        Me.tableCount.Margin = New System.Windows.Forms.Padding(0)
+        Me.tableCount.Name = "tableCount"
+        Me.tableCount.RowCount = 1
+        Me.tableCount.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tableCount.Size = New System.Drawing.Size(560, 29)
+        Me.tableCount.TabIndex = 38
         '
         'lblTotalCount
         '
         Me.lblTotalCount.AutoSize = True
         Me.lblTotalCount.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblTotalCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
-        Me.lblTotalCount.Location = New System.Drawing.Point(175, 10)
+        Me.lblTotalCount.Location = New System.Drawing.Point(115, 9)
         Me.lblTotalCount.Name = "lblTotalCount"
-        Me.lblTotalCount.Size = New System.Drawing.Size(37, 20)
-        Me.lblTotalCount.TabIndex = 48
+        Me.lblTotalCount.Size = New System.Drawing.Size(442, 20)
+        Me.lblTotalCount.TabIndex = 2
         Me.lblTotalCount.Text = "0"
         Me.lblTotalCount.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
@@ -1443,71 +1318,30 @@ Partial Class frmLector
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
         Me.Label3.ImageAlign = System.Drawing.ContentAlignment.BottomRight
-        Me.Label3.Location = New System.Drawing.Point(3, 10)
+        Me.Label3.Location = New System.Drawing.Point(3, 9)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(166, 20)
-        Me.Label3.TabIndex = 47
-        Me.Label3.Text = "Timbradas"
+        Me.Label3.Size = New System.Drawing.Size(106, 20)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Auditorias"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.BottomRight
         '
-        'TableLayoutPanel3
+        'MsnVincular
         '
-        Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.btnStopInventoryEx, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.cbxInventory, 2, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.btnStartInventoryEx, 1, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 109)
-        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(864, 6)
-        Me.TableLayoutPanel3.TabIndex = 47
-        '
-        'btnStopInventoryEx
-        '
-        Me.btnStopInventoryEx.Location = New System.Drawing.Point(3, 3)
-        Me.btnStopInventoryEx.Name = "btnStopInventoryEx"
-        Me.btnStopInventoryEx.Size = New System.Drawing.Size(65, 1)
-        Me.btnStopInventoryEx.TabIndex = 30
-        Me.btnStopInventoryEx.TabStop = False
-        Me.btnStopInventoryEx.Text = "Stop"
-        Me.btnStopInventoryEx.UseVisualStyleBackColor = True
-        Me.btnStopInventoryEx.Visible = False
-        '
-        'cbxInventory
-        '
-        Me.cbxInventory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbxInventory.FormattingEnabled = True
-        Me.cbxInventory.Location = New System.Drawing.Point(572, 2)
-        Me.cbxInventory.Margin = New System.Windows.Forms.Padding(2)
-        Me.cbxInventory.Name = "cbxInventory"
-        Me.cbxInventory.Size = New System.Drawing.Size(93, 21)
-        Me.cbxInventory.TabIndex = 34
-        Me.cbxInventory.Visible = False
-        '
-        'btnStartInventoryEx
-        '
-        Me.btnStartInventoryEx.Location = New System.Drawing.Point(288, 3)
-        Me.btnStartInventoryEx.Name = "btnStartInventoryEx"
-        Me.btnStartInventoryEx.Size = New System.Drawing.Size(65, 1)
-        Me.btnStartInventoryEx.TabIndex = 29
-        Me.btnStartInventoryEx.TabStop = False
-        Me.btnStartInventoryEx.Text = "Start"
-        Me.btnStartInventoryEx.UseVisualStyleBackColor = True
-        Me.btnStartInventoryEx.Visible = False
+        Me.MsnVincular.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.MsnVincular.AutoSize = True
+        Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MsnVincular.Location = New System.Drawing.Point(557, 4)
+        Me.MsnVincular.Name = "MsnVincular"
+        Me.MsnVincular.Size = New System.Drawing.Size(0, 20)
+        Me.MsnVincular.TabIndex = 28
+        Me.MsnVincular.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'tpSearch
         '
         Me.tpSearch.Controls.Add(Me.gbxBuscarPrenda)
         Me.tpSearch.Location = New System.Drawing.Point(4, 44)
         Me.tpSearch.Name = "tpSearch"
-        Me.tpSearch.Size = New System.Drawing.Size(876, 635)
+        Me.tpSearch.Size = New System.Drawing.Size(944, 615)
         Me.tpSearch.TabIndex = 4
         Me.tpSearch.Text = "Consulta Prenda"
         Me.tpSearch.UseVisualStyleBackColor = True
@@ -1521,7 +1355,7 @@ Partial Class frmLector
         Me.gbxBuscarPrenda.Location = New System.Drawing.Point(0, 0)
         Me.gbxBuscarPrenda.Margin = New System.Windows.Forms.Padding(0)
         Me.gbxBuscarPrenda.Name = "gbxBuscarPrenda"
-        Me.gbxBuscarPrenda.Size = New System.Drawing.Size(876, 635)
+        Me.gbxBuscarPrenda.Size = New System.Drawing.Size(944, 615)
         Me.gbxBuscarPrenda.TabIndex = 0
         Me.gbxBuscarPrenda.TabStop = False
         '
@@ -1536,14 +1370,13 @@ Partial Class frmLector
         Me.tablaBuscarPrenda.Controls.Add(Me.MsnBusquedaPrenda, 0, 1)
         Me.tablaBuscarPrenda.Controls.Add(Me.DataGridView2, 0, 2)
         Me.tablaBuscarPrenda.Location = New System.Drawing.Point(6, 19)
-        Me.tablaBuscarPrenda.Margin = New System.Windows.Forms.Padding(0)
         Me.tablaBuscarPrenda.Name = "tablaBuscarPrenda"
         Me.tablaBuscarPrenda.RowCount = 4
         Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
-        Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3.0!))
-        Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82.0!))
         Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
-        Me.tablaBuscarPrenda.Size = New System.Drawing.Size(870, 616)
+        Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80.0!))
+        Me.tablaBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
+        Me.tablaBuscarPrenda.Size = New System.Drawing.Size(938, 596)
         Me.tablaBuscarPrenda.TabIndex = 0
         '
         'ContenedorBuscarPrenda
@@ -1562,7 +1395,7 @@ Partial Class frmLector
         Me.ContenedorBuscarPrenda.Name = "ContenedorBuscarPrenda"
         Me.ContenedorBuscarPrenda.RowCount = 1
         Me.ContenedorBuscarPrenda.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ContenedorBuscarPrenda.Size = New System.Drawing.Size(870, 61)
+        Me.ContenedorBuscarPrenda.Size = New System.Drawing.Size(938, 59)
         Me.ContenedorBuscarPrenda.TabIndex = 0
         '
         'Label5
@@ -1578,7 +1411,7 @@ Partial Class frmLector
         'BuscarCodBarras
         '
         Me.BuscarCodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BuscarCodBarras.Location = New System.Drawing.Point(194, 3)
+        Me.BuscarCodBarras.Location = New System.Drawing.Point(209, 3)
         Me.BuscarCodBarras.Name = "BuscarCodBarras"
         Me.BuscarCodBarras.Size = New System.Drawing.Size(300, 30)
         Me.BuscarCodBarras.TabIndex = 1
@@ -1588,7 +1421,7 @@ Partial Class frmLector
         Me.MsnBusquedaPrenda.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.MsnBusquedaPrenda.AutoSize = True
         Me.MsnBusquedaPrenda.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsnBusquedaPrenda.Location = New System.Drawing.Point(3, 61)
+        Me.MsnBusquedaPrenda.Location = New System.Drawing.Point(3, 65)
         Me.MsnBusquedaPrenda.Name = "MsnBusquedaPrenda"
         Me.MsnBusquedaPrenda.Size = New System.Drawing.Size(0, 17)
         Me.MsnBusquedaPrenda.TabIndex = 1
@@ -1602,11 +1435,11 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView2.Location = New System.Drawing.Point(3, 82)
+        Me.DataGridView2.Location = New System.Drawing.Point(3, 91)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.ReadOnly = True
         Me.DataGridView2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView2.Size = New System.Drawing.Size(864, 499)
+        Me.DataGridView2.Size = New System.Drawing.Size(932, 470)
         Me.DataGridView2.TabIndex = 2
         '
         'tpPapper
@@ -1614,7 +1447,7 @@ Partial Class frmLector
         Me.tpPapper.Controls.Add(Me.TablaContenedorHM)
         Me.tpPapper.Location = New System.Drawing.Point(4, 44)
         Me.tpPapper.Name = "tpPapper"
-        Me.tpPapper.Size = New System.Drawing.Size(876, 635)
+        Me.tpPapper.Size = New System.Drawing.Size(944, 615)
         Me.tpPapper.TabIndex = 5
         Me.tpPapper.Text = "Hoja de Marcación"
         Me.tpPapper.UseVisualStyleBackColor = True
@@ -1631,21 +1464,21 @@ Partial Class frmLector
         Me.TablaContenedorHM.Name = "TablaContenedorHM"
         Me.TablaContenedorHM.RowCount = 4
         Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.0!))
-        Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
+        Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.0!))
         Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.0!))
-        Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
-        Me.TablaContenedorHM.Size = New System.Drawing.Size(876, 635)
-        Me.TablaContenedorHM.TabIndex = 2
+        Me.TablaContenedorHM.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.0!))
+        Me.TablaContenedorHM.Size = New System.Drawing.Size(944, 615)
+        Me.TablaContenedorHM.TabIndex = 1
         '
         'tabaCabecera
         '
         Me.tabaCabecera.ColumnCount = 6
-        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.0!))
+        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.0!))
         Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
-        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.0!))
-        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.0!))
+        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
+        Me.tabaCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
         Me.tabaCabecera.Controls.Add(Me.TextBoxOP, 1, 0)
         Me.tabaCabecera.Controls.Add(Me.LabelOP, 0, 0)
         Me.tabaCabecera.Controls.Add(Me.BtnBuscarHM, 4, 0)
@@ -1653,20 +1486,19 @@ Partial Class frmLector
         Me.tabaCabecera.Controls.Add(Me.LabelHM, 2, 0)
         Me.tabaCabecera.Controls.Add(Me.BtnLimpiarHM, 5, 0)
         Me.tabaCabecera.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tabaCabecera.Location = New System.Drawing.Point(0, 0)
-        Me.tabaCabecera.Margin = New System.Windows.Forms.Padding(0)
+        Me.tabaCabecera.Location = New System.Drawing.Point(3, 3)
         Me.tabaCabecera.Name = "tabaCabecera"
         Me.tabaCabecera.RowCount = 1
         Me.tabaCabecera.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tabaCabecera.Size = New System.Drawing.Size(876, 50)
+        Me.tabaCabecera.Size = New System.Drawing.Size(938, 43)
         Me.tabaCabecera.TabIndex = 0
         '
         'TextBoxOP
         '
         Me.TextBoxOP.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxOP.Location = New System.Drawing.Point(160, 15)
+        Me.TextBoxOP.Location = New System.Drawing.Point(190, 11)
         Me.TextBoxOP.Name = "TextBoxOP"
-        Me.TextBoxOP.Size = New System.Drawing.Size(213, 20)
+        Me.TextBoxOP.Size = New System.Drawing.Size(228, 20)
         Me.TextBoxOP.TabIndex = 2
         '
         'LabelOP
@@ -1674,7 +1506,7 @@ Partial Class frmLector
         Me.LabelOP.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.LabelOP.AutoSize = True
         Me.LabelOP.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelOP.Location = New System.Drawing.Point(118, 18)
+        Me.LabelOP.Location = New System.Drawing.Point(148, 15)
         Me.LabelOP.Name = "LabelOP"
         Me.LabelOP.Size = New System.Drawing.Size(36, 13)
         Me.LabelOP.TabIndex = 0
@@ -1684,9 +1516,9 @@ Partial Class frmLector
         'BtnBuscarHM
         '
         Me.BtnBuscarHM.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.BtnBuscarHM.Location = New System.Drawing.Point(599, 15)
+        Me.BtnBuscarHM.Location = New System.Drawing.Point(768, 11)
         Me.BtnBuscarHM.Name = "BtnBuscarHM"
-        Me.BtnBuscarHM.Size = New System.Drawing.Size(49, 20)
+        Me.BtnBuscarHM.Size = New System.Drawing.Size(52, 20)
         Me.BtnBuscarHM.TabIndex = 4
         Me.BtnBuscarHM.Text = "Buscar"
         Me.BtnBuscarHM.UseVisualStyleBackColor = True
@@ -1695,9 +1527,9 @@ Partial Class frmLector
         '
         Me.TextBoxHM.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxHM.Enabled = False
-        Me.TextBoxHM.Location = New System.Drawing.Point(457, 15)
+        Me.TextBoxHM.Location = New System.Drawing.Point(517, 11)
         Me.TextBoxHM.Name = "TextBoxHM"
-        Me.TextBoxHM.Size = New System.Drawing.Size(81, 20)
+        Me.TextBoxHM.Size = New System.Drawing.Size(228, 20)
         Me.TextBoxHM.TabIndex = 3
         '
         'LabelHM
@@ -1705,7 +1537,7 @@ Partial Class frmLector
         Me.LabelHM.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.LabelHM.AutoSize = True
         Me.LabelHM.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelHM.Location = New System.Drawing.Point(413, 18)
+        Me.LabelHM.Location = New System.Drawing.Point(473, 15)
         Me.LabelHM.Name = "LabelHM"
         Me.LabelHM.Size = New System.Drawing.Size(38, 13)
         Me.LabelHM.TabIndex = 1
@@ -1715,9 +1547,9 @@ Partial Class frmLector
         'BtnLimpiarHM
         '
         Me.BtnLimpiarHM.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.BtnLimpiarHM.Location = New System.Drawing.Point(765, 13)
+        Me.BtnLimpiarHM.Location = New System.Drawing.Point(862, 10)
         Me.BtnLimpiarHM.Name = "BtnLimpiarHM"
-        Me.BtnLimpiarHM.Size = New System.Drawing.Size(52, 23)
+        Me.BtnLimpiarHM.Size = New System.Drawing.Size(55, 23)
         Me.BtnLimpiarHM.TabIndex = 5
         Me.BtnLimpiarHM.Text = "Limpiar"
         Me.BtnLimpiarHM.UseVisualStyleBackColor = True
@@ -1784,7 +1616,7 @@ Partial Class frmLector
         Me.tableCabecera.Controls.Add(Me.text_tfrmem, 1, 6)
         Me.tableCabecera.Controls.Add(Me.text_cod_lugrent_cobro, 1, 3)
         Me.tableCabecera.Controls.Add(Me.txt_BillToDet, 2, 3)
-        Me.tableCabecera.Location = New System.Drawing.Point(0, 50)
+        Me.tableCabecera.Location = New System.Drawing.Point(0, 49)
         Me.tableCabecera.Margin = New System.Windows.Forms.Padding(0)
         Me.tableCabecera.Name = "tableCabecera"
         Me.tableCabecera.Padding = New System.Windows.Forms.Padding(3)
@@ -1796,7 +1628,7 @@ Partial Class frmLector
         Me.tableCabecera.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.26531!))
         Me.tableCabecera.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.26531!))
         Me.tableCabecera.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.40816!))
-        Me.tableCabecera.Size = New System.Drawing.Size(876, 285)
+        Me.tableCabecera.Size = New System.Drawing.Size(944, 196)
         Me.tableCabecera.TabIndex = 1
         '
         'lbl_op
@@ -1809,7 +1641,7 @@ Partial Class frmLector
         Me.lbl_op.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_op.Location = New System.Drawing.Point(6, 3)
         Me.lbl_op.Name = "lbl_op"
-        Me.lbl_op.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_op.Size = New System.Drawing.Size(87, 25)
         Me.lbl_op.TabIndex = 0
         Me.lbl_op.Text = "OP:"
         Me.lbl_op.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1822,9 +1654,9 @@ Partial Class frmLector
         Me.lbl_cliente.AutoSize = True
         Me.lbl_cliente.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_cliente.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_cliente.Location = New System.Drawing.Point(6, 40)
+        Me.lbl_cliente.Location = New System.Drawing.Point(6, 28)
         Me.lbl_cliente.Name = "lbl_cliente"
-        Me.lbl_cliente.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_cliente.Size = New System.Drawing.Size(87, 25)
         Me.lbl_cliente.TabIndex = 1
         Me.lbl_cliente.Text = "Cliente:"
         Me.lbl_cliente.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1837,9 +1669,9 @@ Partial Class frmLector
         Me.lbl_shipTo.AutoSize = True
         Me.lbl_shipTo.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_shipTo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_shipTo.Location = New System.Drawing.Point(6, 77)
+        Me.lbl_shipTo.Location = New System.Drawing.Point(6, 53)
         Me.lbl_shipTo.Name = "lbl_shipTo"
-        Me.lbl_shipTo.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_shipTo.Size = New System.Drawing.Size(87, 25)
         Me.lbl_shipTo.TabIndex = 2
         Me.lbl_shipTo.Text = "Ship TO:"
         Me.lbl_shipTo.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1853,9 +1685,9 @@ Partial Class frmLector
         Me.lbl_Despacho.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Despacho.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Despacho.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.lbl_Despacho.Location = New System.Drawing.Point(6, 188)
+        Me.lbl_Despacho.Location = New System.Drawing.Point(6, 128)
         Me.lbl_Despacho.Name = "lbl_Despacho"
-        Me.lbl_Despacho.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Despacho.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Despacho.TabIndex = 5
         Me.lbl_Despacho.Text = "Via Despacho:"
         Me.lbl_Despacho.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1869,9 +1701,9 @@ Partial Class frmLector
         Me.lbl_empaque.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_empaque.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_empaque.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.lbl_empaque.Location = New System.Drawing.Point(6, 225)
+        Me.lbl_empaque.Location = New System.Drawing.Point(6, 153)
         Me.lbl_empaque.Name = "lbl_empaque"
-        Me.lbl_empaque.Size = New System.Drawing.Size(81, 57)
+        Me.lbl_empaque.Size = New System.Drawing.Size(87, 40)
         Me.lbl_empaque.TabIndex = 6
         Me.lbl_empaque.Text = "Empaque:"
         Me.lbl_empaque.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -1884,9 +1716,9 @@ Partial Class frmLector
         Me.lbl_HM.AutoSize = True
         Me.lbl_HM.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_HM.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_HM.Location = New System.Drawing.Point(180, 3)
+        Me.lbl_HM.Location = New System.Drawing.Point(192, 3)
         Me.lbl_HM.Name = "lbl_HM"
-        Me.lbl_HM.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_HM.Size = New System.Drawing.Size(87, 25)
         Me.lbl_HM.TabIndex = 7
         Me.lbl_HM.Text = "HM:"
         Me.lbl_HM.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1899,9 +1731,9 @@ Partial Class frmLector
         Me.lbl_po.AutoSize = True
         Me.lbl_po.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_po.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_po.Location = New System.Drawing.Point(354, 3)
+        Me.lbl_po.Location = New System.Drawing.Point(378, 3)
         Me.lbl_po.Name = "lbl_po"
-        Me.lbl_po.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_po.Size = New System.Drawing.Size(87, 25)
         Me.lbl_po.TabIndex = 8
         Me.lbl_po.Text = "PO:"
         Me.lbl_po.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1914,9 +1746,9 @@ Partial Class frmLector
         Me.lbl_Estado.AutoSize = True
         Me.lbl_Estado.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Estado.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Estado.Location = New System.Drawing.Point(528, 3)
+        Me.lbl_Estado.Location = New System.Drawing.Point(564, 3)
         Me.lbl_Estado.Name = "lbl_Estado"
-        Me.lbl_Estado.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Estado.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Estado.TabIndex = 9
         Me.lbl_Estado.Text = "Estado:"
         Me.lbl_Estado.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1929,9 +1761,9 @@ Partial Class frmLector
         Me.lbl_Reserva.AutoSize = True
         Me.lbl_Reserva.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Reserva.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Reserva.Location = New System.Drawing.Point(702, 3)
+        Me.lbl_Reserva.Location = New System.Drawing.Point(750, 3)
         Me.lbl_Reserva.Name = "lbl_Reserva"
-        Me.lbl_Reserva.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Reserva.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Reserva.TabIndex = 10
         Me.lbl_Reserva.Text = "Reserva:"
         Me.lbl_Reserva.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1944,9 +1776,9 @@ Partial Class frmLector
         Me.lbl_Prenda.AutoSize = True
         Me.lbl_Prenda.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Prenda.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Prenda.Location = New System.Drawing.Point(528, 40)
+        Me.lbl_Prenda.Location = New System.Drawing.Point(564, 28)
         Me.lbl_Prenda.Name = "lbl_Prenda"
-        Me.lbl_Prenda.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Prenda.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Prenda.TabIndex = 11
         Me.lbl_Prenda.Text = "Prenda:"
         Me.lbl_Prenda.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1959,9 +1791,9 @@ Partial Class frmLector
         Me.lbl_direccion_1.AutoSize = True
         Me.lbl_direccion_1.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_direccion_1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_direccion_1.Location = New System.Drawing.Point(528, 77)
+        Me.lbl_direccion_1.Location = New System.Drawing.Point(564, 53)
         Me.lbl_direccion_1.Name = "lbl_direccion_1"
-        Me.lbl_direccion_1.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_direccion_1.Size = New System.Drawing.Size(87, 25)
         Me.lbl_direccion_1.TabIndex = 12
         Me.lbl_direccion_1.Text = "Dirección:"
         Me.lbl_direccion_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1974,9 +1806,9 @@ Partial Class frmLector
         Me.lbl_direccion_2.AutoSize = True
         Me.lbl_direccion_2.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_direccion_2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_direccion_2.Location = New System.Drawing.Point(528, 114)
+        Me.lbl_direccion_2.Location = New System.Drawing.Point(564, 78)
         Me.lbl_direccion_2.Name = "lbl_direccion_2"
-        Me.lbl_direccion_2.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_direccion_2.Size = New System.Drawing.Size(87, 25)
         Me.lbl_direccion_2.TabIndex = 13
         Me.lbl_direccion_2.Text = "Dirección:"
         Me.lbl_direccion_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -1989,9 +1821,9 @@ Partial Class frmLector
         Me.lbl_Tolerancia.AutoSize = True
         Me.lbl_Tolerancia.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Tolerancia.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Tolerancia.Location = New System.Drawing.Point(180, 151)
+        Me.lbl_Tolerancia.Location = New System.Drawing.Point(192, 103)
         Me.lbl_Tolerancia.Name = "lbl_Tolerancia"
-        Me.lbl_Tolerancia.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Tolerancia.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Tolerancia.TabIndex = 14
         Me.lbl_Tolerancia.Text = "Tolerancia:"
         Me.lbl_Tolerancia.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2004,9 +1836,9 @@ Partial Class frmLector
         Me.lbl_Estilo.AutoSize = True
         Me.lbl_Estilo.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Estilo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Estilo.Location = New System.Drawing.Point(354, 151)
+        Me.lbl_Estilo.Location = New System.Drawing.Point(378, 103)
         Me.lbl_Estilo.Name = "lbl_Estilo"
-        Me.lbl_Estilo.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Estilo.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Estilo.TabIndex = 15
         Me.lbl_Estilo.Text = "Estilo:"
         Me.lbl_Estilo.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2019,9 +1851,9 @@ Partial Class frmLector
         Me.lbl_Observacion.AutoSize = True
         Me.lbl_Observacion.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Observacion.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Observacion.Location = New System.Drawing.Point(441, 225)
+        Me.lbl_Observacion.Location = New System.Drawing.Point(471, 153)
         Me.lbl_Observacion.Name = "lbl_Observacion"
-        Me.lbl_Observacion.Size = New System.Drawing.Size(81, 57)
+        Me.lbl_Observacion.Size = New System.Drawing.Size(87, 40)
         Me.lbl_Observacion.TabIndex = 18
         Me.lbl_Observacion.Text = "Observación:"
         Me.lbl_Observacion.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2034,9 +1866,9 @@ Partial Class frmLector
         Me.lbl_Certificado.AutoSize = True
         Me.lbl_Certificado.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_Certificado.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Certificado.Location = New System.Drawing.Point(441, 188)
+        Me.lbl_Certificado.Location = New System.Drawing.Point(471, 128)
         Me.lbl_Certificado.Name = "lbl_Certificado"
-        Me.lbl_Certificado.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_Certificado.Size = New System.Drawing.Size(87, 25)
         Me.lbl_Certificado.TabIndex = 17
         Me.lbl_Certificado.Text = "Certificado:"
         Me.lbl_Certificado.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2049,9 +1881,9 @@ Partial Class frmLector
         Me.lbl_NKit.AutoSize = True
         Me.lbl_NKit.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_NKit.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_NKit.Location = New System.Drawing.Point(267, 188)
+        Me.lbl_NKit.Location = New System.Drawing.Point(285, 128)
         Me.lbl_NKit.Name = "lbl_NKit"
-        Me.lbl_NKit.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_NKit.Size = New System.Drawing.Size(87, 25)
         Me.lbl_NKit.TabIndex = 19
         Me.lbl_NKit.Text = "N° KIT:"
         Me.lbl_NKit.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2063,9 +1895,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_norpd.AutoSize = True
         Me.text_norpd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.text_norpd.Location = New System.Drawing.Point(93, 3)
+        Me.text_norpd.Location = New System.Drawing.Point(99, 3)
         Me.text_norpd.Name = "text_norpd"
-        Me.text_norpd.Size = New System.Drawing.Size(81, 37)
+        Me.text_norpd.Size = New System.Drawing.Size(87, 25)
         Me.text_norpd.TabIndex = 20
         Me.text_norpd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2075,9 +1907,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_npocl.AutoSize = True
-        Me.text_npocl.Location = New System.Drawing.Point(441, 3)
+        Me.text_npocl.Location = New System.Drawing.Point(471, 3)
         Me.text_npocl.Name = "text_npocl"
-        Me.text_npocl.Size = New System.Drawing.Size(81, 37)
+        Me.text_npocl.Size = New System.Drawing.Size(87, 25)
         Me.text_npocl.TabIndex = 21
         Me.text_npocl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2087,9 +1919,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_nhjmr.AutoSize = True
-        Me.text_nhjmr.Location = New System.Drawing.Point(267, 3)
+        Me.text_nhjmr.Location = New System.Drawing.Point(285, 3)
         Me.text_nhjmr.Name = "text_nhjmr"
-        Me.text_nhjmr.Size = New System.Drawing.Size(81, 37)
+        Me.text_nhjmr.Size = New System.Drawing.Size(87, 25)
         Me.text_nhjmr.TabIndex = 22
         Me.text_nhjmr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2099,9 +1931,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_sesthm.AutoSize = True
-        Me.text_sesthm.Location = New System.Drawing.Point(615, 3)
+        Me.text_sesthm.Location = New System.Drawing.Point(657, 3)
         Me.text_sesthm.Name = "text_sesthm"
-        Me.text_sesthm.Size = New System.Drawing.Size(81, 37)
+        Me.text_sesthm.Size = New System.Drawing.Size(87, 25)
         Me.text_sesthm.TabIndex = 23
         Me.text_sesthm.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2111,9 +1943,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_sreserva.AutoSize = True
-        Me.text_sreserva.Location = New System.Drawing.Point(789, 3)
+        Me.text_sreserva.Location = New System.Drawing.Point(843, 3)
         Me.text_sreserva.Name = "text_sreserva"
-        Me.text_sreserva.Size = New System.Drawing.Size(81, 37)
+        Me.text_sreserva.Size = New System.Drawing.Size(95, 25)
         Me.text_sreserva.TabIndex = 24
         Me.text_sreserva.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2123,9 +1955,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_cclnt.AutoSize = True
-        Me.text_cclnt.Location = New System.Drawing.Point(93, 40)
+        Me.text_cclnt.Location = New System.Drawing.Point(99, 28)
         Me.text_cclnt.Name = "text_cclnt"
-        Me.text_cclnt.Size = New System.Drawing.Size(81, 37)
+        Me.text_cclnt.Size = New System.Drawing.Size(87, 25)
         Me.text_cclnt.TabIndex = 25
         Me.text_cclnt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2136,9 +1968,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_ttrcr.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_ttrcr, 4)
-        Me.text_ttrcr.Location = New System.Drawing.Point(180, 40)
+        Me.text_ttrcr.Location = New System.Drawing.Point(192, 28)
         Me.text_ttrcr.Name = "text_ttrcr"
-        Me.text_ttrcr.Size = New System.Drawing.Size(342, 37)
+        Me.text_ttrcr.Size = New System.Drawing.Size(366, 25)
         Me.text_ttrcr.TabIndex = 26
         Me.text_ttrcr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2148,9 +1980,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_tdscr.AutoSize = True
-        Me.text_tdscr.Location = New System.Drawing.Point(615, 40)
+        Me.text_tdscr.Location = New System.Drawing.Point(657, 28)
         Me.text_tdscr.Name = "text_tdscr"
-        Me.text_tdscr.Size = New System.Drawing.Size(81, 37)
+        Me.text_tdscr.Size = New System.Drawing.Size(87, 25)
         Me.text_tdscr.TabIndex = 27
         Me.text_tdscr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2161,9 +1993,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_temporada.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_temporada, 2)
-        Me.text_temporada.Location = New System.Drawing.Point(702, 40)
+        Me.text_temporada.Location = New System.Drawing.Point(750, 28)
         Me.text_temporada.Name = "text_temporada"
-        Me.text_temporada.Size = New System.Drawing.Size(168, 37)
+        Me.text_temporada.Size = New System.Drawing.Size(188, 25)
         Me.text_temporada.TabIndex = 28
         Me.text_temporada.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2175,9 +2007,9 @@ Partial Class frmLector
         Me.lbl_SitDespacho.AutoSize = True
         Me.lbl_SitDespacho.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_SitDespacho.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_SitDespacho.Location = New System.Drawing.Point(702, 151)
+        Me.lbl_SitDespacho.Location = New System.Drawing.Point(750, 103)
         Me.lbl_SitDespacho.Name = "lbl_SitDespacho"
-        Me.lbl_SitDespacho.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_SitDespacho.Size = New System.Drawing.Size(87, 25)
         Me.lbl_SitDespacho.TabIndex = 16
         Me.lbl_SitDespacho.Text = "Sit Despacho:"
         Me.lbl_SitDespacho.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2189,9 +2021,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_tdrcc.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_tdrcc, 3)
-        Me.text_tdrcc.Location = New System.Drawing.Point(615, 77)
+        Me.text_tdrcc.Location = New System.Drawing.Point(657, 53)
         Me.text_tdrcc.Name = "text_tdrcc"
-        Me.text_tdrcc.Size = New System.Drawing.Size(255, 37)
+        Me.text_tdrcc.Size = New System.Drawing.Size(281, 25)
         Me.text_tdrcc.TabIndex = 29
         Me.text_tdrcc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2202,9 +2034,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_Direccion_2.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.txt_Direccion_2, 3)
-        Me.txt_Direccion_2.Location = New System.Drawing.Point(615, 114)
+        Me.txt_Direccion_2.Location = New System.Drawing.Point(657, 78)
         Me.txt_Direccion_2.Name = "txt_Direccion_2"
-        Me.txt_Direccion_2.Size = New System.Drawing.Size(255, 37)
+        Me.txt_Direccion_2.Size = New System.Drawing.Size(281, 25)
         Me.txt_Direccion_2.TabIndex = 30
         Me.txt_Direccion_2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2214,9 +2046,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_clgren.AutoSize = True
-        Me.text_clgren.Location = New System.Drawing.Point(93, 77)
+        Me.text_clgren.Location = New System.Drawing.Point(99, 53)
         Me.text_clgren.Name = "text_clgren"
-        Me.text_clgren.Size = New System.Drawing.Size(81, 37)
+        Me.text_clgren.Size = New System.Drawing.Size(87, 25)
         Me.text_clgren.TabIndex = 31
         Me.text_clgren.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2229,9 +2061,9 @@ Partial Class frmLector
         Me.lbl_fEntrega.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_fEntrega.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_fEntrega.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.lbl_fEntrega.Location = New System.Drawing.Point(6, 151)
+        Me.lbl_fEntrega.Location = New System.Drawing.Point(6, 103)
         Me.lbl_fEntrega.Name = "lbl_fEntrega"
-        Me.lbl_fEntrega.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_fEntrega.Size = New System.Drawing.Size(87, 25)
         Me.lbl_fEntrega.TabIndex = 3
         Me.lbl_fEntrega.Text = "F. Entrega:"
         Me.lbl_fEntrega.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2242,9 +2074,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_fentr.AutoSize = True
-        Me.text_fentr.Location = New System.Drawing.Point(93, 151)
+        Me.text_fentr.Location = New System.Drawing.Point(99, 103)
         Me.text_fentr.Name = "text_fentr"
-        Me.text_fentr.Size = New System.Drawing.Size(81, 37)
+        Me.text_fentr.Size = New System.Drawing.Size(87, 25)
         Me.text_fentr.TabIndex = 32
         Me.text_fentr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2257,9 +2089,9 @@ Partial Class frmLector
         Me.lbl_BillTo.BackColor = System.Drawing.Color.Turquoise
         Me.lbl_BillTo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_BillTo.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.lbl_BillTo.Location = New System.Drawing.Point(6, 114)
+        Me.lbl_BillTo.Location = New System.Drawing.Point(6, 78)
         Me.lbl_BillTo.Name = "lbl_BillTo"
-        Me.lbl_BillTo.Size = New System.Drawing.Size(81, 37)
+        Me.lbl_BillTo.Size = New System.Drawing.Size(87, 25)
         Me.lbl_BillTo.TabIndex = 33
         Me.lbl_BillTo.Text = "Bill TO:"
         Me.lbl_BillTo.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2271,9 +2103,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_tlgen.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_tlgen, 4)
-        Me.text_tlgen.Location = New System.Drawing.Point(180, 77)
+        Me.text_tlgen.Location = New System.Drawing.Point(192, 53)
         Me.text_tlgen.Name = "text_tlgen"
-        Me.text_tlgen.Size = New System.Drawing.Size(342, 37)
+        Me.text_tlgen.Size = New System.Drawing.Size(366, 25)
         Me.text_tlgen.TabIndex = 34
         Me.text_tlgen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2283,9 +2115,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_ptlrnc.AutoSize = True
-        Me.text_ptlrnc.Location = New System.Drawing.Point(267, 151)
+        Me.text_ptlrnc.Location = New System.Drawing.Point(285, 103)
         Me.text_ptlrnc.Name = "text_ptlrnc"
-        Me.text_ptlrnc.Size = New System.Drawing.Size(81, 37)
+        Me.text_ptlrnc.Size = New System.Drawing.Size(87, 25)
         Me.text_ptlrnc.TabIndex = 35
         Me.text_ptlrnc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2295,9 +2127,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_cestcl.AutoSize = True
-        Me.text_cestcl.Location = New System.Drawing.Point(441, 151)
+        Me.text_cestcl.Location = New System.Drawing.Point(471, 103)
         Me.text_cestcl.Name = "text_cestcl"
-        Me.text_cestcl.Size = New System.Drawing.Size(81, 37)
+        Me.text_cestcl.Size = New System.Drawing.Size(87, 25)
         Me.text_cestcl.TabIndex = 36
         Me.text_cestcl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2308,9 +2140,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_testcl.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_testcl, 2)
-        Me.text_testcl.Location = New System.Drawing.Point(528, 151)
+        Me.text_testcl.Location = New System.Drawing.Point(564, 103)
         Me.text_testcl.Name = "text_testcl"
-        Me.text_testcl.Size = New System.Drawing.Size(168, 37)
+        Me.text_testcl.Size = New System.Drawing.Size(180, 25)
         Me.text_testcl.TabIndex = 37
         Me.text_testcl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2320,9 +2152,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_flgdes.AutoSize = True
-        Me.text_flgdes.Location = New System.Drawing.Point(789, 151)
+        Me.text_flgdes.Location = New System.Drawing.Point(843, 103)
         Me.text_flgdes.Name = "text_flgdes"
-        Me.text_flgdes.Size = New System.Drawing.Size(81, 37)
+        Me.text_flgdes.Size = New System.Drawing.Size(95, 25)
         Me.text_flgdes.TabIndex = 38
         Me.text_flgdes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2333,9 +2165,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_tvia.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_tvia, 2)
-        Me.text_tvia.Location = New System.Drawing.Point(93, 188)
+        Me.text_tvia.Location = New System.Drawing.Point(99, 128)
         Me.text_tvia.Name = "text_tvia"
-        Me.text_tvia.Size = New System.Drawing.Size(168, 37)
+        Me.text_tvia.Size = New System.Drawing.Size(180, 25)
         Me.text_tvia.TabIndex = 39
         Me.text_tvia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2345,9 +2177,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_nro_kit.AutoSize = True
-        Me.txt_nro_kit.Location = New System.Drawing.Point(354, 188)
+        Me.txt_nro_kit.Location = New System.Drawing.Point(378, 128)
         Me.txt_nro_kit.Name = "txt_nro_kit"
-        Me.txt_nro_kit.Size = New System.Drawing.Size(81, 37)
+        Me.txt_nro_kit.Size = New System.Drawing.Size(87, 25)
         Me.txt_nro_kit.TabIndex = 40
         Me.txt_nro_kit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2358,9 +2190,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_nro_certificado.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_nro_certificado, 4)
-        Me.text_nro_certificado.Location = New System.Drawing.Point(528, 188)
+        Me.text_nro_certificado.Location = New System.Drawing.Point(564, 128)
         Me.text_nro_certificado.Name = "text_nro_certificado"
-        Me.text_nro_certificado.Size = New System.Drawing.Size(342, 37)
+        Me.text_nro_certificado.Size = New System.Drawing.Size(374, 25)
         Me.text_nro_certificado.TabIndex = 41
         Me.text_nro_certificado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2371,9 +2203,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_totros.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_totros, 4)
-        Me.text_totros.Location = New System.Drawing.Point(528, 225)
+        Me.text_totros.Location = New System.Drawing.Point(564, 153)
         Me.text_totros.Name = "text_totros"
-        Me.text_totros.Size = New System.Drawing.Size(342, 57)
+        Me.text_totros.Size = New System.Drawing.Size(374, 40)
         Me.text_totros.TabIndex = 42
         '
         'text_tfrmem
@@ -2383,9 +2215,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_tfrmem.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.text_tfrmem, 4)
-        Me.text_tfrmem.Location = New System.Drawing.Point(93, 225)
+        Me.text_tfrmem.Location = New System.Drawing.Point(99, 153)
         Me.text_tfrmem.Name = "text_tfrmem"
-        Me.text_tfrmem.Size = New System.Drawing.Size(342, 57)
+        Me.text_tfrmem.Size = New System.Drawing.Size(366, 40)
         Me.text_tfrmem.TabIndex = 43
         '
         'text_cod_lugrent_cobro
@@ -2394,9 +2226,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.text_cod_lugrent_cobro.AutoSize = True
-        Me.text_cod_lugrent_cobro.Location = New System.Drawing.Point(93, 114)
+        Me.text_cod_lugrent_cobro.Location = New System.Drawing.Point(99, 78)
         Me.text_cod_lugrent_cobro.Name = "text_cod_lugrent_cobro"
-        Me.text_cod_lugrent_cobro.Size = New System.Drawing.Size(81, 37)
+        Me.text_cod_lugrent_cobro.Size = New System.Drawing.Size(87, 25)
         Me.text_cod_lugrent_cobro.TabIndex = 44
         Me.text_cod_lugrent_cobro.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2407,9 +2239,9 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_BillToDet.AutoSize = True
         Me.tableCabecera.SetColumnSpan(Me.txt_BillToDet, 4)
-        Me.txt_BillToDet.Location = New System.Drawing.Point(180, 114)
+        Me.txt_BillToDet.Location = New System.Drawing.Point(192, 78)
         Me.txt_BillToDet.Name = "txt_BillToDet"
-        Me.txt_BillToDet.Size = New System.Drawing.Size(342, 37)
+        Me.txt_BillToDet.Size = New System.Drawing.Size(366, 25)
         Me.txt_BillToDet.TabIndex = 45
         Me.txt_BillToDet.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -2421,29 +2253,75 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView3.Location = New System.Drawing.Point(3, 350)
+        Me.DataGridView3.Location = New System.Drawing.Point(3, 260)
         Me.DataGridView3.Name = "DataGridView3"
         Me.DataGridView3.ReadOnly = True
         Me.DataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView3.Size = New System.Drawing.Size(870, 282)
+        Me.DataGridView3.Size = New System.Drawing.Size(938, 352)
         Me.DataGridView3.TabIndex = 2
         '
-        'frmLector
+        'op
+        '
+        Me.op.HeaderText = "OP"
+        Me.op.Name = "op"
+        Me.op.ReadOnly = True
+        '
+        'corte
+        '
+        Me.corte.HeaderText = "Corte"
+        Me.corte.Name = "corte"
+        Me.corte.ReadOnly = True
+        '
+        'subcorte
+        '
+        Me.subcorte.HeaderText = "Sub Corte"
+        Me.subcorte.Name = "subcorte"
+        Me.subcorte.ReadOnly = True
+        '
+        'talla
+        '
+        Me.talla.HeaderText = "Talla"
+        Me.talla.Name = "talla"
+        Me.talla.ReadOnly = True
+        '
+        'linea
+        '
+        Me.linea.HeaderText = "Linea"
+        Me.linea.Name = "linea"
+        Me.linea.ReadOnly = True
+        '
+        'id_talla
+        '
+        Me.id_talla.HeaderText = "ID"
+        Me.id_talla.Name = "id_talla"
+        Me.id_talla.ReadOnly = True
+        '
+        'fecha
+        '
+        Me.fecha.HeaderText = "Fecha"
+        Me.fecha.Name = "fecha"
+        Me.fecha.ReadOnly = True
+        '
+        'comentario
+        '
+        Me.comentario.HeaderText = "Comentario"
+        Me.comentario.Name = "comentario"
+        Me.comentario.ReadOnly = True
+        '
+        'estado
+        '
+        Me.estado.HeaderText = "Estado"
+        Me.estado.Name = "estado"
+        Me.estado.ReadOnly = True
+        '
+        'VistaAuditoria
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(884, 759)
+        Me.ClientSize = New System.Drawing.Size(952, 663)
         Me.Controls.Add(Me.tabControl)
-        Me.Controls.Add(Me.pnlConnect)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.KeyPreview = True
-        Me.Name = "frmLector"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "TS800 Sample"
-        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
-        Me.pnlConnect.ResumeLayout(False)
-        Me.pnlConnect.PerformLayout()
+        Me.Name = "VistaAuditoria"
+        Me.Text = "VistaAuditoria"
         Me.tabControl.ResumeLayout(False)
         Me.tpPerformance.ResumeLayout(False)
         Me.tablaContenConf.ResumeLayout(False)
@@ -2479,13 +2357,12 @@ Partial Class frmLector
         Me.tablaContenedorTimbrado.ResumeLayout(False)
         Me.tabaLadoTimbrado.ResumeLayout(False)
         Me.tabaLadoTimbrado.PerformLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout()
-        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.tableLadoContador.ResumeLayout(False)
+        Me.tableLadoContador.PerformLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tableCount.ResumeLayout(False)
+        Me.tableCount.PerformLayout()
         Me.tpSearch.ResumeLayout(False)
         Me.gbxBuscarPrenda.ResumeLayout(False)
         Me.tablaBuscarPrenda.ResumeLayout(False)
@@ -2504,19 +2381,102 @@ Partial Class frmLector
 
     End Sub
 
-    Friend WithEvents pnlConnect As System.Windows.Forms.Panel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents cbxPort As System.Windows.Forms.ComboBox
-    Friend WithEvents cbxBaudrate As System.Windows.Forms.ComboBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents btnWifiSetting As System.Windows.Forms.Button
-    Friend WithEvents btnConnect As System.Windows.Forms.Button
-    Friend WithEvents tabControl As System.Windows.Forms.TabControl
-    Friend WithEvents tpPerformance As System.Windows.Forms.TabPage
-    Friend WithEvents lblRomVersion As Label
-    Friend WithEvents lblSdkVersion As Label
+    Friend WithEvents tabControl As TabControl
+    Friend WithEvents tpPerformance As TabPage
+    Friend WithEvents tablaContenConf As TableLayoutPanel
+    Friend WithEvents GroupBox8 As GroupBox
+    Friend WithEvents btnGetActiveMode As Button
+    Friend WithEvents btnSetActiveMode As Button
+    Friend WithEvents cbxActiveMode As ComboBox
+    Friend WithEvents Label44 As Label
+    Friend WithEvents gbxScanMode As GroupBox
+    Friend WithEvents btnGetScanMode As Button
+    Friend WithEvents btnSetScanMode As Button
+    Friend WithEvents cbxScanMode As ComboBox
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents btnGetInvnetoryRoundInterval As Button
+    Friend WithEvents nudInventoryRoundInterval As NumericUpDown
+    Friend WithEvents btnSetInvnetoryRoundInterval As Button
+    Friend WithEvents Label38 As Label
+    Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents btnGetRemoveThreshold As Button
+    Friend WithEvents nudTagRemoveThreshold As NumericUpDown
+    Friend WithEvents btnSetRemoveThreshold As Button
+    Friend WithEvents Label37 As Label
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents btnGetTagPresentRepeatInterval As Button
+    Friend WithEvents nudTagPresentRepeatInterval As NumericUpDown
+    Friend WithEvents btnSetTagPresentRepeatInterval As Button
+    Friend WithEvents Label35 As Label
+    Friend WithEvents GroupBoxLinkFrequency As GroupBox
+    Friend WithEvents btnGetLinkFrequency As Button
+    Friend WithEvents cbxLinkFrequency As ComboBox
+    Friend WithEvents btnSetLinkFrequency As Button
+    Friend WithEvents Label50 As Label
+    Friend WithEvents GroupBoxRxDecode As GroupBox
+    Friend WithEvents btnGetRxDecode As Button
+    Friend WithEvents btnSetRxDecode As Button
+    Friend WithEvents cbxRxDecode As ComboBox
+    Friend WithEvents Label49 As Label
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents btnGetRfSensitivity As Button
+    Friend WithEvents lblRfSensitivity As Label
+    Friend WithEvents btnSetRfSensitivity As Button
+    Friend WithEvents tbRfSensitivity As TrackBar
+    Friend WithEvents Label4 As Label
+    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents btnGetRfPower As Button
+    Friend WithEvents btnSetRfPower As Button
+    Friend WithEvents tbRfPower As TrackBar
+    Friend WithEvents Label28 As Label
+    Friend WithEvents lblRfPower As Label
+    Friend WithEvents TableLayoutPanel5 As TableLayoutPanel
+    Friend WithEvents gbJapanFrequency As GroupBox
+    Friend WithEvents cb923_2 As CheckBox
+    Friend WithEvents cb923_0 As CheckBox
+    Friend WithEvents cb922_8 As CheckBox
+    Friend WithEvents cb922_6 As CheckBox
+    Friend WithEvents cb922_4 As CheckBox
+    Friend WithEvents cb922_2 As CheckBox
+    Friend WithEvents cb922_0 As CheckBox
+    Friend WithEvents cb921_8 As CheckBox
+    Friend WithEvents cb921_6 As CheckBox
+    Friend WithEvents cb921_4 As CheckBox
+    Friend WithEvents cb921_2 As CheckBox
+    Friend WithEvents cb921_0 As CheckBox
+    Friend WithEvents cb920_8 As CheckBox
+    Friend WithEvents cb920_6 As CheckBox
+    Friend WithEvents cb920_4 As CheckBox
+    Friend WithEvents cb919_2 As CheckBox
+    Friend WithEvents cb918_0 As CheckBox
+    Friend WithEvents cb916_8 As CheckBox
+    Friend WithEvents Button1 As Button
+    Friend WithEvents gbTaiwanFrequency As GroupBox
+    Friend WithEvents cb920_25 As CheckBox
+    Friend WithEvents cb922_25 As CheckBox
+    Friend WithEvents Button2 As Button
+    Friend WithEvents btnGetFrequency As Button
+    Friend WithEvents btnSetFrequency As Button
     Friend WithEvents tpInventory As TabPage
     Friend WithEvents gbxInventoryEx As GroupBox
+    Friend WithEvents tablaContenedorTimbrado As TableLayoutPanel
+    Friend WithEvents tabaLadoTimbrado As TableLayoutPanel
+    Friend WithEvents btnStopInventoryEx As Button
+    Friend WithEvents btnLimpiarRFID As Button
+    Friend WithEvents cbxInventory As ComboBox
+    Friend WithEvents btnStartInventoryEx As Button
+    Friend WithEvents dgvTagList As DataGridView
+    Friend WithEvents clnEPC As DataGridViewTextBoxColumn
+    Friend WithEvents clnTID As DataGridViewTextBoxColumn
+    Friend WithEvents clnCount As DataGridViewTextBoxColumn
+    Friend WithEvents btnClear As Button
+    Friend WithEvents CodBarras As TextBox
+    Friend WithEvents tableLadoContador As TableLayoutPanel
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents tableCount As TableLayoutPanel
+    Friend WithEvents lblTotalCount As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents MsnVincular As Label
     Friend WithEvents tpSearch As TabPage
     Friend WithEvents gbxBuscarPrenda As GroupBox
     Friend WithEvents tablaBuscarPrenda As TableLayoutPanel
@@ -2533,6 +2493,7 @@ Partial Class frmLector
     Friend WithEvents BtnBuscarHM As Button
     Friend WithEvents TextBoxHM As TextBox
     Friend WithEvents LabelHM As Label
+    Friend WithEvents BtnLimpiarHM As Button
     Friend WithEvents tableCabecera As TableLayoutPanel
     Friend WithEvents lbl_op As Label
     Friend WithEvents lbl_cliente As Label
@@ -2579,92 +2540,7 @@ Partial Class frmLector
     Friend WithEvents text_tfrmem As Label
     Friend WithEvents text_cod_lugrent_cobro As Label
     Friend WithEvents txt_BillToDet As Label
-    Friend WithEvents BtnLimpiarHM As Button
     Friend WithEvents DataGridView3 As DataGridView
-    Friend WithEvents tablaContenConf As TableLayoutPanel
-    Friend WithEvents GroupBox8 As GroupBox
-    Friend WithEvents btnGetActiveMode As Button
-    Friend WithEvents btnSetActiveMode As Button
-    Friend WithEvents cbxActiveMode As ComboBox
-    Friend WithEvents Label44 As Label
-    Friend WithEvents gbJapanFrequency As GroupBox
-    Friend WithEvents cb923_2 As CheckBox
-    Friend WithEvents cb923_0 As CheckBox
-    Friend WithEvents cb922_8 As CheckBox
-    Friend WithEvents cb922_6 As CheckBox
-    Friend WithEvents cb922_4 As CheckBox
-    Friend WithEvents cb922_2 As CheckBox
-    Friend WithEvents cb922_0 As CheckBox
-    Friend WithEvents cb921_8 As CheckBox
-    Friend WithEvents cb921_6 As CheckBox
-    Friend WithEvents cb921_4 As CheckBox
-    Friend WithEvents cb921_2 As CheckBox
-    Friend WithEvents cb921_0 As CheckBox
-    Friend WithEvents cb920_8 As CheckBox
-    Friend WithEvents cb920_6 As CheckBox
-    Friend WithEvents cb920_4 As CheckBox
-    Friend WithEvents cb919_2 As CheckBox
-    Friend WithEvents cb918_0 As CheckBox
-    Friend WithEvents cb916_8 As CheckBox
-    Friend WithEvents Button1 As Button
-    Friend WithEvents gbxScanMode As GroupBox
-    Friend WithEvents btnGetScanMode As Button
-    Friend WithEvents btnSetScanMode As Button
-    Friend WithEvents cbxScanMode As ComboBox
-    Friend WithEvents GroupBox5 As GroupBox
-    Friend WithEvents btnGetInvnetoryRoundInterval As Button
-    Friend WithEvents nudInventoryRoundInterval As NumericUpDown
-    Friend WithEvents btnSetInvnetoryRoundInterval As Button
-    Friend WithEvents Label38 As Label
-    Friend WithEvents GroupBox4 As GroupBox
-    Friend WithEvents btnGetRemoveThreshold As Button
-    Friend WithEvents nudTagRemoveThreshold As NumericUpDown
-    Friend WithEvents btnSetRemoveThreshold As Button
-    Friend WithEvents Label37 As Label
-    Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents btnGetTagPresentRepeatInterval As Button
-    Friend WithEvents nudTagPresentRepeatInterval As NumericUpDown
-    Friend WithEvents btnSetTagPresentRepeatInterval As Button
-    Friend WithEvents Label35 As Label
-    Friend WithEvents GroupBoxLinkFrequency As GroupBox
-    Friend WithEvents btnGetLinkFrequency As Button
-    Friend WithEvents cbxLinkFrequency As ComboBox
-    Friend WithEvents btnSetLinkFrequency As Button
-    Friend WithEvents Label50 As Label
-    Friend WithEvents GroupBoxRxDecode As GroupBox
-    Friend WithEvents btnGetRxDecode As Button
-    Friend WithEvents btnSetRxDecode As Button
-    Friend WithEvents cbxRxDecode As ComboBox
-    Friend WithEvents Label49 As Label
-    Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents btnGetRfSensitivity As Button
-    Friend WithEvents lblRfSensitivity As Label
-    Friend WithEvents btnSetRfSensitivity As Button
-    Friend WithEvents tbRfSensitivity As TrackBar
-    Friend WithEvents Label4 As Label
-    Friend WithEvents GroupBox3 As GroupBox
-    Friend WithEvents btnGetRfPower As Button
-    Friend WithEvents btnSetRfPower As Button
-    Friend WithEvents tbRfPower As TrackBar
-    Friend WithEvents Label28 As Label
-    Friend WithEvents lblRfPower As Label
-    Friend WithEvents TableLayoutPanel5 As TableLayoutPanel
-    Friend WithEvents btnGetFrequency As Button
-    Friend WithEvents gbTaiwanFrequency As GroupBox
-    Friend WithEvents cb920_25 As CheckBox
-    Friend WithEvents cb922_25 As CheckBox
-    Friend WithEvents Button2 As Button
-    Friend WithEvents btnSetFrequency As Button
-    Friend WithEvents btnLimpiarRFID As Button
-    Friend WithEvents btnClear As Button
-    Friend WithEvents CodBarras As TextBox
-    Friend WithEvents btnStopInventoryEx As Button
-    Friend WithEvents cbxInventory As ComboBox
-    Friend WithEvents btnStartInventoryEx As Button
-    Friend WithEvents tablaContenedorTimbrado As TableLayoutPanel
-    Friend WithEvents tabaLadoTimbrado As TableLayoutPanel
-    Friend WithEvents MsnVincular As Label
-    Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents op As DataGridViewTextBoxColumn
     Friend WithEvents corte As DataGridViewTextBoxColumn
     Friend WithEvents subcorte As DataGridViewTextBoxColumn
@@ -2672,13 +2548,6 @@ Partial Class frmLector
     Friend WithEvents linea As DataGridViewTextBoxColumn
     Friend WithEvents id_talla As DataGridViewTextBoxColumn
     Friend WithEvents fecha As DataGridViewTextBoxColumn
-    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents lblTotalCount As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
-    Friend WithEvents dgvTagList As DataGridView
-    Friend WithEvents clnEPC As DataGridViewTextBoxColumn
-    Friend WithEvents clnTID As DataGridViewTextBoxColumn
-    Friend WithEvents clnCount As DataGridViewTextBoxColumn
+    Friend WithEvents comentario As DataGridViewTextBoxColumn
+    Friend WithEvents estado As DataGridViewTextBoxColumn
 End Class

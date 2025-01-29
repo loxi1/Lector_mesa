@@ -14,7 +14,7 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <OptionExplicit>Off</OptionExplicit>
-    <OptionCompare>Binary</OptionCompare>
+    <OptionCompare>Text</OptionCompare>
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
     <FileUpgradeFlags>
@@ -95,7 +95,7 @@
     <DefineConstants>DEVICE="TS800"</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icono_f.ico</ApplicationIcon>
+    <ApplicationIcon>icono_del_rfid.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
@@ -283,6 +283,12 @@
     </Compile>
     <Compile Include="Sybase.vb" />
     <Compile Include="SybaseHelper.vb" />
+    <Compile Include="VistaAuditoria.Designer.vb">
+      <DependentUpon>VistaAuditoria.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VistaAuditoria.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WiFiSettings.vb" />
     <Compile Include="WiFiSettingsForm.Designer.vb">
       <DependentUpon>WiFiSettingsForm.vb</DependentUpon>
@@ -339,6 +345,9 @@
     <EmbeddedResource Include="PruebaConfiguracion.resx">
       <DependentUpon>PruebaConfiguracion.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="VistaAuditoria.resx">
+      <DependentUpon>VistaAuditoria.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include=".env" />
@@ -357,6 +366,7 @@
     <None Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="form.ico" />
     <Content Include="GHIDIO.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -370,6 +380,7 @@
     <None Include="Resources\icon_ok.png" />
     <None Include="Resources\icon_rfid.png" />
     <None Include="Resources\conex_1.png" />
+    <Content Include="icono_del_rfid.ico" />
     <Content Include="icono_f.ico" />
     <Content Include="mirame_pus.ico" />
     <None Include="Resources\advertencia_90.png" />
