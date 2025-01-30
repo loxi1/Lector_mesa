@@ -419,24 +419,44 @@ Public Class frmLector
     End Sub
 
     Private Sub _ts80O_OnTagPresented(ByVal sender As Object, ByVal tagInformation As TagInformationFormat) Handles _ts800.OnTagPresented
-        Dim oRow As DataGridViewRow
-        Dim iRowIndex As Integer
-        Dim szPCEPC As String = tagInformation.PcEpcHex
-        Dim szTID As String = tagInformation.TidHex
+        Try
+            Dim oRow As DataGridViewRow
+            Dim iRowIndex As Integer
+            Dim szPCEPC As String = tagInformation.PcEpcHex
+            Dim szTID As String = tagInformation.TidHex
 
-        iRowIndex = _tagList.IndexOf(szPCEPC)
-        If iRowIndex <> -1 Then
-            oRow = dgvTagList.Rows(iRowIndex)
-        Else
-            _tagList.Add(szPCEPC)
-            iRowIndex = dgvTagList.Rows.Add()
-            oRow = dgvTagList.Rows(iRowIndex)
-            oRow.Cells(0).Value = szPCEPC
-            oRow.Cells(1).Value = szTID
-            oRow.Cells(2).Value = 1
-            'CountTags()
-        End If
+            ' Buscar si ya existe el tag en la lista
+            iRowIndex = _tagList.IndexOf(szPCEPC)
+
+            If iRowIndex <> -1 AndAlso iRowIndex < dgvTagList.Rows.Count Then
+                ' Si el índice es válido, acceder a la fila existente
+                oRow = dgvTagList.Rows(iRowIndex)
+            Else
+                ' Agregar nuevo tag a la lista
+                _tagList.Add(szPCEPC)
+
+                ' Agregar una nueva fila y obtener el índice correcto
+                Dim newRowIndex As Integer = dgvTagList.Rows.Add()
+
+                ' Verificar si el índice es válido antes de acceder a la fila
+                If newRowIndex >= 0 AndAlso newRowIndex < dgvTagList.Rows.Count Then
+                    iRowIndex = newRowIndex
+                    oRow = dgvTagList.Rows(iRowIndex)
+
+                    ' Asignar valores a las celdas
+                    oRow.Cells(0).Value = szPCEPC
+                    oRow.Cells(1).Value = szTID
+                    oRow.Cells(2).Value = 1
+                Else
+                    MessageBox.Show("Error: Índice de fila fuera de rango.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Exit Sub
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error en _ts80O_OnTagPresented: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
+
 
     'Private Sub _ts800_OnTagPresentedEx(sender As Object, tagDecodeInformation As DecodedTagData) Handles _ts800.OnTagPresentedEx
     '    Dim oRow As DataGridViewRow
@@ -1081,20 +1101,7 @@ Public Class frmLector
                 If btn IsNot Nothing And (control.Name = "BtnBuscarHM" Or control.Name = "BtnLimpiarHM") Then
                     ' Ajustar el tamaño de la fuente del botón
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
-
-                    ' Ajustar el ancho del botón al 100% de su celda en el TableLayoutPanel
-                    Dim columnIndex As Integer = panel.GetColumn(control)
-                    If columnIndex >= 0 Then
-                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
-                        btn.Width = cellWidth
-                    End If
-                    ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
-                    Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
-                    btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
-                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
-
-                    ' (Opcional) Asegurar que el botón esté centrado en su celda
-                    btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                    AjustarBoton(btn)
                 End If
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
                 Console.WriteLine($"Nombre-->{control.Name}")
@@ -1182,22 +1189,7 @@ Public Class frmLector
                                 ' Ajustar el tamaño de la fuente del botón
                                 btn.Font = New Font(btn.Font.FontFamily, fontSize1)
 
-                                ' Obtener el TableLayoutPanel correcto (el que contiene a control2)
-                                Dim parentTable As TableLayoutPanel = TryCast(control2.Parent, TableLayoutPanel)
-                                If parentTable IsNot Nothing Then
-                                    Dim columnIndex As Integer = parentTable.GetColumn(control2)
-                                    If columnIndex >= 0 Then
-                                        Dim cellWidth As Integer = parentTable.GetColumnWidths()(columnIndex)
-                                        btn.Width = cellWidth
-                                    End If
-                                End If
-                                ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
-                                Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
-                                btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
-                                control2.Top = (control2.Parent.ClientSize.Height - control2.Height) \ 2
-
-                                ' (Opcional) Asegurar que el botón esté centrado en su celda
-                                btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                                AjustarBoton(btn)
                             End If
                         ElseIf control2.Name.StartsWith("text_", StringComparison.OrdinalIgnoreCase) Then
                             control2.Font = New Font(control.Font.FontFamily, fontSize2)
@@ -1211,27 +1203,33 @@ Public Class frmLector
             End If
         Next
     End Sub
+    Private Sub AjustarBoton(btn As Button)
+        ' Establecer el tamaño del botón basado en el contenido del texto
+        Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
+
+        ' Agregar padding extra para evitar cortes
+        btn.Width = textSize.Width + 20
+        btn.Height = textSize.Height + 10
+
+        ' Asegurar que el texto se vea completo
+        btn.AutoSize = True
+        btn.TextAlign = ContentAlignment.MiddleCenter
+        btn.Padding = New Padding(5)
+
+        ' Evitar que el botón sea demasiado pequeño
+        If btn.Width < 80 Then btn.Width = 80
+        If btn.Height < 30 Then btn.Height = 30
+    End Sub
+
     Private Sub ResizeTableLayoutPanelControls(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single)
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
                 If btn IsNot Nothing And (control.Name = "btnClear" Or control.Name = "btnLimpiarRFID") Then
                     ' Ajustar el tamaño de la fuente del botón
+                    'EstiloBoton(btn)
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
-
-                    ' Ajustar el ancho del botón al 100% de su celda en el TableLayoutPanel
-                    Dim columnIndex As Integer = panel.GetColumn(control)
-                    If columnIndex >= 0 Then
-                        Dim cellWidth As Integer = panel.GetColumnWidths()(columnIndex)
-                        btn.Width = cellWidth
-                    End If
-                    ' Ajustar la altura del botón según el tamaño del texto más 10 unidades de padding
-                    Dim textSize As Size = TextRenderer.MeasureText(btn.Text, btn.Font)
-                    btn.Height = textSize.Height + 20 ' 10 unidades de padding arriba y abajo
-                    control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
-
-                    ' (Opcional) Asegurar que el botón esté centrado en su celda
-                    btn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
+                    AjustarBoton(btn)
                 End If
             ElseIf TypeOf control Is TableLayoutPanel Then
                 ' Llamada recursiva para manejar anidamientos
@@ -1242,11 +1240,6 @@ Public Class frmLector
                 If control.Name = "CodBarras" Or control.Name = "BuscarCodBarras" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
                     control.Font = New Font(control.Font.FontFamily, fontSize)
-                    ' Ajustar el ancho para que ocupe el 100% del ancho del contenedor
-                    If control.Parent IsNot Nothing Then
-                        control.Width = control.Parent.ClientSize.Width
-                        control.Top = (control.Parent.ClientSize.Height - control.Height) \ 2
-                    End If
                 ElseIf control.Name = "Label34" Or control.Name = "Label5" Then
                     control.Font = New Font(control.Font.FontFamily, fontSize)
                 Else
@@ -2283,8 +2276,11 @@ Public Class frmLector
             dgv.Columns("Descripción").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         End If
 
-        ' Evitar que el usuario redimensione manualmente las columnas
-        dgv.AllowUserToResizeColumns = False
+        ' Asegurar que la columna "Area" se expanda para mostrar el texto completo
+        If dgv.Columns.Contains("Area") Then
+            dgv.Columns("Area").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+        End If
+
 
         ' Alinear el texto de las celdas al centro
         For Each col As DataGridViewColumn In dgv.Columns
@@ -2308,8 +2304,6 @@ Public Class frmLector
             .FlatStyle = FlatStyle.Flat
             .FlatAppearance.BorderSize = 1 ' Sin borde
             .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
-            .Font = New Font("Arial", 12, FontStyle.Bold) ' Fuente más grande y negrita
-            .Size = New Size(150, 40) ' Aumentar el tamaño del botón
             .TextAlign = ContentAlignment.MiddleCenter
             .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
         End With

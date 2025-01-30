@@ -22,9 +22,9 @@ Partial Class VistaAuditoria
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.tabControl = New System.Windows.Forms.TabControl()
         Me.tpPerformance = New System.Windows.Forms.TabPage()
         Me.tablaContenConf = New System.Windows.Forms.TableLayoutPanel()
@@ -117,6 +117,15 @@ Partial Class VistaAuditoria
         Me.CodBarras = New System.Windows.Forms.TextBox()
         Me.tableLadoContador = New System.Windows.Forms.TableLayoutPanel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.comentario = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.estado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tableCount = New System.Windows.Forms.TableLayoutPanel()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -185,15 +194,6 @@ Partial Class VistaAuditoria
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.comentario = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.estado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabControl.SuspendLayout()
         Me.tpPerformance.SuspendLayout()
         Me.tablaContenConf.SuspendLayout()
@@ -1099,7 +1099,7 @@ Partial Class VistaAuditoria
         Me.tablaContenedorTimbrado.Name = "tablaContenedorTimbrado"
         Me.tablaContenedorTimbrado.RowCount = 1
         Me.tablaContenedorTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tablaContenedorTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 620.0!))
+        Me.tablaContenedorTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 590.0!))
         Me.tablaContenedorTimbrado.Size = New System.Drawing.Size(932, 590)
         Me.tablaContenedorTimbrado.TabIndex = 30
         '
@@ -1172,30 +1172,30 @@ Partial Class VistaAuditoria
         '
         'dgvTagList
         '
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray
-        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray
+        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvTagList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvTagList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTagList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.SteelBlue
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.SteelBlue
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvTagList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvTagList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clnEPC, Me.clnTID, Me.clnCount})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Arial", 9.0!)
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.Padding = New System.Windows.Forms.Padding(5)
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightBlue
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Arial", 9.0!)
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(5)
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightBlue
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvTagList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvTagList.EnableHeadersVisualStyles = False
         Me.dgvTagList.GridColor = System.Drawing.Color.LightGray
@@ -1283,6 +1283,60 @@ Partial Class VistaAuditoria
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(554, 526)
         Me.DataGridView1.TabIndex = 37
+        '
+        'op
+        '
+        Me.op.HeaderText = "OP"
+        Me.op.Name = "op"
+        Me.op.ReadOnly = True
+        '
+        'corte
+        '
+        Me.corte.HeaderText = "Corte"
+        Me.corte.Name = "corte"
+        Me.corte.ReadOnly = True
+        '
+        'subcorte
+        '
+        Me.subcorte.HeaderText = "Sub Corte"
+        Me.subcorte.Name = "subcorte"
+        Me.subcorte.ReadOnly = True
+        '
+        'talla
+        '
+        Me.talla.HeaderText = "Talla"
+        Me.talla.Name = "talla"
+        Me.talla.ReadOnly = True
+        '
+        'linea
+        '
+        Me.linea.HeaderText = "Linea"
+        Me.linea.Name = "linea"
+        Me.linea.ReadOnly = True
+        '
+        'id_talla
+        '
+        Me.id_talla.HeaderText = "ID"
+        Me.id_talla.Name = "id_talla"
+        Me.id_talla.ReadOnly = True
+        '
+        'fecha
+        '
+        Me.fecha.HeaderText = "Fecha"
+        Me.fecha.Name = "fecha"
+        Me.fecha.ReadOnly = True
+        '
+        'comentario
+        '
+        Me.comentario.HeaderText = "Comentario"
+        Me.comentario.Name = "comentario"
+        Me.comentario.ReadOnly = True
+        '
+        'estado
+        '
+        Me.estado.HeaderText = "Estado"
+        Me.estado.Name = "estado"
+        Me.estado.ReadOnly = True
         '
         'tableCount
         '
@@ -1400,9 +1454,10 @@ Partial Class VistaAuditoria
         '
         'Label5
         '
+        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(3, 0)
+        Me.Label5.Location = New System.Drawing.Point(80, 19)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(123, 20)
         Me.Label5.TabIndex = 0
@@ -1410,8 +1465,9 @@ Partial Class VistaAuditoria
         '
         'BuscarCodBarras
         '
+        Me.BuscarCodBarras.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.BuscarCodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BuscarCodBarras.Location = New System.Drawing.Point(209, 3)
+        Me.BuscarCodBarras.Location = New System.Drawing.Point(209, 14)
         Me.BuscarCodBarras.Name = "BuscarCodBarras"
         Me.BuscarCodBarras.Size = New System.Drawing.Size(300, 30)
         Me.BuscarCodBarras.TabIndex = 1
@@ -2259,60 +2315,6 @@ Partial Class VistaAuditoria
         Me.DataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView3.Size = New System.Drawing.Size(938, 352)
         Me.DataGridView3.TabIndex = 2
-        '
-        'op
-        '
-        Me.op.HeaderText = "OP"
-        Me.op.Name = "op"
-        Me.op.ReadOnly = True
-        '
-        'corte
-        '
-        Me.corte.HeaderText = "Corte"
-        Me.corte.Name = "corte"
-        Me.corte.ReadOnly = True
-        '
-        'subcorte
-        '
-        Me.subcorte.HeaderText = "Sub Corte"
-        Me.subcorte.Name = "subcorte"
-        Me.subcorte.ReadOnly = True
-        '
-        'talla
-        '
-        Me.talla.HeaderText = "Talla"
-        Me.talla.Name = "talla"
-        Me.talla.ReadOnly = True
-        '
-        'linea
-        '
-        Me.linea.HeaderText = "Linea"
-        Me.linea.Name = "linea"
-        Me.linea.ReadOnly = True
-        '
-        'id_talla
-        '
-        Me.id_talla.HeaderText = "ID"
-        Me.id_talla.Name = "id_talla"
-        Me.id_talla.ReadOnly = True
-        '
-        'fecha
-        '
-        Me.fecha.HeaderText = "Fecha"
-        Me.fecha.Name = "fecha"
-        Me.fecha.ReadOnly = True
-        '
-        'comentario
-        '
-        Me.comentario.HeaderText = "Comentario"
-        Me.comentario.Name = "comentario"
-        Me.comentario.ReadOnly = True
-        '
-        'estado
-        '
-        Me.estado.HeaderText = "Estado"
-        Me.estado.Name = "estado"
-        Me.estado.ReadOnly = True
         '
         'VistaAuditoria
         '

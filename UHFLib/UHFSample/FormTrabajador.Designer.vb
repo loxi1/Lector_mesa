@@ -29,13 +29,14 @@ Partial Class FormTrabajador
         Me.ClaveTrabajador = New System.Windows.Forms.TextBox()
         Me.ButtonOk = New System.Windows.Forms.Button()
         Me.buttonCancelar = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(6, 22)
+        Me.Label1.Location = New System.Drawing.Point(31, 32)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(272, 31)
         Me.Label1.TabIndex = 2
@@ -45,7 +46,7 @@ Partial Class FormTrabajador
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(118, 67)
+        Me.Label2.Location = New System.Drawing.Point(143, 77)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(159, 31)
         Me.Label2.TabIndex = 3
@@ -54,18 +55,18 @@ Partial Class FormTrabajador
         'txtCodTrabajador
         '
         Me.txtCodTrabajador.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCodTrabajador.Location = New System.Drawing.Point(287, 13)
+        Me.txtCodTrabajador.Location = New System.Drawing.Point(307, 23)
         Me.txtCodTrabajador.Name = "txtCodTrabajador"
-        Me.txtCodTrabajador.Size = New System.Drawing.Size(180, 38)
+        Me.txtCodTrabajador.Size = New System.Drawing.Size(146, 38)
         Me.txtCodTrabajador.TabIndex = 0
         '
         'ClaveTrabajador
         '
         Me.ClaveTrabajador.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ClaveTrabajador.Location = New System.Drawing.Point(287, 60)
+        Me.ClaveTrabajador.Location = New System.Drawing.Point(307, 70)
         Me.ClaveTrabajador.Name = "ClaveTrabajador"
         Me.ClaveTrabajador.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.ClaveTrabajador.Size = New System.Drawing.Size(180, 38)
+        Me.ClaveTrabajador.Size = New System.Drawing.Size(146, 38)
         Me.ClaveTrabajador.TabIndex = 1
         '
         'ButtonOk
@@ -73,7 +74,7 @@ Partial Class FormTrabajador
         Me.ButtonOk.BackColor = System.Drawing.Color.MediumSeaGreen
         Me.ButtonOk.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonOk.ForeColor = System.Drawing.Color.White
-        Me.ButtonOk.Location = New System.Drawing.Point(315, 135)
+        Me.ButtonOk.Location = New System.Drawing.Point(315, 133)
         Me.ButtonOk.Name = "ButtonOk"
         Me.ButtonOk.Size = New System.Drawing.Size(131, 47)
         Me.ButtonOk.TabIndex = 4
@@ -85,12 +86,22 @@ Partial Class FormTrabajador
         Me.buttonCancelar.BackColor = System.Drawing.Color.MediumSeaGreen
         Me.buttonCancelar.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.buttonCancelar.ForeColor = System.Drawing.Color.White
-        Me.buttonCancelar.Location = New System.Drawing.Point(14, 134)
+        Me.buttonCancelar.Location = New System.Drawing.Point(40, 134)
         Me.buttonCancelar.Name = "buttonCancelar"
         Me.buttonCancelar.Size = New System.Drawing.Size(148, 47)
         Me.buttonCancelar.TabIndex = 5
         Me.buttonCancelar.Text = "Limpiar"
         Me.buttonCancelar.UseVisualStyleBackColor = False
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 1)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(460, 199)
+        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabStop = False
         '
         'FormTrabajador
         '
@@ -103,6 +114,7 @@ Partial Class FormTrabajador
         Me.Controls.Add(Me.txtCodTrabajador)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -120,4 +132,5 @@ Partial Class FormTrabajador
     Friend WithEvents ClaveTrabajador As TextBox
     Friend WithEvents ButtonOk As Button
     Friend WithEvents buttonCancelar As Button
+    Friend WithEvents GroupBox1 As GroupBox
 End Class
