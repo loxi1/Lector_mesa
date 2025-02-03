@@ -42,6 +42,17 @@ Partial Class frmLector
         Me.tabControl = New System.Windows.Forms.TabControl()
         Me.tpPerformance = New System.Windows.Forms.TabPage()
         Me.tablaContenConf = New System.Windows.Forms.TableLayoutPanel()
+        Me.gbxEPCSettings = New System.Windows.Forms.GroupBox()
+        Me.btnGetSessionTarget = New System.Windows.Forms.Button()
+        Me.cbxSession = New System.Windows.Forms.ComboBox()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.cbxTarget = New System.Windows.Forms.ComboBox()
+        Me.btnSetSessionTarget = New System.Windows.Forms.Button()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.btnGetQValue = New System.Windows.Forms.Button()
+        Me.cbxQValue = New System.Windows.Forms.ComboBox()
+        Me.btnSetQValue = New System.Windows.Forms.Button()
+        Me.Label31 = New System.Windows.Forms.Label()
         Me.GroupBox8 = New System.Windows.Forms.GroupBox()
         Me.btnGetActiveMode = New System.Windows.Forms.Button()
         Me.btnSetActiveMode = New System.Windows.Forms.Button()
@@ -121,22 +132,16 @@ Partial Class frmLector
         Me.tablaContenedorTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.tabaLadoTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnLimpiarRFID = New System.Windows.Forms.Button()
+        Me.btnClear = New System.Windows.Forms.Button()
+        Me.cantidadRFID = New System.Windows.Forms.Label()
+        Me.MsnVincular = New System.Windows.Forms.Label()
         Me.dgvTagList = New System.Windows.Forms.DataGridView()
         Me.clnEPC = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnTID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CodBarras = New System.Windows.Forms.TextBox()
-        Me.btnLimpiarRFID = New System.Windows.Forms.Button()
-        Me.btnClear = New System.Windows.Forms.Button()
-        Me.MsnVincular = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -208,10 +213,19 @@ Partial Class frmLector
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
+        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_rfid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pnlConnect.SuspendLayout()
         Me.tabControl.SuspendLayout()
         Me.tpPerformance.SuspendLayout()
         Me.tablaContenConf.SuspendLayout()
+        Me.gbxEPCSettings.SuspendLayout()
         Me.GroupBox8.SuspendLayout()
         Me.gbxScanMode.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
@@ -378,6 +392,7 @@ Partial Class frmLector
         Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.tablaContenConf.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.tablaContenConf.Controls.Add(Me.gbxEPCSettings, 0, 5)
         Me.tablaContenConf.Controls.Add(Me.GroupBox8, 1, 4)
         Me.tablaContenConf.Controls.Add(Me.gbxScanMode, 1, 3)
         Me.tablaContenConf.Controls.Add(Me.GroupBox5, 1, 2)
@@ -401,6 +416,116 @@ Partial Class frmLector
         Me.tablaContenConf.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.tablaContenConf.Size = New System.Drawing.Size(1189, 619)
         Me.tablaContenConf.TabIndex = 1
+        '
+        'gbxEPCSettings
+        '
+        Me.gbxEPCSettings.Controls.Add(Me.btnGetSessionTarget)
+        Me.gbxEPCSettings.Controls.Add(Me.cbxSession)
+        Me.gbxEPCSettings.Controls.Add(Me.Label33)
+        Me.gbxEPCSettings.Controls.Add(Me.cbxTarget)
+        Me.gbxEPCSettings.Controls.Add(Me.btnSetSessionTarget)
+        Me.gbxEPCSettings.Controls.Add(Me.Label32)
+        Me.gbxEPCSettings.Controls.Add(Me.btnGetQValue)
+        Me.gbxEPCSettings.Controls.Add(Me.cbxQValue)
+        Me.gbxEPCSettings.Controls.Add(Me.btnSetQValue)
+        Me.gbxEPCSettings.Controls.Add(Me.Label31)
+        Me.gbxEPCSettings.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbxEPCSettings.Location = New System.Drawing.Point(597, 498)
+        Me.gbxEPCSettings.Name = "gbxEPCSettings"
+        Me.gbxEPCSettings.Size = New System.Drawing.Size(589, 77)
+        Me.gbxEPCSettings.TabIndex = 36
+        Me.gbxEPCSettings.TabStop = False
+        Me.gbxEPCSettings.Text = "Configurar EPC"
+        '
+        'btnGetSessionTarget
+        '
+        Me.btnGetSessionTarget.Location = New System.Drawing.Point(422, 46)
+        Me.btnGetSessionTarget.Name = "btnGetSessionTarget"
+        Me.btnGetSessionTarget.Size = New System.Drawing.Size(60, 25)
+        Me.btnGetSessionTarget.TabIndex = 29
+        Me.btnGetSessionTarget.Text = "Obtener"
+        Me.btnGetSessionTarget.UseVisualStyleBackColor = True
+        '
+        'cbxSession
+        '
+        Me.cbxSession.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxSession.FormattingEnabled = True
+        Me.cbxSession.Location = New System.Drawing.Point(58, 48)
+        Me.cbxSession.Name = "cbxSession"
+        Me.cbxSession.Size = New System.Drawing.Size(107, 21)
+        Me.cbxSession.TabIndex = 28
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Location = New System.Drawing.Point(7, 51)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(45, 13)
+        Me.Label33.TabIndex = 27
+        Me.Label33.Text = "Sesión :"
+        '
+        'cbxTarget
+        '
+        Me.cbxTarget.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxTarget.FormattingEnabled = True
+        Me.cbxTarget.Location = New System.Drawing.Point(235, 48)
+        Me.cbxTarget.Name = "cbxTarget"
+        Me.cbxTarget.Size = New System.Drawing.Size(107, 21)
+        Me.cbxTarget.TabIndex = 26
+        '
+        'btnSetSessionTarget
+        '
+        Me.btnSetSessionTarget.Location = New System.Drawing.Point(349, 46)
+        Me.btnSetSessionTarget.Name = "btnSetSessionTarget"
+        Me.btnSetSessionTarget.Size = New System.Drawing.Size(70, 25)
+        Me.btnSetSessionTarget.TabIndex = 25
+        Me.btnSetSessionTarget.Text = "Establecer"
+        Me.btnSetSessionTarget.UseVisualStyleBackColor = True
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Location = New System.Drawing.Point(188, 51)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(50, 13)
+        Me.Label32.TabIndex = 24
+        Me.Label32.Text = "Targeta :"
+        '
+        'btnGetQValue
+        '
+        Me.btnGetQValue.Location = New System.Drawing.Point(422, 14)
+        Me.btnGetQValue.Name = "btnGetQValue"
+        Me.btnGetQValue.Size = New System.Drawing.Size(60, 25)
+        Me.btnGetQValue.TabIndex = 21
+        Me.btnGetQValue.Text = "Obtener"
+        Me.btnGetQValue.UseVisualStyleBackColor = True
+        '
+        'cbxQValue
+        '
+        Me.cbxQValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxQValue.FormattingEnabled = True
+        Me.cbxQValue.Location = New System.Drawing.Point(133, 16)
+        Me.cbxQValue.Name = "cbxQValue"
+        Me.cbxQValue.Size = New System.Drawing.Size(208, 21)
+        Me.cbxQValue.TabIndex = 14
+        '
+        'btnSetQValue
+        '
+        Me.btnSetQValue.Location = New System.Drawing.Point(348, 14)
+        Me.btnSetQValue.Name = "btnSetQValue"
+        Me.btnSetQValue.Size = New System.Drawing.Size(70, 25)
+        Me.btnSetQValue.TabIndex = 1
+        Me.btnSetQValue.Text = "Establecer"
+        Me.btnSetQValue.UseVisualStyleBackColor = True
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = True
+        Me.Label31.Location = New System.Drawing.Point(78, 20)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(45, 13)
+        Me.Label31.TabIndex = 0
+        Me.Label31.Text = "Valor Q:"
         '
         'GroupBox8
         '
@@ -756,7 +881,7 @@ Partial Class frmLector
         '
         'btnGetRfSensitivity
         '
-        Me.btnGetRfSensitivity.Location = New System.Drawing.Point(531, 15)
+        Me.btnGetRfSensitivity.Location = New System.Drawing.Point(538, 15)
         Me.btnGetRfSensitivity.Name = "btnGetRfSensitivity"
         Me.btnGetRfSensitivity.Size = New System.Drawing.Size(60, 25)
         Me.btnGetRfSensitivity.TabIndex = 20
@@ -775,7 +900,7 @@ Partial Class frmLector
         '
         'btnSetRfSensitivity
         '
-        Me.btnSetRfSensitivity.Location = New System.Drawing.Point(458, 15)
+        Me.btnSetRfSensitivity.Location = New System.Drawing.Point(463, 15)
         Me.btnSetRfSensitivity.Name = "btnSetRfSensitivity"
         Me.btnSetRfSensitivity.Size = New System.Drawing.Size(70, 25)
         Me.btnSetRfSensitivity.TabIndex = 18
@@ -861,9 +986,9 @@ Partial Class frmLector
         Me.lblRfPower.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
         Me.lblRfPower.Location = New System.Drawing.Point(387, 21)
         Me.lblRfPower.Name = "lblRfPower"
-        Me.lblRfPower.Size = New System.Drawing.Size(67, 21)
+        Me.lblRfPower.Size = New System.Drawing.Size(58, 21)
         Me.lblRfPower.TabIndex = 14
-        Me.lblRfPower.Text = "11 dBm"
+        Me.lblRfPower.Text = "1 dBm"
         '
         'TableLayoutPanel5
         '
@@ -1224,21 +1349,19 @@ Partial Class frmLector
         '
         Me.tabaLadoTimbrado.ColumnCount = 1
         Me.tabaLadoTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tabaLadoTimbrado.Controls.Add(Me.DataGridView1, 0, 4)
+        Me.tabaLadoTimbrado.Controls.Add(Me.DataGridView1, 0, 3)
         Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel1, 0, 0)
-        Me.tabaLadoTimbrado.Controls.Add(Me.MsnVincular, 0, 1)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel2, 0, 2)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel3, 0, 3)
+        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel2, 0, 1)
+        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel3, 0, 2)
         Me.tabaLadoTimbrado.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tabaLadoTimbrado.Location = New System.Drawing.Point(0, 0)
         Me.tabaLadoTimbrado.Margin = New System.Windows.Forms.Padding(0)
         Me.tabaLadoTimbrado.Name = "tabaLadoTimbrado"
-        Me.tabaLadoTimbrado.RowCount = 5
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
+        Me.tabaLadoTimbrado.RowCount = 4
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.0!))
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.0!))
         Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.0!))
-        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.0!))
+        Me.tabaLadoTimbrado.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.0!))
         Me.tabaLadoTimbrado.Size = New System.Drawing.Size(1183, 600)
         Me.tabaLadoTimbrado.TabIndex = 0
         '
@@ -1258,7 +1381,7 @@ Partial Class frmLector
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.linea, Me.id_talla, Me.fecha})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1267,74 +1390,90 @@ Partial Class frmLector
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 147)
+        Me.DataGridView1.Location = New System.Drawing.Point(3, 171)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1177, 450)
+        Me.DataGridView1.Size = New System.Drawing.Size(1177, 426)
         Me.DataGridView1.TabIndex = 41
-        '
-        'op
-        '
-        Me.op.HeaderText = "OP"
-        Me.op.Name = "op"
-        Me.op.ReadOnly = True
-        '
-        'corte
-        '
-        Me.corte.HeaderText = "Corte"
-        Me.corte.Name = "corte"
-        Me.corte.ReadOnly = True
-        '
-        'subcorte
-        '
-        Me.subcorte.HeaderText = "Sub Corte"
-        Me.subcorte.Name = "subcorte"
-        Me.subcorte.ReadOnly = True
-        '
-        'talla
-        '
-        Me.talla.HeaderText = "Talla"
-        Me.talla.Name = "talla"
-        Me.talla.ReadOnly = True
-        '
-        'linea
-        '
-        Me.linea.HeaderText = "Linea"
-        Me.linea.Name = "linea"
-        Me.linea.ReadOnly = True
-        '
-        'id_talla
-        '
-        Me.id_talla.HeaderText = "ID"
-        Me.id_talla.Name = "id_talla"
-        Me.id_talla.ReadOnly = True
-        '
-        'fecha
-        '
-        Me.fecha.HeaderText = "Fecha"
-        Me.fecha.Name = "fecha"
-        Me.fecha.ReadOnly = True
         '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 4
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.dgvTagList, 2, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.CodBarras, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnLimpiarRFID, 3, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnLimpiarRFID, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.btnClear, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.cantidadRFID, 2, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.MsnVincular, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.dgvTagList, 3, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.CodBarras, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1183, 90)
+        Me.TableLayoutPanel1.RowCount = 3
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1183, 126)
         Me.TableLayoutPanel1.TabIndex = 44
+        '
+        'btnLimpiarRFID
+        '
+        Me.btnLimpiarRFID.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnLimpiarRFID.Location = New System.Drawing.Point(476, 50)
+        Me.btnLimpiarRFID.Name = "btnLimpiarRFID"
+        Me.btnLimpiarRFID.Size = New System.Drawing.Size(171, 41)
+        Me.btnLimpiarRFID.TabIndex = 51
+        Me.btnLimpiarRFID.Text = "Limpiar"
+        Me.btnLimpiarRFID.UseVisualStyleBackColor = True
+        '
+        'btnClear
+        '
+        Me.btnClear.BackColor = System.Drawing.Color.MediumSeaGreen
+        Me.btnClear.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnClear.ForeColor = System.Drawing.Color.White
+        Me.btnClear.Location = New System.Drawing.Point(476, 3)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(171, 41)
+        Me.btnClear.TabIndex = 50
+        Me.btnClear.Text = "Nuevo Timbrado"
+        Me.btnClear.UseVisualStyleBackColor = False
+        '
+        'cantidadRFID
+        '
+        Me.cantidadRFID.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cantidadRFID.AutoSize = True
+        Me.cantidadRFID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.cantidadRFID.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cantidadRFID.Location = New System.Drawing.Point(653, 3)
+        Me.cantidadRFID.Margin = New System.Windows.Forms.Padding(3)
+        Me.cantidadRFID.Name = "cantidadRFID"
+        Me.TableLayoutPanel1.SetRowSpan(Me.cantidadRFID, 2)
+        Me.cantidadRFID.Size = New System.Drawing.Size(112, 88)
+        Me.cantidadRFID.TabIndex = 48
+        Me.cantidadRFID.Text = "0"
+        Me.cantidadRFID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'MsnVincular
+        '
+        Me.MsnVincular.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MsnVincular.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel1.SetColumnSpan(Me.MsnVincular, 3)
+        Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MsnVincular.Location = New System.Drawing.Point(3, 97)
+        Me.MsnVincular.Margin = New System.Windows.Forms.Padding(3)
+        Me.MsnVincular.Name = "MsnVincular"
+        Me.MsnVincular.Size = New System.Drawing.Size(762, 26)
+        Me.MsnVincular.TabIndex = 28
+        Me.MsnVincular.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'dgvTagList
         '
@@ -1365,13 +1504,14 @@ Partial Class frmLector
         Me.dgvTagList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvTagList.EnableHeadersVisualStyles = False
         Me.dgvTagList.GridColor = System.Drawing.Color.LightGray
-        Me.dgvTagList.Location = New System.Drawing.Point(594, 3)
+        Me.dgvTagList.Location = New System.Drawing.Point(771, 3)
         Me.dgvTagList.Name = "dgvTagList"
         Me.dgvTagList.ReadOnly = True
         Me.dgvTagList.RowHeadersVisible = False
+        Me.TableLayoutPanel1.SetRowSpan(Me.dgvTagList, 3)
         Me.dgvTagList.RowTemplate.Height = 24
         Me.dgvTagList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvTagList.Size = New System.Drawing.Size(408, 84)
+        Me.dgvTagList.Size = New System.Drawing.Size(409, 120)
         Me.dgvTagList.TabIndex = 47
         '
         'clnEPC
@@ -1402,42 +1542,12 @@ Partial Class frmLector
         '
         Me.CodBarras.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CodBarras.Location = New System.Drawing.Point(3, 30)
+        Me.CodBarras.Location = New System.Drawing.Point(3, 32)
         Me.CodBarras.Name = "CodBarras"
-        Me.CodBarras.Size = New System.Drawing.Size(408, 30)
+        Me.TableLayoutPanel1.SetRowSpan(Me.CodBarras, 2)
+        Me.CodBarras.Size = New System.Drawing.Size(467, 30)
         Me.CodBarras.TabIndex = 25
-        '
-        'btnLimpiarRFID
-        '
-        Me.btnLimpiarRFID.Location = New System.Drawing.Point(1008, 3)
-        Me.btnLimpiarRFID.Name = "btnLimpiarRFID"
-        Me.btnLimpiarRFID.Size = New System.Drawing.Size(92, 25)
-        Me.btnLimpiarRFID.TabIndex = 3
-        Me.btnLimpiarRFID.Text = "Limpiar"
-        Me.btnLimpiarRFID.UseVisualStyleBackColor = True
-        '
-        'btnClear
-        '
-        Me.btnClear.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.btnClear.BackColor = System.Drawing.Color.MediumSeaGreen
-        Me.btnClear.ForeColor = System.Drawing.Color.White
-        Me.btnClear.Location = New System.Drawing.Point(417, 32)
-        Me.btnClear.Name = "btnClear"
-        Me.btnClear.Size = New System.Drawing.Size(92, 25)
-        Me.btnClear.TabIndex = 2
-        Me.btnClear.Text = "Nuevo Timbrado"
-        Me.btnClear.UseVisualStyleBackColor = False
-        '
-        'MsnVincular
-        '
-        Me.MsnVincular.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.MsnVincular.AutoSize = True
-        Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MsnVincular.Location = New System.Drawing.Point(3, 90)
-        Me.MsnVincular.Name = "MsnVincular"
-        Me.MsnVincular.Size = New System.Drawing.Size(0, 18)
-        Me.MsnVincular.TabIndex = 28
-        Me.MsnVincular.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.CodBarras.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TableLayoutPanel2
         '
@@ -1449,12 +1559,12 @@ Partial Class frmLector
         Me.TableLayoutPanel2.Controls.Add(Me.lblTotalCount, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 108)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 126)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1183, 30)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1183, 36)
         Me.TableLayoutPanel2.TabIndex = 46
         '
         'lblTotalCount
@@ -1462,7 +1572,7 @@ Partial Class frmLector
         Me.lblTotalCount.AutoSize = True
         Me.lblTotalCount.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblTotalCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
-        Me.lblTotalCount.Location = New System.Drawing.Point(239, 10)
+        Me.lblTotalCount.Location = New System.Drawing.Point(239, 16)
         Me.lblTotalCount.Name = "lblTotalCount"
         Me.lblTotalCount.Size = New System.Drawing.Size(53, 20)
         Me.lblTotalCount.TabIndex = 48
@@ -1475,7 +1585,7 @@ Partial Class frmLector
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
         Me.Label3.ImageAlign = System.Drawing.ContentAlignment.BottomRight
-        Me.Label3.Location = New System.Drawing.Point(3, 10)
+        Me.Label3.Location = New System.Drawing.Point(3, 16)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(230, 20)
         Me.Label3.TabIndex = 47
@@ -1493,7 +1603,7 @@ Partial Class frmLector
         Me.TableLayoutPanel3.Controls.Add(Me.cbxInventory, 2, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.btnStartInventoryEx, 1, 0)
         Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 138)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 162)
         Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
@@ -2480,6 +2590,54 @@ Partial Class frmLector
         Me.DataGridView3.Size = New System.Drawing.Size(1189, 245)
         Me.DataGridView3.TabIndex = 2
         '
+        'op
+        '
+        Me.op.HeaderText = "OP"
+        Me.op.Name = "op"
+        Me.op.ReadOnly = True
+        '
+        'corte
+        '
+        Me.corte.HeaderText = "Corte"
+        Me.corte.Name = "corte"
+        Me.corte.ReadOnly = True
+        '
+        'subcorte
+        '
+        Me.subcorte.HeaderText = "Sub_Corte"
+        Me.subcorte.Name = "subcorte"
+        Me.subcorte.ReadOnly = True
+        '
+        'talla
+        '
+        Me.talla.HeaderText = "Talla"
+        Me.talla.Name = "talla"
+        Me.talla.ReadOnly = True
+        '
+        'linea
+        '
+        Me.linea.HeaderText = "Linea"
+        Me.linea.Name = "linea"
+        Me.linea.ReadOnly = True
+        '
+        'id_talla
+        '
+        Me.id_talla.HeaderText = "ID"
+        Me.id_talla.Name = "id_talla"
+        Me.id_talla.ReadOnly = True
+        '
+        'fecha
+        '
+        Me.fecha.HeaderText = "Fecha"
+        Me.fecha.Name = "fecha"
+        Me.fecha.ReadOnly = True
+        '
+        'id_rfid
+        '
+        Me.id_rfid.HeaderText = "RFID"
+        Me.id_rfid.Name = "id_rfid"
+        Me.id_rfid.ReadOnly = True
+        '
         'frmLector
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2499,6 +2657,8 @@ Partial Class frmLector
         Me.tabControl.ResumeLayout(False)
         Me.tpPerformance.ResumeLayout(False)
         Me.tablaContenConf.ResumeLayout(False)
+        Me.gbxEPCSettings.ResumeLayout(False)
+        Me.gbxEPCSettings.PerformLayout()
         Me.GroupBox8.ResumeLayout(False)
         Me.GroupBox8.PerformLayout()
         Me.gbxScanMode.ResumeLayout(False)
@@ -2531,7 +2691,6 @@ Partial Class frmLector
         Me.gbxInventoryEx.ResumeLayout(False)
         Me.tablaContenedorTimbrado.ResumeLayout(False)
         Me.tabaLadoTimbrado.ResumeLayout(False)
-        Me.tabaLadoTimbrado.PerformLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
@@ -2707,8 +2866,6 @@ Partial Class frmLector
     Friend WithEvents cb922_25 As CheckBox
     Friend WithEvents Button2 As Button
     Friend WithEvents btnSetFrequency As Button
-    Friend WithEvents btnLimpiarRFID As Button
-    Friend WithEvents btnClear As Button
     Friend WithEvents CodBarras As TextBox
     Friend WithEvents btnStopInventoryEx As Button
     Friend WithEvents cbxInventory As ComboBox
@@ -2717,13 +2874,6 @@ Partial Class frmLector
     Friend WithEvents tabaLadoTimbrado As TableLayoutPanel
     Friend WithEvents MsnVincular As Label
     Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents op As DataGridViewTextBoxColumn
-    Friend WithEvents corte As DataGridViewTextBoxColumn
-    Friend WithEvents subcorte As DataGridViewTextBoxColumn
-    Friend WithEvents talla As DataGridViewTextBoxColumn
-    Friend WithEvents linea As DataGridViewTextBoxColumn
-    Friend WithEvents id_talla As DataGridViewTextBoxColumn
-    Friend WithEvents fecha As DataGridViewTextBoxColumn
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents lblTotalCount As Label
@@ -2735,4 +2885,26 @@ Partial Class frmLector
     Friend WithEvents clnCount As DataGridViewTextBoxColumn
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
     Friend WithEvents btnGetFrequency As Button
+    Friend WithEvents cantidadRFID As Label
+    Friend WithEvents gbxEPCSettings As GroupBox
+    Friend WithEvents btnGetSessionTarget As Button
+    Friend WithEvents cbxSession As ComboBox
+    Friend WithEvents Label33 As Label
+    Friend WithEvents cbxTarget As ComboBox
+    Friend WithEvents btnSetSessionTarget As Button
+    Friend WithEvents Label32 As Label
+    Friend WithEvents btnGetQValue As Button
+    Friend WithEvents cbxQValue As ComboBox
+    Friend WithEvents btnSetQValue As Button
+    Friend WithEvents Label31 As Label
+    Friend WithEvents btnLimpiarRFID As Button
+    Friend WithEvents btnClear As Button
+    Friend WithEvents op As DataGridViewTextBoxColumn
+    Friend WithEvents corte As DataGridViewTextBoxColumn
+    Friend WithEvents subcorte As DataGridViewTextBoxColumn
+    Friend WithEvents talla As DataGridViewTextBoxColumn
+    Friend WithEvents linea As DataGridViewTextBoxColumn
+    Friend WithEvents id_talla As DataGridViewTextBoxColumn
+    Friend WithEvents fecha As DataGridViewTextBoxColumn
+    Friend WithEvents id_rfid As DataGridViewTextBoxColumn
 End Class

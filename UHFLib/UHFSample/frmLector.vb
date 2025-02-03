@@ -30,6 +30,7 @@ Public Class frmLector
     ' Cola concurrente para almacenar los valores de CodBarras
     Private CodBarrasQueue As New ConcurrentQueue(Of String)()
     Private IsProcessingQueue As Boolean = False
+    Private cacheRFID As New Dictionary(Of String, Boolean)
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
@@ -44,8 +45,11 @@ Public Class frmLector
     End Sub
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'DeshabilitarControles(tpInventory, False) ' Desactivar "tpInventory"
-        'tabControl.TabPages.Remove(tpPapper)
+        Console.WriteLine($"Dime si existe Cache")
+        For Each kvp As KeyValuePair(Of String, Boolean) In cacheRFID
+            Console.WriteLine("Clave: " & kvp.Key & " - Valor: " & kvp.Value.ToString())
+        Next
+
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -117,6 +121,36 @@ Public Class frmLector
             .Add(New ComboBoxItem(True, ActiveMode.READ, "Read"))
             .Add(New ComboBoxItem(False, ActiveMode.COMMAND, "Command"))
         End With
+
+        With cbxQValue.Items
+            .Clear()
+            .Add(New ComboBoxItem(0, "0"))
+            .Add(New ComboBoxItem(1, "1"))
+            .Add(New ComboBoxItem(2, "2"))
+            .Add(New ComboBoxItem(3, "3"))
+            .Add(New ComboBoxItem(True, 4, "4"))
+            .Add(New ComboBoxItem(5, "5"))
+            .Add(New ComboBoxItem(6, "6"))
+            .Add(New ComboBoxItem(7, "7"))
+            .Add(New ComboBoxItem(8, "8"))
+            .Add(New ComboBoxItem(9, "9"))
+            .Add(New ComboBoxItem(10, "10"))
+            .Add(New ComboBoxItem(11, "11"))
+            .Add(New ComboBoxItem(12, "12"))
+            .Add(New ComboBoxItem(13, "13"))
+            .Add(New ComboBoxItem(14, "14"))
+            .Add(New ComboBoxItem(15, "15"))
+        End With
+
+        With cbxSession.Items
+            .Add(New ComboBoxItem(True, Session.S0, "S0"))
+            .Add(New ComboBoxItem(Session.S1, "S1"))
+            .Add(New ComboBoxItem(Session.S2, "S2"))
+            .Add(New ComboBoxItem(Session.S3, "S3"))
+            .Add(New ComboBoxItem(Session.SL, "SL"))
+        End With
+
+        cbxTarget.Items.AddRange(m_oSessionSLItems)
 
         'CodBarras.Text = ""
         tabControl.Enabled = False
@@ -255,8 +289,18 @@ Public Class frmLector
             tabControl.Enabled = True
             btnWifiSetting.Enabled = True
             btnConnect.Text = "Desconectar"
+            'ObtenerRfPotencia()
+            'SaveRfPotencia()
+            'ObtenerRfSensibilidad()
+            'SaveRfSencibiliad()
             ObtenerInvActivo()
             SaveInvActivo()
+            'ObtenerRepeatInterval()
+            'saveRepeatInterval()
+            'ObtenerQ()
+            'SaveQ()
+            'ObtenerSessTarj()
+            'SaveSessTar()
             AlertaOk("Conexion", Color.FromArgb(16, 175, 76), 30, "Exitosa al reader.")
         End If
         _host.NetDeviceSearcherEnabled = True
@@ -375,7 +419,6 @@ Public Class frmLector
     Private m_bIsInventoryProcessing As Boolean
     Private Sub btnStartInventory_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         StartInventory()
-        Console.WriteLine($"Codigo RFID-->{ObtenerPCEPC()}")
     End Sub
 
     Private Sub StartInventory()
@@ -410,9 +453,11 @@ Public Class frmLector
     End Sub
 
     Private Sub ClearTagListView()
+        Console.WriteLine("Ejecutando ClearTagListView()...")
         dgvTagList.Rows.Clear()
         _tagList.Clear()
-        'CountTags()
+        ActualizarCantidadRFID()
+        CodBarras.Focus()
     End Sub
     Private Sub CountTags()
         lblTotalCount.Text = _tagList.Count
@@ -451,41 +496,16 @@ Public Class frmLector
                     MessageBox.Show("Error: Índice de fila fuera de rango.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Exit Sub
                 End If
+                ActualizarCantidadRFID() ' Llamar función para actualizar el label
             End If
         Catch ex As Exception
             MessageBox.Show("Error en _ts80O_OnTagPresented: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
-
-    'Private Sub _ts800_OnTagPresentedEx(sender As Object, tagDecodeInformation As DecodedTagData) Handles _ts800.OnTagPresentedEx
-    '    Dim oRow As DataGridViewRow
-    '    Dim iRowIndex As Integer
-    '    Dim szPCEPC As String
-    '    Dim szTID As String
-
-    '    For Each oData In tagDecodeInformation.Data
-    '        Select Case oData.OutputDataType
-    '            Case oData.DataType.TagData_PC_EPC, oData.DataType.TagData_EPC
-    '                szPCEPC = oData.ToString
-    '        End Select
-    '    Next oData
-    '    szTID = tagDecodeInformation.TID.ToHexString
-
-    '    iRowIndex = _tagList.IndexOf(szPCEPC)
-    '    If iRowIndex <> -1 Then
-    '        oRow = dgvTagList.Rows(iRowIndex)
-    '        oRow.Cells(2).Value = oRow.Cells(2).Value + 1
-    '    Else
-    '        _tagList.Add(szPCEPC)
-    '        iRowIndex = dgvTagList.Rows.Add()
-    '        oRow = dgvTagList.Rows(iRowIndex)
-    '        oRow.Cells(0).Value = szPCEPC
-    '        oRow.Cells(1).Value = szTID
-    '        oRow.Cells(2).Value = 1
-    '        CountTags()
-    '    End If
-    'End Sub
+    Private Sub ActualizarCantidadRFID()
+        Dim totalRFID As Integer = If(dgvTagList.AllowUserToAddRows, dgvTagList.Rows.Count - 1, dgvTagList.Rows.Count)
+        cantidadRFID.Text = $"{totalRFID}"
+    End Sub
 
     Private Sub btnGetIO_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim resultMessage As String = ""
@@ -597,86 +617,19 @@ Public Class frmLector
     End Sub
 
     Private Sub btnSetDelimiter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'Dim delimiterValue As New HashSet(Of PostDataDelimiter)
-        'Dim result As Boolean
-        'If chkDelimiterCR.Checked Then
-        '    delimiterValue.Add(PostDataDelimiter.Carriage)
-        'End If
-        'If chkDelimiterLine.Checked Then
-        '    delimiterValue.Add(PostDataDelimiter.Line)
-        'End If
-        'If chkDelimiterTab.Checked Then
-        '    delimiterValue.Add(PostDataDelimiter.TAB)
-        'End If
-        'result = _ts800.SetPostDataDelimiter(False, delimiterValue)
-        'If result Then
-        '    MsgBox("Set Post Data Delimiter Successful.")
-        'Else
-        '    MsgBox("Set Post Data Delimiter Failed.")
-        'End If
+
     End Sub
 
     Private Sub btnGetDelimiter_Click(sender As Object, e As EventArgs)
-        'Dim postDelimiterSet As HashSet(Of PostDataDelimiter)
-        'postDelimiterSet = _ts800.GetPostDataDelimiter(False)
-        'chkDelimiterCR.Checked = False
-        'chkDelimiterLine.Checked = False
-        'chkDelimiterTab.Checked = False
-        'For Each delimiter As PostDataDelimiter In postDelimiterSet
-        '    Select Case delimiter
-        '        Case PostDataDelimiter.Carriage
-        '            chkDelimiterCR.Checked = True
-        '        Case PostDataDelimiter.Line
-        '            chkDelimiterLine.Checked = True
-        '        Case PostDataDelimiter.TAB
-        '            chkDelimiterTab.Checked = True
-        '    End Select
-        'Next delimiter
+
     End Sub
 
     Private Sub btnSetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'Dim encodeTypeSet As HashSet(Of TagDataEncodeType)
-        'Dim result As Boolean
-        'encodeTypeSet = New HashSet(Of TagDataEncodeType)
-        'If (chkUdc.Checked) Then
-        '    encodeTypeSet.Add(TagDataEncodeType.UDC)
-        'End If
-        'If (chkEanUpc.Checked) Then
-        '    encodeTypeSet.Add(TagDataEncodeType.EAN_UPC)
-        'End If
-        'If (chkEanUpcEas.Checked) Then
-        '    encodeTypeSet.Add(TagDataEncodeType.EAN_UPC_EAS)
-        'End If
-        'If (chkRawData.Checked) Then
-        '    encodeTypeSet.Add(TagDataEncodeType.RAW_DATA)
-        'End If
-        'result = _ts100.SetFilter(False, encodeTypeSet)
-        'If result Then
-        '    MsgBox("Set Filter Successful.")
-        'Else
-        '    MsgBox("Set Filter Failed.")
-        'End If
+
     End Sub
 
     Private Sub btnGetFilter_Click(sender As Object, e As EventArgs)
-        'Dim encoeFilterSet As HashSet(Of TagDataEncodeType)
-        'chkUdc.Checked = False
-        'chkEanUpc.Checked = False
-        'chkEanUpcEas.Checked = False
-        'chkRawData.Checked = False
-        'encoeFilterSet = _ts800.GetFilter(False)
-        'For Each decodedType As TagDataEncodeType In encoeFilterSet
-        '    Select Case decodedType
-        '        Case TagDataEncodeType.UDC
-        '            chkUdc.Checked = True
-        '        Case TagDataEncodeType.EAN_UPC
-        '            chkEanUpc.Checked = True
-        '        Case TagDataEncodeType.EAN_UPC_EAS
-        '            chkEanUpcEas.Checked = True
-        '        Case TagDataEncodeType.RAW_DATA
-        '            chkRawData.Checked = True
-        '    End Select
-        'Next decodedType
+
     End Sub
 
     Private Sub InitializeUI()
@@ -698,28 +651,6 @@ Public Class frmLector
 
         ' Configurar la pestaña de inventario
         tabControl.SelectedTab = tpInventory
-    End Sub
-
-    Private Sub btnSetRfPower_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim power As Integer
-        Dim result As Boolean = False
-        power = tbRfPower.Value
-        result = _ts800.SetRfPower(False, power)
-        If result Then
-            MsgBox("Set RF Power Successful.")
-        Else
-            MsgBox("Set RF Power Failed.")
-        End If
-    End Sub
-
-    Private Sub btnGetRfPower_Click(sender As Object, e As EventArgs)
-        Dim power As Integer
-        power = _ts800.GetRfPower(False)
-        tbRfPower.Value = power
-    End Sub
-
-    Private Sub tbRfPower_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        lblRfPower.Text = tbRfPower.Value & " dBm"
     End Sub
 
     Private Sub btnSetFrequency_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -752,89 +683,6 @@ Public Class frmLector
     Private Sub btnGetBuzzerOperationMode_Click(sender As Object, e As EventArgs)
         Dim buzzerOperationMode As BuzzerOperationMode
         buzzerOperationMode = _ts800.GetBuzzerOperationMode(False)
-    End Sub
-
-    Private Sub tbRfSensitivity_ValueChanged(sender As Object, e As EventArgs)
-        lblRfSensitivity.Text = "Level " & tbRfSensitivity.Value
-    End Sub
-
-    Private Sub btnSetRfSensitivity_Click(sender As Object, e As EventArgs)
-        Dim rfSensitivityValue As RfSensitivityLevel = RfSensitivityLevel.LEVEL_7
-        Dim result As Boolean = False
-        Select Case tbRfSensitivity.Value
-            Case 1
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_1_LOWEST
-            Case 2
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_2
-            Case 3
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_3
-            Case 4
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_4
-            Case 5
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_5
-            Case 6
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_6
-            Case 7
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_7
-            Case 8
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_8
-            Case 9
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_9
-            Case 10
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_10
-            Case 11
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_11
-            Case 12
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_12
-            Case 13
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_13
-            Case 14
-                rfSensitivityValue = RfSensitivityLevel.LEVEL_14_HIGHEST
-        End Select
-        result = _ts800.SetRfSensitivity(False, rfSensitivityValue)
-        If result Then
-            MsgBox("Set RF Sensitivity Successful.")
-        Else
-            MsgBox("Set RF Sensitivity Failed.")
-        End If
-    End Sub
-
-    Private Sub btnGetRfSensitivity_Click(sender As Object, e As EventArgs)
-        Dim sensitivity As Integer
-        sensitivity = _ts800.GetRfSensitivity(False)
-        If sensitivity <> 0 Then
-            Select Case sensitivity
-                Case RfSensitivityLevel.LEVEL_1_LOWEST
-                    sensitivity = 1
-                Case RfSensitivityLevel.LEVEL_2
-                    sensitivity = 2
-                Case RfSensitivityLevel.LEVEL_3
-                    sensitivity = 3
-                Case RfSensitivityLevel.LEVEL_4
-                    sensitivity = 4
-                Case RfSensitivityLevel.LEVEL_5
-                    sensitivity = 5
-                Case RfSensitivityLevel.LEVEL_6
-                    sensitivity = 6
-                Case RfSensitivityLevel.LEVEL_7
-                    sensitivity = 7
-                Case RfSensitivityLevel.LEVEL_8
-                    sensitivity = 8
-                Case RfSensitivityLevel.LEVEL_9
-                    sensitivity = 9
-                Case RfSensitivityLevel.LEVEL_10
-                    sensitivity = 10
-                Case RfSensitivityLevel.LEVEL_11
-                    sensitivity = 11
-                Case RfSensitivityLevel.LEVEL_12
-                    sensitivity = 12
-                Case RfSensitivityLevel.LEVEL_13
-                    sensitivity = 13
-                Case RfSensitivityLevel.LEVEL_14_HIGHEST
-                    sensitivity = 14
-            End Select
-            tbRfSensitivity.Value = sensitivity
-        End If
     End Sub
 
     Private Sub btnSetRxDecode_Click(sender As Object, e As EventArgs)
@@ -915,9 +763,6 @@ Public Class frmLector
     Private Sub _uhf_OnErrorOccurred(errorCode As ErrorCode, errorMessage As String) Handles _ts800.OnErrorOccurred
         Console.WriteLine("errorCode: " & errorCode & vbTab & "errorMessage: " & errorMessage)
     End Sub
-    Private Sub cbxSession_SelectedIndexChanged(sender As Object, e As EventArgs)
-
-    End Sub
 
     Private m_oSessionSLItems() As ComboBoxItem =
         {
@@ -932,26 +777,6 @@ Public Class frmLector
             New ComboBoxItem(Target.B, "B"),
             New ComboBoxItem(Target.A_B, "A <-> B")
         }
-
-    Private Sub btnSetQValue_Click(sender As Object, e As EventArgs)
-        Dim result As Boolean = False
-    End Sub
-
-
-    Private Sub btnGetQValue_Click(sender As Object, e As EventArgs)
-        Dim qValue As Integer
-        qValue = _ts800.GetQValue(False)
-    End Sub
-
-    Private Sub btnSetSessionTarget_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub btnGetSessionTarget_Click(sender As Object, e As EventArgs)
-        Dim session As Session
-        Dim target As Target
-        _ts800.GetSessionAndTarget(False, session, target)
-    End Sub
 
     Private Sub _host_OnPortStateChanged(sender As Object, portName As String, portState As Host.PortState) Handles _host.OnPortStateChanged
         Dim iIndex As Integer = -1
@@ -990,27 +815,13 @@ Public Class frmLector
     End Sub
 
     Private Sub BtnSetEventType_Click(sender As Object, e As EventArgs)
-        'Dim eventType As EventType
-        'Dim result As Boolean
-        'eventType = ComboBoxItem.GetCurrentItemValue(cbxEventType)
-        'result = _ts800.SetEventType(False, eventType)
-        'If result Then
-        '    MsgBox("Set Event Type Successful.")
-        'Else
-        '    MsgBox("Set Event Type Failed.")
-        'End If
+
     End Sub
 
     Private Sub btnGetEventType_Click(sender As Object, e As EventArgs)
         'Dim eventType As EventType
         'eventType = _ts800.GetEventType(False)
         'ComboBoxItem.SelectItemByValue(cbxEventType, eventType)
-    End Sub
-
-    Private Sub btnGetTagPresentRepeatInterval_Click(sender As Object, e As EventArgs)
-        Dim tagPresentedRepeatInterval As Integer
-        tagPresentedRepeatInterval = _ts800.GetTagPresentedRepeatInterval(False)
-        nudTagPresentRepeatInterval.Value = tagPresentedRepeatInterval
     End Sub
 
     Private Sub btnGetRemoveThreshold_Click(sender As Object, e As EventArgs)
@@ -1088,7 +899,6 @@ Public Class frmLector
             Dim fontSize As Single = Math.Max(8, Me.ClientSize.Width / 50)
             Dim fontSize1 As Single = Math.Max(10, Me.ClientSize.Width / 100)
             Dim fontSize2 As Single = Math.Max(10, Me.ClientSize.Width / 150)
-            Console.WriteLine($" <control555---{control.Name}--5555>")
             If TypeOf control Is TableLayoutPanel Then
                 ResizeTableLPCIHM2(TryCast(control, TableLayoutPanel), fontSize, fontSize1, fontSize2)
             End If
@@ -1104,7 +914,6 @@ Public Class frmLector
                     AjustarBoton(btn)
                 End If
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
-                Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
                 If control.Name = "TextBoxOP" Or control.Name = "TextBoxHM" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
@@ -1154,6 +963,7 @@ Public Class frmLector
     End Sub
     Private Sub TabInventario()
         CodBarras.Focus()
+        ActualizarCantidadRFID() ' Refrescar la cantidad de RFID al entrar en la pestaña
         ' Redimensionar elementos dentro de tablaContenedorTimbrado
         For Each control As Control In tablaContenedorTimbrado.Controls
 
@@ -1168,10 +978,8 @@ Public Class frmLector
     End Sub
     Private Sub ResizeTableLPCIHM(panel As TableLayoutPanel, fontSize As Single, fontSize1 As Single, fontSize2 As Single)
         For Each control As Control In panel.Controls
-            Console.WriteLine($"mideme--{control.Name}")
 
             If Not String.IsNullOrEmpty(control.Name) Then
-                Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
                 If TypeOf control Is TableLayoutPanel Then
                     For Each control2 As Control In control.Controls
@@ -1229,127 +1037,31 @@ Public Class frmLector
                     ' Ajustar el tamaño de la fuente del botón
                     'EstiloBoton(btn)
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
-                    AjustarBoton(btn)
+                    'AjustarBoton(btn)
                 End If
             ElseIf TypeOf control Is TableLayoutPanel Then
                 ' Llamada recursiva para manejar anidamientos
                 ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
-                Console.WriteLine($"Nombre-->{control.Name}")
                 ' Ajustar la fuente de otros controles si es necesario
                 If control.Name = "CodBarras" Or control.Name = "BuscarCodBarras" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
                     control.Font = New Font(control.Font.FontFamily, fontSize)
                 ElseIf control.Name = "Label34" Or control.Name = "Label5" Then
                     control.Font = New Font(control.Font.FontFamily, fontSize)
-                Else
-                    control.Font = New Font(control.Font.FontFamily, fontSize1)
                 End If
             End If
         Next
     End Sub
-    'Private Sub LeerCodigoRFID()
-    '    Console.WriteLine("Se ejecuta LeerCodigoRFID")
-    '    btnStartInventory.PerformClick()
-    '    btnStopInventory.PerformClick()
-    '    Dim mCodBarra As String = CodBarras.Text.Trim()
-    '    Dim sCodigoRFID As String = ObtenerPCEPC()
-
-    '    CodBarras.Clear()
-    '    CodBarras.Focus()
-    '    Console.WriteLine($"mCodBarra->{mCodBarra} sCodigoRFID->{sCodigoRFID}")
-
-    '    If String.IsNullOrWhiteSpace(sCodigoRFID) Then
-    '        MsnVincular.Text = "Por favor, lea un código RFID válido."
-    '        Exit Sub
-    '    End If
-    '    sCodigoRFID = "E90069150000700A8R40718C"
-    '    If String.IsNullOrWhiteSpace(mCodBarra) Then
-    '        MsnVincular.Text = "Por favor, lea un código de barras."
-    '        Exit Sub
-    '    End If
-
-    '    Console.WriteLine($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
-
-    '    ' Validar si el RFID ya existe en la base de datos
-    '    Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
-    '    Dim dataRta = m_BDPrendaScm.GetData(dictionary)
-    '    Console.WriteLine($"Sigue 1")
-    '    If dataRta.Rows.Count > 0 Then
-    '        Dim lsDatos = BuildDataString(dataRta.Rows(0))
-    '        MsnVincular.Text = $"RFID ya registrado en: {lsDatos}. Verifique."
-    '        Exit Sub
-    '    End If
-    '    Console.WriteLine($"Sigue 2")
-
-    '    ' Manejar conexión explícita para Sybase
-    '    Using connectionAse = m_BDPrenda.GetConnection()
-    '        Console.WriteLine($"Estado de la conexión antes de SetRfid: {connectionAse?.State}")
-
-    '        ' Enviar datos a Sybase
-    '        Dim lsResult = m_BDPrenda.SetRfid(connectionAse, mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
-    '        Console.WriteLine($"Resultado de SetRfid: {lsResult.Item1}, Mensaje: {lsResult.Item2}")
-    '        Console.WriteLine($"Datos devueltos por SetRfid: Filas={lsResult.Item3.Rows.Count}")
-
-    '        MsnVincular.Text = lsResult.Item2
-    '        Console.WriteLine($"Sigue 3")
-    '        If lsResult.Item1 <> 0 Then
-    '            Console.WriteLine($"Error al registrar RFID en Sybase: {lsResult.Item2}")
-    '            MsnVincular.Text = $"Error al registrar RFID en Sybase: {lsResult.Item2}"
-    '            Exit Sub
-    '        End If
-
-    '        ' Insertar datos en MySQL
-    '        dataRta = lsResult.Item3
-    '        If dataRta.Rows.Count > 0 Then
-    '            Dim row As DataRow = dataRta.Rows(0)
-    '            Dim subCorteValue As Object = If(dataRta.Columns.Contains("sub_corte"), row("sub_corte"), DBNull.Value)
-    '            Dim insertData As New Dictionary(Of String, Object) From {
-    '            {"id_rfid", sCodigoRFID},
-    '            {"id_barras", row("etiqueta")},
-    '            {"op", row("op")},
-    '            {"corte", row("corte")},
-    '            {"subcorte", subCorteValue},
-    '            {"cod_talla", row("cod_talla")},
-    '            {"id_talla", row("id_talla")},
-    '            {"talla", row("talla")},
-    '            {"cod_combinacion", row("cod_comb")},
-    '            {"color", row("color")},
-    '            {"cod_trabajador", row("fotocheck")}
-    '        }
-
-    '            Dim llReturn = m_BDPrendaScm.Insert(insertData)
-    '            Console.WriteLine($"Sigue 4")
-    '            If llReturn = -1 Then
-    '                MsnVincular.Text = $"Error al registrar en MySQL: {m_BDPrendaScm.GetError()}"
-    '                Exit Sub
-    '            End If
-
-    '            Dim lsDatos = BuildDataString(row)
-    '            Console.WriteLine($"Sigue 5")
-    '            MsnVincular.Text = $"Se registró correctamente: {lsDatos}"
-    '        Else
-    '            Console.WriteLine("No se devolvieron datos de Retrieve.")
-    '            MsnVincular.Text = "Error al procesar datos. Verifique con el administrador."
-    '        End If
-    '        Console.WriteLine($"Estado de la conexión después de SetRfid: {connectionAse?.State}")
-    '    End Using
-    'End Sub
-
 
     ' Método que devuelve el valor de szPCEPC
     Private Function ObtenerPCEPC() As String
-        If dgvTagList.Rows.Count > 0 AndAlso Not dgvTagList.Rows(0).IsNewRow Then
-            Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()
+        If dgvTagList.Rows.Count = 0 OrElse dgvTagList.Rows(0).IsNewRow Then Return String.Empty
 
-            If Not String.IsNullOrEmpty(value) AndAlso value.Length > 24 Then
-                ' Retorna los últimos 24 caracteres si el valor tiene más de 24
-                Return value.Substring(value.Length - 24)
-            End If
+        Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()?.Trim().Replace(" ", "")
 
-            Return value ' Retorna el valor completo si tiene 24 o menos caracteres
-        End If
-        Return String.Empty
+        If String.IsNullOrEmpty(value) Then Return String.Empty
+        Return If(value.Length > 24, value.Substring(value.Length - 24), value)
     End Function
 
     Private Function PrimerValorRFID() As String
@@ -1371,15 +1083,16 @@ Public Class frmLector
 
     Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Enter Then
-            If enterPressed Then Exit Sub ' Prevenir múltiples ejecuciones
+            If enterPressed Then Exit Sub
             enterPressed = True
             Try
-                If CodBarras Is Nothing Then Throw New Exception("CodBarras no está inicializado.")
-                If dgvTagList Is Nothing Then Throw New Exception("dgvTagList no está inicializado.")
+                If CodBarras.Text.Trim().Length < 20 Then
+                    MostrarAlerta("Código de barras incompleto.")
+                    Exit Sub
+                End If
                 LeerCodigoRFID()
             Catch ex As Exception
-                Console.WriteLine($"Error en CodBarras_KeyDown: {ex.Message}")
-                MsnVincular.Text = "Error: " & ex.Message
+                MostrarAlerta($"Error en CodBarras_KeyDown: {ex.Message}")
             Finally
                 enterPressed = False
             End Try
@@ -1537,29 +1250,17 @@ Public Class frmLector
         Dim partes() As String = cadena.Split("~"c) ' Divide la cadena por el símbolo ~
         Dim mCodBarra As String = partes(0)
         Dim sCodigoRFID As String = partes(1)
+        sCodigoRFID = sCodigoRFID.Trim().Replace(" ", "")
 
-        Console.WriteLine($"Elemento que va guardar {mCodBarra} -- {sCodigoRFID}")
         Dim M_S_N As String = ""
 
         Dim cantLeidas As Integer = CantidadFilasLeidas()
-        Console.WriteLine($"cantLeidas->{cantLeidas}")
-        If (sCodigoRFID <> "") Then
-            Try
-                Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
-                Dim dataRta = m_BDPrendaScm.GetData(dictionary)
-
-                'Console.WriteLine($"Filas devueltas por GetData: {dataRta.Rows.Count}")
-                If dataRta.Rows.Count > 0 Then
-                    lsDatos = BuildDataString(dataRta.Rows(0))
-                    SafeUpdateTextBox(CodBarras, "")
-                    MostrarAlerta($"RFID ya registrado en: {lsDatos}. Verifique.")
-                    Exit Sub
-                End If
-            Catch ex As Exception
-                'Console.WriteLine($"Error al validar RFID: {ex.Message}")
-                MostrarAlerta("Error al validar RFID. Verifique con el administrador.")
-                Exit Sub
-            End Try
+        ' Evitar consulta si ya sabemos que este RFID está registrado
+        If cacheRFID.ContainsKey(sCodigoRFID) Then
+            SafeUpdateLabel(MsnVincular, "")
+            SafeUpdateTextBox(CodBarras, "")
+            MostrarAlerta($"Este RFID ya fue registrado.")
+            Exit Sub
         End If
 
         'Prueba
@@ -1569,13 +1270,22 @@ Public Class frmLector
 
         'Se intertan los valores al procedimento almacenado USP_SAL_EMB_CON_RFID
         'El procediento valida y muestra msn con codigo de error lugo se actualiza la taba ordenacabadostallasmov y inserta en tmp_etiq_timbradas
+        Console.WriteLine($"Se envia este valor de :{sCodigoRFID}:")
         Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
         ' Actualizar el control 'MsnVincular' de forma segura
         SafeUpdateLabel(MsnVincular, lsResult.Item2)
         If lsResult.Item1 <> 0 Then
+            If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
+                cacheRFID(sCodigoRFID) = True
+            End If
             SafeUpdateTextBox(CodBarras, "")
             MostrarAlerta($"Verificar: {lsResult.Item2}")
             Exit Sub
+        End If
+
+        If sCodigoRFID.Length > 0 Then
+            ' Guardar el RFID en caché después de una inserción exitosa
+            cacheRFID(sCodigoRFID) = True
         End If
 
         Try
@@ -1600,6 +1310,7 @@ Public Class frmLector
                 {"color", row("color")},
                 {"cod_trabajador", row("fotocheck")}
             }
+            Console.WriteLine($"sCodigoRFID-->{sCodigoRFID}")
 
             Dim llReturn = m_BDPrendaScm.Insert(insertData)
             If llReturn <> 1 Then
@@ -1611,8 +1322,6 @@ Public Class frmLector
                 insertData("fecha") = DateTime.Now
                 If insertData.ContainsKey("id_barras") Then
                     insertData.Remove("id_barras")
-                    insertData.Remove("id_rfid")
-                    insertData.Remove("cod_talla")
                     insertData.Remove("cod_combinacion")
                     insertData.Remove("color")
                     insertData.Remove("cod_trabajador")
@@ -1701,7 +1410,6 @@ Public Class frmLector
 
     Private Sub CantidadFilas()
         Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
-        Console.WriteLine($"totalRegistros-->{totalRegistros}")
         SafeUpdateLabel(lblTotalCount, CType(totalRegistros, String))
     End Sub
 
@@ -1710,7 +1418,6 @@ Public Class frmLector
         SafeUpdateControl(dgvTagList, Sub(dgv)
                                           totalRegistrosLeidos = If(dgv.AllowUserToAddRows, dgv.Rows.Count - 1, dgv.Rows.Count)
                                       End Sub)
-        Console.WriteLine($"totalRegistros leídos: {totalRegistrosLeidos}")
         Return totalRegistrosLeidos
     End Function
 
@@ -1747,50 +1454,60 @@ Public Class frmLector
     End Function
 
     Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
-        ' Obtener el código RFID
         Try
-            Dim cantLeidas As Integer = CantidadFilasLeidas()
-            If cantLeidas > 1 Then
-                MostrarAlerta("Verificar existen 2 RFID")
-                Exit Sub
-            End If
-
-            Dim rfidCode As String = ObtenerPCEPC()
-
+            ' Validar longitud del código de barras
             If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
-                Dim barcode As String = CodBarras.Text.Trim() + "~" + rfidCode
-                CodBarrasQueue.Enqueue(barcode) ' Encolar el valor
-                StartProcessingQueue() ' Iniciar el procesamiento si no está activo
-                dgvTagList.Rows.Clear()
-            End If
+                Console.WriteLine($" <----{CodBarras.Text}--->")
+                Dim cantLeidas As Integer = CantidadFilasLeidas()
+                If cantLeidas > 1 Then
+                    MostrarAlerta("Verificar existen 2 RFID")
+                    Exit Sub
+                End If
 
+                Dim rfidCode As String = ObtenerPCEPC()
+                Dim codbarr As String = CodBarras.Text.Trim()
+
+                Dim barcode As String = $"{codbarr}~{rfidCode}"
+                Console.WriteLine($"barcode::{barcode}::")
+                ' Agregar a la cola sin bloquear la interfaz
+                CodBarrasQueue.Enqueue(barcode)
+                StartProcessingQueue()
+            End If
         Catch ex As Exception
             MostrarAlerta($"Error al procesar código de barras: {ex.Message}")
         End Try
+
+        ' Limpiar DataGridView después de procesar la cola
+        SafeUpdateControl(Me, Sub(form)
+                                  form.dgvTagList.Rows.Clear()
+                                  form._tagList.Clear()
+                                  form.cantidadRFID.Text = "0"
+                              End Sub)
     End Sub
 
-    Private Sub StartProcessingQueue()
+    Private Async Sub StartProcessingQueue()
         If IsProcessingQueue Then Return
         IsProcessingQueue = True
 
-        Task.Run(Sub()
-                     While Not CodBarrasQueue.IsEmpty
-                         Dim barcode As String = Nothing ' Inicialización explícita
-                         If Not CodBarrasQueue.TryDequeue(barcode) Then
-                             Continue While
-                         End If
+        While Not CodBarrasQueue.IsEmpty
+            Dim barcode As String = Nothing
+            If Not CodBarrasQueue.TryDequeue(barcode) Then Continue While
 
-                         ' Llama a SaveCodigoRFID de forma segura
-                         SafeUpdateControl(Me, Sub(form)
-                                                   form.SaveCodigoRFID(barcode)
-                                               End Sub)
-                     End While
-                     IsProcessingQueue = False
-                 End Sub)
+            If Not String.IsNullOrEmpty(barcode) Then
+                ' Procesar código de barras en un hilo de fondo sin bloquear la UI
+                Await Task.Run(Sub() SafeUpdateControl(Me, Sub(form) form.SaveCodigoRFID(barcode)))
+            End If
+        End While
+        ' Limpiar después de procesar la cola
+        SafeUpdateControl(Me, Sub(form)
+                                  Console.WriteLine("Limpieza final después de procesar la cola...")
+                                  form.dgvTagList.Rows.Clear()
+                                  form._tagList.Clear()
+                                  form.cantidadRFID.Text = "0"
+                              End Sub)
+
+        IsProcessingQueue = False
     End Sub
-
-
-
 
     ' Método para procesar un código de barras
     Private Sub ProcessBarcode(barcode As String)
@@ -1805,16 +1522,6 @@ Public Class frmLector
         End Try
     End Sub
 
-
-    Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        dgvTagList.Rows.Clear()
-        DataGridView1.Rows.Clear()
-        _tagList.Clear()
-        CountTags()
-        MsnVincular.Text = ""
-        CodBarras.Focus()
-    End Sub
-
     Private Sub CodBarras_Bloqueado()
         CodBarras.Enabled = False
     End Sub
@@ -1823,8 +1530,10 @@ Public Class frmLector
     End Sub
 
     Private Sub CodBarras_ClearFoco()
+        RemoveHandler CodBarras.TextChanged, AddressOf CodBarras_TextChanged
         CodBarras.Clear()
         CodBarras.Focus()
+        AddHandler CodBarras.TextChanged, AddressOf CodBarras_TextChanged
     End Sub
 
     ' Deshabilitar todos los controles dentro de un TabPage
@@ -1842,7 +1551,7 @@ Public Class frmLector
         StopInventory()
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnLimpiarRFID.Click
+    Private Sub Button3_Click(sender As Object, e As EventArgs)
         ClearTagListView()
     End Sub
     Private Sub BuscarPrenda()
@@ -1914,7 +1623,6 @@ Public Class frmLector
             Dim tipo As String = "norpd"
             Dim whereParameters As New Dictionary(Of String, Object) From {{tipo, pOp}}
             Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
-            Console.WriteLine($"El valor es-->{valor}")
 
             If String.IsNullOrWhiteSpace(valor) Then
                 TextBoxOP.Text = ""
@@ -1944,13 +1652,11 @@ Public Class frmLector
     Private Sub TextBoxHM_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxHM.KeyDown
         ' Verificar si se presionó la tecla Enter o Tab
         If e.KeyCode = Keys.Enter Then
-            Console.WriteLine($"Evento-->KeyDown Tab")
             e.SuppressKeyPress = True ' Evitar el sonido "ding" del sistema
             ' Acción a realizar cuando se presiona valida HM
             ValidarHM()
         End If
         Dim controlConFoco As Control = Me.ActiveControl
-        Console.WriteLine($" KeyDown --> c {controlConFoco.Name}")
     End Sub
 
     Private Sub TextBoxHM_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxHM.KeyPress
@@ -2147,8 +1853,6 @@ Public Class frmLector
     End Sub
     Private Function SaveInvActivo() As Boolean
         Dim activeMode As ActiveMode
-        Console.WriteLine($"Imprimier valor {ComboBoxItem.GetCurrentItemValue(cbxActiveMode)} {activeMode}")
-
         ' Convertir explícitamente el valor devuelto al tipo ActiveMode
         activeMode = CType(ComboBoxItem.GetCurrentItemValue(cbxActiveMode), ActiveMode)
         Return _ts800.SetInventoryActiveMode(False, activeMode)
@@ -2171,15 +1875,6 @@ Public Class frmLector
         ComboBoxItem.SelectItemByValue(cbxScanMode, scanMode)
     End Sub
 
-    Private Sub BtnSetActiveMode_Click(sender As Object, e As EventArgs)
-        Dim result As Boolean = SaveInvActivo()
-
-        If result Then
-            AlertaOk("Establecer el modo activo", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
-        Else
-            MostrarAlerta("Error al establecer el modo activo de inventario.")
-        End If
-    End Sub
     Private Sub ObtenerInvActivo()
         Dim inventoryActiveMode As ActiveMode
         inventoryActiveMode = _ts800.GetInventoryActiveMode(False)
@@ -2190,42 +1885,6 @@ Public Class frmLector
         ObtenerInvActivo()
     End Sub
 
-    'Private Sub BtnSetTriggerType_Click(sender As Object, e As EventArgs)
-    '    Dim result As Boolean
-    '    Dim triggerTypes As New HashSet(Of TriggerType)
-    '    If chkCommand.Checked Then
-    '        triggerTypes.Add(TriggerType.Command)
-    '    End If
-    '    If chkSensor.Checked Then
-    '        triggerTypes.Add(TriggerType.Sensor)
-    '    End If
-    '    If chkDigitalInput.Checked Then
-    '        triggerTypes.Add(TriggerType.DigitalInput)
-    '    End If
-    '    result = _ts800.SetTriggerType(False, triggerTypes)
-    '    If result Then
-    '        MsgBox("Set TriggerType Successful.")
-    '    Else
-    '        MsgBox("Set TriggerType Failed.")
-    '    End If
-    'End Sub
-
-    'Private Sub BtnGetTriggerType_Click(sender As Object, e As EventArgs)
-    '    Dim triggerTypes As New HashSet(Of TriggerType)
-    '    triggerTypes = _ts800.GetTriggerType(False)
-    '    chkCommand.Checked = False
-    '    chkSensor.Checked = False
-    '    chkDigitalInput.Checked = False
-    '    For Each type As TriggerType In triggerTypes
-    '        If type = TriggerType.Command Then
-    '            chkCommand.Checked = True
-    '        ElseIf type = TriggerType.Sensor Then
-    '            chkSensor.Checked = True
-    '        ElseIf type = TriggerType.DigitalInput Then
-    '            chkDigitalInput.Checked = True
-    '        End If
-    '    Next type
-    'End Sub
     Private Sub SafeUpdateControl(Of T As Control)(control As T, updateAction As Action(Of T))
         If control.InvokeRequired Then
             control.Invoke(New Action(Of T, Action(Of T))(AddressOf SafeUpdateControl), control, updateAction)
@@ -2262,6 +1921,11 @@ Public Class frmLector
             ' Filas alternas
             .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241) ' Gris claro
             .RowTemplate.Height = 30
+
+            ' Ajustar la columna RFID para que sea más ancha
+            If .Columns.Contains("RFID") Then
+                .Columns("RFID").Width = 250 ' Ajusta el ancho de la columna RFID según sea necesario
+            End If
         End With
     End Sub
     Private Sub MejorarDataGridView(ByVal dgv As DataGridView)
@@ -2294,13 +1958,13 @@ Public Class frmLector
         ConfigurarEstiloDataGridView(dgv)
     End Sub
 
-
     Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
         ' Configuración mejorada para el botón btnClear
         With btnViste
             .Anchor = System.Windows.Forms.AnchorStyles.Left
             .BackColor = ColorTranslator.FromHtml(bkcolor)
             .ForeColor = ColorTranslator.FromHtml(txtcolor)
+            .Dock = DockStyle.Fill
             .FlatStyle = FlatStyle.Flat
             .FlatAppearance.BorderSize = 1 ' Sin borde
             .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
@@ -2328,5 +1992,272 @@ Public Class frmLector
                 .Columns("clnTID").Visible = False
             End If
         End With
+    End Sub
+
+    Private Sub CbxSession_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxSession.SelectedIndexChanged
+        Dim session As Session
+        Dim index As Integer
+        index = cbxTarget.SelectedIndex
+        session = ComboBoxItem.GetCurrentItemValue(cbxSession)
+        With cbxTarget.Items
+            .Clear()
+            If session = Session.SL Then
+                .AddRange(m_oSessionSLItems)
+            Else
+                .AddRange(m_oSessionS0To3Items)
+            End If
+        End With
+        cbxTarget.SelectedIndex = index
+    End Sub
+
+    Private Sub BtnSetQValue_Click(sender As Object, e As EventArgs) Handles btnSetQValue.Click
+        If SaveQ() Then
+            AlertaOk("Estableció valor Q", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
+            ObtenerQ() ' 🚀 Asegura que el comboBox tenga el valor actualizado
+        Else
+            MostrarAlerta("Error al establecer valor Q.")
+        End If
+    End Sub
+    Private Function SaveSessTar() As Boolean
+        If cbxSession.SelectedItem Is Nothing OrElse cbxTarget.SelectedItem Is Nothing Then
+            MostrarAlerta("Seleccione valores para Sesión y Target.")
+            Return False
+        End If
+
+        Dim session As Session = DirectCast(cbxSession.SelectedItem, ComboBoxItem).Value
+        Dim target As Target = DirectCast(cbxTarget.SelectedItem, ComboBoxItem).Value
+
+        Dim result As Boolean = _ts800.SetSessionAndTarget(False, session, target)
+
+        ' 🚀 Si se guardó correctamente, actualizar los ComboBox
+        If result Then
+            cbxSession.SelectedItem = cbxSession.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = session)
+            cbxTarget.SelectedItem = cbxTarget.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = target)
+        End If
+
+        Return result
+    End Function
+
+    Private Sub BtnSetSessionTarget_Click(sender As Object, e As EventArgs) Handles btnSetSessionTarget.Click
+        If SaveSessTar() Then
+            AlertaOk("Estableció Sesión y Tarjeta", Color.FromArgb(16, 175, 76), 30, "Guardado correctamente.")
+            ObtenerSessTarj() ' 🚀 Asegura que los comboBox tengan el valor actualizado
+        Else
+            MostrarAlerta("Error al establecer Sesión y Tarjeta.")
+        End If
+    End Sub
+    Private Sub ObtenerSessTarj()
+        Dim session As Session
+        Dim target As Target
+
+        _ts800.GetSessionAndTarget(False, session, target)
+
+        ' 🚀 Actualizar los ComboBox con los valores obtenidos
+        If cbxSession.Items.Cast(Of ComboBoxItem)().Any(Function(x) x.Value = session) Then
+            cbxSession.SelectedItem = cbxSession.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = session)
+        End If
+
+        If cbxTarget.Items.Cast(Of ComboBoxItem)().Any(Function(x) x.Value = target) Then
+            cbxTarget.SelectedItem = cbxTarget.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = target)
+        End If
+    End Sub
+
+    Private Sub BtnGetSessionTarget_Click(sender As Object, e As EventArgs) Handles btnGetSessionTarget.Click
+        ObtenerSessTarj()
+    End Sub
+    Public Function saveRepeatInterval() As Boolean
+        Dim param As Integer
+        param = nudTagPresentRepeatInterval.Value
+        Return _ts800.SetTagPresentedRepeatInterval(False, param)
+    End Function
+    Private Sub BtnSetTagPresentRepeatInterval_Click(sender As Object, e As EventArgs) Handles btnSetTagPresentRepeatInterval.Click
+        Dim result As Boolean = saveRepeatInterval()
+
+        If result Then
+            AlertaOk("Establecio Intervalo de repeticion", Color.FromArgb(16, 175, 76), 30, "Guardao correctamente.")
+        Else
+            MostrarAlerta("Error al establecer Intervalo de repeticion.")
+        End If
+    End Sub
+
+    Public Sub ObtenerRepeatInterval()
+        Dim tagPresentedRepeatInterval As Integer
+        tagPresentedRepeatInterval = _ts800.GetTagPresentedRepeatInterval(False)
+        nudTagPresentRepeatInterval.Value = tagPresentedRepeatInterval
+    End Sub
+
+    Private Sub BtnGetTagPresentRepeatInterval_Click(sender As Object, e As EventArgs) Handles btnGetTagPresentRepeatInterval.Click
+        ObtenerRepeatInterval()
+    End Sub
+
+    Private Sub TbRfPower_ValueChanged(sender As Object, e As EventArgs) Handles tbRfPower.ValueChanged
+        lblRfPower.Text = tbRfPower.Value & " dBm"
+    End Sub
+
+    Private Sub TbRfSensitivity_ValueChanged(sender As Object, e As EventArgs) Handles tbRfSensitivity.ValueChanged
+        lblRfSensitivity.Text = "Nivel " & tbRfSensitivity.Value
+    End Sub
+    Private Sub ObtenerQ()
+        Dim qValue As Integer = _ts800.GetQValue(False)
+
+        ' 🚀 Actualizar el ComboBox con el valor obtenido
+        If cbxQValue.Items.Cast(Of ComboBoxItem)().Any(Function(x) x.Value = qValue) Then
+            cbxQValue.SelectedItem = cbxQValue.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = qValue)
+        End If
+    End Sub
+    Private Sub BtnGetQValue_Click(sender As Object, e As EventArgs) Handles btnGetQValue.Click
+        ObtenerQ()
+    End Sub
+
+    Private Function SaveQ() As Boolean
+        If cbxQValue.SelectedItem Is Nothing Then
+            MostrarAlerta("Seleccione un valor para Q.")
+            Return False
+        End If
+
+        Dim qValue As Integer = DirectCast(cbxQValue.SelectedItem, ComboBoxItem).Value
+        Dim result As Boolean = _ts800.SetQValue(False, qValue)
+
+        ' 🚀 Si se guardó correctamente, actualizar el ComboBox
+        If result Then
+            cbxQValue.SelectedItem = cbxQValue.Items.Cast(Of ComboBoxItem)().FirstOrDefault(Function(x) x.Value = qValue)
+        End If
+
+        Return result
+    End Function
+
+    Private Sub BtnSetActiveMode_Click(sender As Object, e As EventArgs) Handles btnSetActiveMode.Click
+        Dim result As Boolean = SaveInvActivo()
+
+        If result Then
+            AlertaOk("Establecer el modo activo", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
+        Else
+            MostrarAlerta("Error al establecer el modo activo de inventario.")
+        End If
+    End Sub
+    Private Sub ObtenerRfSensibilidad()
+        Dim sensitivity As Integer
+        sensitivity = _ts800.GetRfSensitivity(False)
+        If sensitivity <> 0 Then
+            Select Case sensitivity
+                Case RfSensitivityLevel.LEVEL_1_LOWEST
+                    sensitivity = 1
+                Case RfSensitivityLevel.LEVEL_2
+                    sensitivity = 2
+                Case RfSensitivityLevel.LEVEL_3
+                    sensitivity = 3
+                Case RfSensitivityLevel.LEVEL_4
+                    sensitivity = 4
+                Case RfSensitivityLevel.LEVEL_5
+                    sensitivity = 5
+                Case RfSensitivityLevel.LEVEL_6
+                    sensitivity = 6
+                Case RfSensitivityLevel.LEVEL_7
+                    sensitivity = 7
+                Case RfSensitivityLevel.LEVEL_8
+                    sensitivity = 8
+                Case RfSensitivityLevel.LEVEL_9
+                    sensitivity = 9
+                Case RfSensitivityLevel.LEVEL_10
+                    sensitivity = 10
+                Case RfSensitivityLevel.LEVEL_11
+                    sensitivity = 11
+                Case RfSensitivityLevel.LEVEL_12
+                    sensitivity = 12
+                Case RfSensitivityLevel.LEVEL_13
+                    sensitivity = 13
+                Case RfSensitivityLevel.LEVEL_14_HIGHEST
+                    sensitivity = 14
+            End Select
+            tbRfSensitivity.Value = sensitivity
+        End If
+    End Sub
+    Private Sub BtnGetRfSensitivity_Click(sender As Object, e As EventArgs) Handles btnGetRfSensitivity.Click
+        ObtenerRfSensibilidad()
+    End Sub
+    Private Function SaveRfSencibiliad() As Boolean
+        Dim rfSensitivityValue As RfSensitivityLevel = RfSensitivityLevel.LEVEL_7
+        Dim result As Boolean = False
+        Select Case tbRfSensitivity.Value
+            Case 1
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_1_LOWEST
+            Case 2
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_2
+            Case 3
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_3
+            Case 4
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_4
+            Case 5
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_5
+            Case 6
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_6
+            Case 7
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_7
+            Case 8
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_8
+            Case 9
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_9
+            Case 10
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_10
+            Case 11
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_11
+            Case 12
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_12
+            Case 13
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_13
+            Case 14
+                rfSensitivityValue = RfSensitivityLevel.LEVEL_14_HIGHEST
+        End Select
+        result = _ts800.SetRfSensitivity(False, rfSensitivityValue)
+        Return result
+    End Function
+
+    Private Sub BtnSetRfSensitivity_Click(sender As Object, e As EventArgs) Handles btnSetRfSensitivity.Click
+        Dim result As Boolean = SaveRfSencibiliad()
+        If result Then
+            AlertaOk("Establecer RF Sensibilidad", Color.FromArgb(16, 175, 76), 30, "Registro correctamente.")
+        Else
+            MostrarAlerta("Error al establecer RF Sensibilidad.")
+        End If
+    End Sub
+
+    Private Function SaveRfPotencia() As Boolean
+        Dim power As Integer
+        Dim result As Boolean = False
+        power = tbRfPower.Value
+        result = _ts800.SetRfPower(False, power)
+        Return result
+    End Function
+
+    Private Sub BtnSetRfPower_Click(sender As Object, e As EventArgs) Handles btnSetRfPower.Click
+        Dim result As Boolean = SaveRfPotencia()
+        If result Then
+            AlertaOk("Establecer RF Potencia", Color.FromArgb(16, 175, 76), 30, "Registro correctamente.")
+        Else
+            MostrarAlerta("Error al establecer RF Potencia.")
+        End If
+    End Sub
+
+    Private Sub ObtenerRfPotencia()
+        Dim power As Integer
+        power = _ts800.GetRfPower(False)
+        tbRfPower.Value = power
+    End Sub
+    Private Sub BtnGetRfPower_Click(sender As Object, e As EventArgs) Handles btnGetRfPower.Click
+        ObtenerRfPotencia()
+    End Sub
+
+    Private Sub BtnLimpiarRFID_Click(sender As Object, e As EventArgs) Handles btnLimpiarRFID.Click
+        ClearTagListView()
+        CodBarras.Text = ""
+    End Sub
+
+    Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        ClearTagListView()
+        CountTags()
+        DataGridView1.Rows.Clear()
+        MsnVincular.Text = ""
+        CodBarras.Focus()
+        CodBarras.Text = ""
     End Sub
 End Class
