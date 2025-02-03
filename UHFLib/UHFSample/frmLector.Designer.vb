@@ -132,6 +132,14 @@ Partial Class frmLector
         Me.tablaContenedorTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.tabaLadoTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_rfid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.btnLimpiarRFID = New System.Windows.Forms.Button()
         Me.btnClear = New System.Windows.Forms.Button()
@@ -143,6 +151,7 @@ Partial Class frmLector
         Me.clnCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CodBarras = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.pruebaCodigos = New System.Windows.Forms.Label()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
@@ -213,14 +222,6 @@ Partial Class frmLector
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_rfid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pnlConnect.SuspendLayout()
         Me.tabControl.SuspendLayout()
         Me.tpPerformance.SuspendLayout()
@@ -1397,6 +1398,54 @@ Partial Class frmLector
         Me.DataGridView1.Size = New System.Drawing.Size(1177, 426)
         Me.DataGridView1.TabIndex = 41
         '
+        'op
+        '
+        Me.op.HeaderText = "OP"
+        Me.op.Name = "op"
+        Me.op.ReadOnly = True
+        '
+        'corte
+        '
+        Me.corte.HeaderText = "Corte"
+        Me.corte.Name = "corte"
+        Me.corte.ReadOnly = True
+        '
+        'subcorte
+        '
+        Me.subcorte.HeaderText = "Sub_Corte"
+        Me.subcorte.Name = "subcorte"
+        Me.subcorte.ReadOnly = True
+        '
+        'talla
+        '
+        Me.talla.HeaderText = "Talla"
+        Me.talla.Name = "talla"
+        Me.talla.ReadOnly = True
+        '
+        'linea
+        '
+        Me.linea.HeaderText = "Linea"
+        Me.linea.Name = "linea"
+        Me.linea.ReadOnly = True
+        '
+        'id_talla
+        '
+        Me.id_talla.HeaderText = "ID"
+        Me.id_talla.Name = "id_talla"
+        Me.id_talla.ReadOnly = True
+        '
+        'fecha
+        '
+        Me.fecha.HeaderText = "Fecha"
+        Me.fecha.Name = "fecha"
+        Me.fecha.ReadOnly = True
+        '
+        'id_rfid
+        '
+        Me.id_rfid.HeaderText = "RFID"
+        Me.id_rfid.Name = "id_rfid"
+        Me.id_rfid.ReadOnly = True
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 4
@@ -1556,6 +1605,7 @@ Partial Class frmLector
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.pruebaCodigos, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.lblTotalCount, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1566,6 +1616,17 @@ Partial Class frmLector
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(1183, 36)
         Me.TableLayoutPanel2.TabIndex = 46
+        '
+        'pruebaCodigos
+        '
+        Me.pruebaCodigos.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.pruebaCodigos.AutoSize = True
+        Me.pruebaCodigos.Location = New System.Drawing.Point(613, 11)
+        Me.pruebaCodigos.Name = "pruebaCodigos"
+        Me.pruebaCodigos.Size = New System.Drawing.Size(14, 13)
+        Me.pruebaCodigos.TabIndex = 50
+        Me.pruebaCodigos.Text = "~"
+        Me.pruebaCodigos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblTotalCount
         '
@@ -2590,54 +2651,6 @@ Partial Class frmLector
         Me.DataGridView3.Size = New System.Drawing.Size(1189, 245)
         Me.DataGridView3.TabIndex = 2
         '
-        'op
-        '
-        Me.op.HeaderText = "OP"
-        Me.op.Name = "op"
-        Me.op.ReadOnly = True
-        '
-        'corte
-        '
-        Me.corte.HeaderText = "Corte"
-        Me.corte.Name = "corte"
-        Me.corte.ReadOnly = True
-        '
-        'subcorte
-        '
-        Me.subcorte.HeaderText = "Sub_Corte"
-        Me.subcorte.Name = "subcorte"
-        Me.subcorte.ReadOnly = True
-        '
-        'talla
-        '
-        Me.talla.HeaderText = "Talla"
-        Me.talla.Name = "talla"
-        Me.talla.ReadOnly = True
-        '
-        'linea
-        '
-        Me.linea.HeaderText = "Linea"
-        Me.linea.Name = "linea"
-        Me.linea.ReadOnly = True
-        '
-        'id_talla
-        '
-        Me.id_talla.HeaderText = "ID"
-        Me.id_talla.Name = "id_talla"
-        Me.id_talla.ReadOnly = True
-        '
-        'fecha
-        '
-        Me.fecha.HeaderText = "Fecha"
-        Me.fecha.Name = "fecha"
-        Me.fecha.ReadOnly = True
-        '
-        'id_rfid
-        '
-        Me.id_rfid.HeaderText = "RFID"
-        Me.id_rfid.Name = "id_rfid"
-        Me.id_rfid.ReadOnly = True
-        '
         'frmLector
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2907,4 +2920,5 @@ Partial Class frmLector
     Friend WithEvents id_talla As DataGridViewTextBoxColumn
     Friend WithEvents fecha As DataGridViewTextBoxColumn
     Friend WithEvents id_rfid As DataGridViewTextBoxColumn
+    Friend WithEvents pruebaCodigos As Label
 End Class

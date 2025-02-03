@@ -52,6 +52,7 @@ Partial Class PruebaConfiguracion
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.pruebaCodigos = New System.Windows.Forms.Label()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.btnStopInventoryEx = New System.Windows.Forms.Button()
         Me.cbxInventory = New System.Windows.Forms.ComboBox()
@@ -354,6 +355,7 @@ Partial Class PruebaConfiguracion
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.lblTotalCount, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.pruebaCodigos, 2, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 143)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
@@ -387,6 +389,17 @@ Partial Class PruebaConfiguracion
         Me.Label3.TabIndex = 47
         Me.Label3.Text = "Timbradas"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.BottomRight
+        '
+        'pruebaCodigos
+        '
+        Me.pruebaCodigos.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.pruebaCodigos.AutoSize = True
+        Me.pruebaCodigos.Location = New System.Drawing.Point(618, 13)
+        Me.pruebaCodigos.Name = "pruebaCodigos"
+        Me.pruebaCodigos.Size = New System.Drawing.Size(14, 13)
+        Me.pruebaCodigos.TabIndex = 49
+        Me.pruebaCodigos.Text = "~"
+        Me.pruebaCodigos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TableLayoutPanel3
         '
@@ -492,4 +505,5 @@ Partial Class PruebaConfiguracion
     Friend WithEvents btnStopInventoryEx As Button
     Friend WithEvents cbxInventory As ComboBox
     Friend WithEvents btnStartInventoryEx As Button
+    Friend WithEvents pruebaCodigos As Label
 End Class

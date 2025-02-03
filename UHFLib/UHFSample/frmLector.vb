@@ -1053,7 +1053,18 @@ Public Class frmLector
             End If
         Next
     End Sub
+    Public Function ObtenerPrimerEPC() As String
+        ' Verifica si hay filas en el DataGridView
+        If dgvTagList.Rows.Count > 0 AndAlso dgvTagList.Rows(0).Cells("clnEPC").Value IsNot Nothing Then
+            ' Obtiene el valor y elimina espacios en blanco
+            Dim valorEPC As String = dgvTagList.Rows(0).Cells("clnEPC").Value.ToString().Trim()
 
+            ' Retorna el valor si no está vacío, de lo contrario, devuelve una cadena vacía
+            Return If(String.IsNullOrEmpty(valorEPC), String.Empty, valorEPC)
+        Else
+            Return String.Empty ' Devuelve una cadena vacía si no hay datos
+        End If
+    End Function
     ' Método que devuelve el valor de szPCEPC
     Private Function ObtenerPCEPC() As String
         If dgvTagList.Rows.Count = 0 OrElse dgvTagList.Rows(0).IsNewRow Then Return String.Empty
@@ -1081,26 +1092,6 @@ Public Class frmLector
         Return String.Empty
     End Function
 
-    Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs)
-        If e.KeyCode = Keys.Enter Then
-            If enterPressed Then Exit Sub
-            enterPressed = True
-            Try
-                If CodBarras.Text.Trim().Length < 20 Then
-                    MostrarAlerta("Código de barras incompleto.")
-                    Exit Sub
-                End If
-                LeerCodigoRFID()
-            Catch ex As Exception
-                MostrarAlerta($"Error en CodBarras_KeyDown: {ex.Message}")
-            Finally
-                enterPressed = False
-            End Try
-            e.SuppressKeyPress = True
-            e.Handled = True
-        End If
-    End Sub
-
     Private Function BuildDataString(row As DataRow) As String
         Dim lsDatosList As New List(Of String) From {
             $"OP: {row("op")}",
@@ -1112,120 +1103,6 @@ Public Class frmLector
         Return String.Join(" ", lsDatosList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)))
     End Function
 
-    Private Sub LeerCodigoRFID()
-        dgvTagList.Rows.Clear()
-        Dim mCodBarra As String = CodBarras.Text.Trim()
-        Dim sCodigoRFID As String = ""
-
-        Dim M_S_N As String = ""
-
-        If String.IsNullOrWhiteSpace(mCodBarra) Then
-            MostrarAlerta("Por favor, lea un código de barras.")
-            CodBarras_Desbloqueado()
-            CodBarras_ClearFoco()
-            Exit Sub
-        End If
-
-        StartInventory()
-        Thread.Sleep(500)
-        StopInventory()
-
-        CodBarras_Bloqueado()
-        Dim cantLeidas As Integer = CantidadFilasLeidas()
-        Console.WriteLine($"cantLeidas->{cantLeidas}")
-        If (cantLeidas = 1) Then
-            sCodigoRFID = ObtenerPCEPC()
-            Console.WriteLine($"RFID->{sCodigoRFID}")
-            ' Validar si el RFID ya existe en la base de datos
-            Try
-                Dim dictionary As New Dictionary(Of String, Object) From {{"id_rfid", sCodigoRFID}}
-                Dim dataRta = m_BDPrendaScm.GetData(dictionary)
-
-                'Console.WriteLine($"Filas devueltas por GetData: {dataRta.Rows.Count}")
-                If dataRta.Rows.Count > 0 Then
-                    lsDatos = BuildDataString(dataRta.Rows(0))
-                    MostrarAlerta($"RFID ya registrado en: {lsDatos}. Verifique.")
-                    CodBarras_Desbloqueado()
-                    CodBarras_ClearFoco()
-                    Exit Sub
-                End If
-            Catch ex As Exception
-                'Console.WriteLine($"Error al validar RFID: {ex.Message}")
-                CodBarras_Desbloqueado()
-                CodBarras_ClearFoco()
-                MostrarAlerta("Error al validar RFID. Verifique con el administrador.")
-                Exit Sub
-            End Try
-        End If
-
-        'Prueba
-        'sCodigoRFID = GenerarCadenaAleatoria(24)
-
-        'Console.WriteLine($"Código de Barras: {mCodBarra}, Código RFID: {sCodigoRFID}")
-
-        'Se intertan los valores al procedimento almacenado USP_SAL_EMB_CON_RFID
-        'El procediento valida y muestra msn con codigo de error lugo se actualiza la taba ordenacabadostallasmov y inserta en tmp_etiq_timbradas
-        Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
-        MsnVincular.Text = lsResult.Item2
-        If lsResult.Item1 <> 0 Then
-            'Console.WriteLine($"Error al registrar en Sybase: {lsResult.Item2}")
-            CodBarras_Desbloqueado()
-            CodBarras_ClearFoco()
-            Exit Sub
-        End If
-
-        Try
-            Dim dataTimbrado = m_BDPrenda.GetTimbradasByWorkerAndEtiqueta(mCodTrabajador, mCodBarra)
-            If dataTimbrado.Rows.Count = 0 Then
-                M_S_N = "No se registraron datos en la tabla timbrada. Verifique con el administrador."
-                CodBarras_Desbloqueado()
-                CodBarras_ClearFoco()
-                MostrarAlerta(M_S_N)
-                Exit Sub
-            End If
-
-            Dim row As DataRow = dataTimbrado.Rows(0)
-            Dim insertData As New Dictionary(Of String, Object) From {
-                {"id_rfid", sCodigoRFID},
-                {"id_barras", row("etiqueta")},
-                {"op", row("op")},
-                {"corte", row("corte")},
-                {"subcorte", row("sub_corte")},
-                {"cod_talla", row("cod_talla")},
-                {"id_talla", row("id_talla")},
-                {"talla", row("talla")},
-                {"cod_combinacion", row("cod_comb")},
-                {"color", row("color")},
-                {"cod_trabajador", row("fotocheck")}
-            }
-
-            Dim llReturn = m_BDPrendaScm.Insert(insertData)
-            If llReturn <> 1 Then
-                M_S_N = Msn(llReturn)
-                MostrarAlerta(M_S_N)
-            Else
-                MsnVincular.Text = "Prenda registrada exitosamente."
-                ' Eliminar el elemento "id_barras" del diccionario insertData
-                insertData("fecha") = DateTime.Now
-                If insertData.ContainsKey("id_barras") Then
-                    insertData.Remove("id_barras")
-                    insertData.Remove("id_rfid")
-                    insertData.Remove("cod_talla")
-                    insertData.Remove("cod_combinacion")
-                    insertData.Remove("color")
-                    insertData.Remove("cod_trabajador")
-                End If
-                LlenarDataGridView(DataGridView1, insertData)
-                CantidadFilas()
-                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 5)
-            End If
-        Catch ex As Exception
-            Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
-            MsnVincular.Text = "Error inesperado al registrar la prenda. Consulte con el administrador."
-        End Try
-        CodBarras_Desbloqueado()
-        CodBarras_ClearFoco()
-    End Sub
     Private Sub SafeUpdateLabel(control As Label, text As String)
         If control.InvokeRequired Then
             ' Si no estamos en el subproceso principal, usar Invoke para ejecutar en el hilo adecuado
@@ -1259,7 +1136,8 @@ Public Class frmLector
         If cacheRFID.ContainsKey(sCodigoRFID) Then
             SafeUpdateLabel(MsnVincular, "")
             SafeUpdateTextBox(CodBarras, "")
-            MostrarAlerta($"Este RFID ya fue registrado.")
+            Alerta($"Error: El RFID ya existe. Verifique.", Color.FromArgb(238, 26, 36), 3, 5)
+            MostrarAlerta($"Error: El RFID ya existe. Verifique.")
             Exit Sub
         End If
 
@@ -1278,8 +1156,9 @@ Public Class frmLector
             If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
                 cacheRFID(sCodigoRFID) = True
             End If
+            Alerta($"{lsResult.Item2}", Color.FromArgb(238, 26, 36), 3, 5)
+            SafeUpdateLabel(MsnVincular, lsResult.Item2)
             SafeUpdateTextBox(CodBarras, "")
-            MostrarAlerta($"Verificar: {lsResult.Item2}")
             Exit Sub
         End If
 
@@ -1406,8 +1285,6 @@ Public Class frmLector
         End Try
     End Sub
 
-
-
     Private Sub CantidadFilas()
         Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
         SafeUpdateLabel(lblTotalCount, CType(totalRegistros, String))
@@ -1453,38 +1330,6 @@ Public Class frmLector
         Return message
     End Function
 
-    Private Sub CodBarras_TextChanged(sender As Object, e As EventArgs) Handles CodBarras.TextChanged
-        Try
-            ' Validar longitud del código de barras
-            If CodBarras.Text.Length = 20 Or CodBarras.Text.Length = 21 Then
-                Console.WriteLine($" <----{CodBarras.Text}--->")
-                Dim cantLeidas As Integer = CantidadFilasLeidas()
-                If cantLeidas > 1 Then
-                    MostrarAlerta("Verificar existen 2 RFID")
-                    Exit Sub
-                End If
-
-                Dim rfidCode As String = ObtenerPCEPC()
-                Dim codbarr As String = CodBarras.Text.Trim()
-
-                Dim barcode As String = $"{codbarr}~{rfidCode}"
-                Console.WriteLine($"barcode::{barcode}::")
-                ' Agregar a la cola sin bloquear la interfaz
-                CodBarrasQueue.Enqueue(barcode)
-                StartProcessingQueue()
-            End If
-        Catch ex As Exception
-            MostrarAlerta($"Error al procesar código de barras: {ex.Message}")
-        End Try
-
-        ' Limpiar DataGridView después de procesar la cola
-        SafeUpdateControl(Me, Sub(form)
-                                  form.dgvTagList.Rows.Clear()
-                                  form._tagList.Clear()
-                                  form.cantidadRFID.Text = "0"
-                              End Sub)
-    End Sub
-
     Private Async Sub StartProcessingQueue()
         If IsProcessingQueue Then Return
         IsProcessingQueue = True
@@ -1498,13 +1343,6 @@ Public Class frmLector
                 Await Task.Run(Sub() SafeUpdateControl(Me, Sub(form) form.SaveCodigoRFID(barcode)))
             End If
         End While
-        ' Limpiar después de procesar la cola
-        SafeUpdateControl(Me, Sub(form)
-                                  Console.WriteLine("Limpieza final después de procesar la cola...")
-                                  form.dgvTagList.Rows.Clear()
-                                  form._tagList.Clear()
-                                  form.cantidadRFID.Text = "0"
-                              End Sub)
 
         IsProcessingQueue = False
     End Sub
@@ -1530,10 +1368,8 @@ Public Class frmLector
     End Sub
 
     Private Sub CodBarras_ClearFoco()
-        RemoveHandler CodBarras.TextChanged, AddressOf CodBarras_TextChanged
         CodBarras.Clear()
         CodBarras.Focus()
-        AddHandler CodBarras.TextChanged, AddressOf CodBarras_TextChanged
     End Sub
 
     ' Deshabilitar todos los controles dentro de un TabPage
@@ -1923,8 +1759,13 @@ Public Class frmLector
             .RowTemplate.Height = 30
 
             ' Ajustar la columna RFID para que sea más ancha
-            If .Columns.Contains("RFID") Then
-                .Columns("RFID").Width = 250 ' Ajusta el ancho de la columna RFID según sea necesario
+            If .Columns.Contains("fecha") Then
+                .Columns("fecha").Width = 180 ' Ajusta el ancho de la columna RFID según sea necesario
+            End If
+
+            ' Ajustar la columna RFID para que sea más ancha
+            If .Columns.Contains("id_rfid") Then
+                .Columns("id_rfid").Width = 270 ' Ajusta el ancho de la columna RFID según sea necesario
             End If
         End With
     End Sub
@@ -2259,5 +2100,62 @@ Public Class frmLector
         MsnVincular.Text = ""
         CodBarras.Focus()
         CodBarras.Text = ""
+    End Sub
+
+    Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            ' Evita múltiples ejecuciones del evento
+            If enterPressed Then Exit Sub
+            enterPressed = True
+
+            Try
+                Dim codbarr As String = CodBarras.Text.Trim()
+                CodBarras.Clear()
+                'CodBarras.Focus()
+                ' Verificar si hay más de un RFID leído
+                Dim cantLeidas As Integer = CantidadFilasLeidas()
+                If cantLeidas > 1 Then
+                    MostrarAlerta("Verificar existen 2 RFID")
+                    CodBarras_ClearFoco()
+                    Exit Sub
+                End If
+
+                ' Obtener el código RFID y preparar el código de barras
+                Dim rfidCode As String = ObtenerPCEPC()
+                Dim barcode As String = $"{codbarr}~{rfidCode}"
+                Dim rfidCode_ As String = ObtenerPrimerEPC()
+                ' Mostrar en pantalla el valor capturado para depuración
+                Console.WriteLine($"barcode::{barcode}:: conseguido::{rfidCode_}")
+                SafeUpdateLabel(pruebaCodigos, $"barcode::{barcode}:: conseguido::{rfidCode_}")
+
+                ' Encolar la lectura del código de barras y procesarlo en segundo plano
+                CodBarrasQueue.Enqueue(barcode)
+                ' ✅ Enviar la ejecución en segundo plano sin bloquear la UI
+                Task.Run(Sub() StartProcessingQueue())
+
+            Catch ex As Exception
+                MostrarAlerta($"Error en CodBarras_KeyDown: {ex.Message}")
+            Finally
+                enterPressed = False
+            End Try
+
+            ' ✅ FORZAR REACTIVACIÓN DEL `Enter`
+            SendKeys.Send("{ENTER}")
+
+            ' Limpiar la DataGridView después de procesar la cola
+            SafeUpdateControl(Me, Sub(form)
+                                      form.dgvTagList.Rows.Clear()
+                                      form._tagList.Clear()
+                                      form.cantidadRFID.Text = "0"
+                                  End Sub)
+            ' ✅ FORZAR REACTIVACIÓN DEL `Enter` EN ASÍNCRONO
+            BeginInvoke(New Action(Sub()
+                                       CodBarras.Focus()
+                                       CodBarras.Select() ' Asegurar que el cursor esté en el TextBox
+                                   End Sub))
+            ' Evitar que el Enter produzca un sonido o afecte otros eventos
+            e.SuppressKeyPress = True
+            e.Handled = True
+        End If
     End Sub
 End Class
