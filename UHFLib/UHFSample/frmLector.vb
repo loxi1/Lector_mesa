@@ -1067,12 +1067,22 @@ Public Class frmLector
     End Function
     ' Método que devuelve el valor de szPCEPC
     Private Function ObtenerPCEPC() As String
-        If dgvTagList.Rows.Count = 0 OrElse dgvTagList.Rows(0).IsNewRow Then Return String.Empty
+        Try
+            If dgvTagList.Rows.Count = 0 OrElse dgvTagList.Rows(0).IsNewRow Then
+                Return ""
+            End If
 
-        Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()?.Trim().Replace(" ", "")
+            Dim value As String = dgvTagList.Rows(0).Cells(0).Value?.ToString()?.Trim().Replace(" ", "")
 
-        If String.IsNullOrEmpty(value) Then Return String.Empty
-        Return If(value.Length > 24, value.Substring(value.Length - 24), value)
+            If String.IsNullOrEmpty(value) Then
+                Return ""
+            Else
+                Return value
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error en ObtenerPCEPC: {ex.Message}")
+            Return ""
+        End Try
     End Function
 
     Private Function PrimerValorRFID() As String
@@ -1128,6 +1138,7 @@ Public Class frmLector
         Dim mCodBarra As String = partes(0)
         Dim sCodigoRFID As String = partes(1)
         sCodigoRFID = sCodigoRFID.Trim().Replace(" ", "")
+        sCodigoRFID = If(sCodigoRFID.Length > 24, sCodigoRFID.Substring(sCodigoRFID.Length - 24), sCodigoRFID)
 
         Dim M_S_N As String = ""
 
@@ -1345,7 +1356,19 @@ Public Class frmLector
         End While
 
         IsProcessingQueue = False
+        SetFocusCodBarras() ' ✅ Restaurar el foco inmediatamente
     End Sub
+
+    Private Sub SetFocusCodBarras()
+        If CodBarras.InvokeRequired Then
+            CodBarras.Invoke(New MethodInvoker(AddressOf SetFocusCodBarras))
+        Else
+            If Not CodBarras.Focused Then
+                CodBarras.Focus()
+            End If
+        End If
+    End Sub
+
 
     ' Método para procesar un código de barras
     Private Sub ProcessBarcode(barcode As String)
@@ -2102,7 +2125,7 @@ Public Class frmLector
         CodBarras.Text = ""
     End Sub
 
-    Private Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
+    Private Async Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
         If e.KeyCode = Keys.Enter Then
             ' Evita múltiples ejecuciones del evento
             If enterPressed Then Exit Sub
@@ -2121,17 +2144,19 @@ Public Class frmLector
                 End If
 
                 ' Obtener el código RFID y preparar el código de barras
-                Dim rfidCode As String = ObtenerPCEPC()
+                Dim rfidCode As String = Task.Run(Function() ObtenerPCEPC()).Result
+
                 Dim barcode As String = $"{codbarr}~{rfidCode}"
-                Dim rfidCode_ As String = ObtenerPrimerEPC()
+                'Dim rfidCode_ As String = ObtenerPrimerEPC()
                 ' Mostrar en pantalla el valor capturado para depuración
-                Console.WriteLine($"barcode::{barcode}:: conseguido::{rfidCode_}")
-                SafeUpdateLabel(pruebaCodigos, $"barcode::{barcode}:: conseguido::{rfidCode_}")
+                'Console.WriteLine($"barcode::{barcode}:: conseguido::{rfidCode_}")
+                'SafeUpdateLabel(pruebaCodigos, $"barcode::{barcode}:: conseguido::{rfidCode_}")
 
                 ' Encolar la lectura del código de barras y procesarlo en segundo plano
                 CodBarrasQueue.Enqueue(barcode)
-                ' ✅ Enviar la ejecución en segundo plano sin bloquear la UI
-                Task.Run(Sub() StartProcessingQueue())
+                ' ✅ Dar un pequeño respiro a la UI antes de procesar
+                Await Task.Yield()
+                StartProcessingQueue()
 
             Catch ex As Exception
                 MostrarAlerta($"Error en CodBarras_KeyDown: {ex.Message}")
@@ -2139,8 +2164,8 @@ Public Class frmLector
                 enterPressed = False
             End Try
 
-            ' ✅ FORZAR REACTIVACIÓN DEL `Enter`
-            SendKeys.Send("{ENTER}")
+            ' ✅ FORZAR REACTIVACIÓN DEL `Enter` se comento 4-02-2025
+            'SendKeys.Send("{ENTER}")
 
             ' Limpiar la DataGridView después de procesar la cola
             SafeUpdateControl(Me, Sub(form)
