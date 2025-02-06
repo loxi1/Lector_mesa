@@ -15,6 +15,11 @@ Public Class FormAlerta
         FranjaTop.BackColor = color
         Me.BackColor = ColorTranslator.FromHtml("#fff3cd")
 
+        ' Asegurar que la alerta siempre esté en primer plano
+        Me.TopMost = True
+        Me.BringToFront()
+
+
         ' Ocultar todos los iconos y mostrar el correcto
         icon_error.Visible = False
         icon_ok.Visible = False
