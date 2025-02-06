@@ -111,4 +111,12 @@ Public Class FormTrabajador
         EstiloBoton(ButtonOk)
         EstiloBoton(buttonCancelar, "#E0E0E0", "#000000", "#BDBDBD")
     End Sub
+
+    Private Sub ButtonCancelar_MouseLeave(sender As Object, e As EventArgs) Handles buttonCancelar.MouseLeave
+        buttonCancelar.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+    End Sub
+
+    Private Sub ButtonOk_MouseLeave(sender As Object, e As EventArgs) Handles ButtonOk.MouseLeave
+        ButtonOk.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+    End Sub
 End Class

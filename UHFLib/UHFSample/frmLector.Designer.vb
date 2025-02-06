@@ -1482,7 +1482,7 @@ Partial Class frmLector
         '
         'btnClear
         '
-        Me.btnClear.BackColor = System.Drawing.Color.MediumSeaGreen
+        Me.btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
         Me.btnClear.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btnClear.ForeColor = System.Drawing.Color.White
         Me.btnClear.Location = New System.Drawing.Point(476, 3)
@@ -1500,6 +1500,7 @@ Partial Class frmLector
         Me.cantidadRFID.AutoSize = True
         Me.cantidadRFID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.cantidadRFID.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cantidadRFID.ForeColor = System.Drawing.Color.Red
         Me.cantidadRFID.Location = New System.Drawing.Point(653, 3)
         Me.cantidadRFID.Margin = New System.Windows.Forms.Padding(3)
         Me.cantidadRFID.Name = "cantidadRFID"
@@ -1514,9 +1515,11 @@ Partial Class frmLector
         Me.MsnVincular.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MsnVincular.BackColor = System.Drawing.Color.FromArgb(CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer))
         Me.MsnVincular.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TableLayoutPanel1.SetColumnSpan(Me.MsnVincular, 3)
         Me.MsnVincular.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MsnVincular.ForeColor = System.Drawing.Color.FromArgb(CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer))
         Me.MsnVincular.Location = New System.Drawing.Point(3, 97)
         Me.MsnVincular.Margin = New System.Windows.Forms.Padding(3)
         Me.MsnVincular.Name = "MsnVincular"
@@ -1526,15 +1529,15 @@ Partial Class frmLector
         '
         'dgvTagList
         '
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
         Me.dgvTagList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvTagList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTagList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.SteelBlue
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         DataGridViewCellStyle4.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black
         DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
@@ -1601,9 +1604,9 @@ Partial Class frmLector
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 4
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.pruebaCodigos, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.lblTotalCount, 0, 0)
@@ -1621,19 +1624,21 @@ Partial Class frmLector
         '
         Me.pruebaCodigos.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.pruebaCodigos.AutoSize = True
-        Me.pruebaCodigos.Location = New System.Drawing.Point(613, 11)
+        Me.pruebaCodigos.Location = New System.Drawing.Point(672, 11)
         Me.pruebaCodigos.Name = "pruebaCodigos"
         Me.pruebaCodigos.Size = New System.Drawing.Size(14, 13)
         Me.pruebaCodigos.TabIndex = 50
         Me.pruebaCodigos.Text = "~"
         Me.pruebaCodigos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.pruebaCodigos.Visible = False
         '
         'lblTotalCount
         '
         Me.lblTotalCount.AutoSize = True
         Me.lblTotalCount.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblTotalCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
-        Me.lblTotalCount.Location = New System.Drawing.Point(239, 16)
+        Me.lblTotalCount.ForeColor = System.Drawing.Color.Red
+        Me.lblTotalCount.Location = New System.Drawing.Point(357, 16)
         Me.lblTotalCount.Name = "lblTotalCount"
         Me.lblTotalCount.Size = New System.Drawing.Size(53, 20)
         Me.lblTotalCount.TabIndex = 48
@@ -1645,12 +1650,13 @@ Partial Class frmLector
         Me.Label3.AutoSize = True
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(136, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.Red
         Me.Label3.ImageAlign = System.Drawing.ContentAlignment.BottomRight
         Me.Label3.Location = New System.Drawing.Point(3, 16)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(230, 20)
+        Me.Label3.Size = New System.Drawing.Size(348, 20)
         Me.Label3.TabIndex = 47
-        Me.Label3.Text = "Timbradas"
+        Me.Label3.Text = "La Cantidad De Prendas Timbradas Es:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.BottomRight
         '
         'TableLayoutPanel3
@@ -1794,6 +1800,7 @@ Partial Class frmLector
         Me.MsnBusquedaPrenda.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.MsnBusquedaPrenda.AutoSize = True
         Me.MsnBusquedaPrenda.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MsnBusquedaPrenda.ForeColor = System.Drawing.Color.Red
         Me.MsnBusquedaPrenda.Location = New System.Drawing.Point(3, 66)
         Me.MsnBusquedaPrenda.Name = "MsnBusquedaPrenda"
         Me.MsnBusquedaPrenda.Size = New System.Drawing.Size(0, 17)
@@ -1934,7 +1941,7 @@ Partial Class frmLector
         Me.tableCabecera.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.tableCabecera.BackColor = System.Drawing.Color.Linen
+        Me.tableCabecera.BackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(248, Byte), Integer), CType(CType(227, Byte), Integer))
         Me.tableCabecera.ColumnCount = 10
         Me.tableCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
         Me.tableCabecera.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
@@ -2012,7 +2019,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_op.AutoSize = True
-        Me.lbl_op.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_op.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_op.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_op.Location = New System.Drawing.Point(6, 3)
         Me.lbl_op.Name = "lbl_op"
@@ -2027,7 +2034,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_cliente.AutoSize = True
-        Me.lbl_cliente.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_cliente.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_cliente.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_cliente.Location = New System.Drawing.Point(6, 42)
         Me.lbl_cliente.Name = "lbl_cliente"
@@ -2042,7 +2049,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_shipTo.AutoSize = True
-        Me.lbl_shipTo.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_shipTo.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_shipTo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_shipTo.Location = New System.Drawing.Point(6, 81)
         Me.lbl_shipTo.Name = "lbl_shipTo"
@@ -2057,7 +2064,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Despacho.AutoSize = True
-        Me.lbl_Despacho.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Despacho.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Despacho.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Despacho.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lbl_Despacho.Location = New System.Drawing.Point(6, 198)
@@ -2073,7 +2080,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_empaque.AutoSize = True
-        Me.lbl_empaque.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_empaque.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_empaque.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_empaque.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lbl_empaque.Location = New System.Drawing.Point(6, 237)
@@ -2089,7 +2096,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_HM.AutoSize = True
-        Me.lbl_HM.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_HM.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_HM.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_HM.Location = New System.Drawing.Point(242, 3)
         Me.lbl_HM.Name = "lbl_HM"
@@ -2104,7 +2111,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_po.AutoSize = True
-        Me.lbl_po.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_po.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_po.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_po.Location = New System.Drawing.Point(478, 3)
         Me.lbl_po.Name = "lbl_po"
@@ -2119,7 +2126,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Estado.AutoSize = True
-        Me.lbl_Estado.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Estado.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Estado.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Estado.Location = New System.Drawing.Point(714, 3)
         Me.lbl_Estado.Name = "lbl_Estado"
@@ -2134,7 +2141,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Reserva.AutoSize = True
-        Me.lbl_Reserva.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Reserva.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Reserva.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Reserva.Location = New System.Drawing.Point(950, 3)
         Me.lbl_Reserva.Name = "lbl_Reserva"
@@ -2149,7 +2156,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Prenda.AutoSize = True
-        Me.lbl_Prenda.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Prenda.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Prenda.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Prenda.Location = New System.Drawing.Point(714, 42)
         Me.lbl_Prenda.Name = "lbl_Prenda"
@@ -2164,7 +2171,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_direccion_1.AutoSize = True
-        Me.lbl_direccion_1.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_direccion_1.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_direccion_1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_direccion_1.Location = New System.Drawing.Point(714, 81)
         Me.lbl_direccion_1.Name = "lbl_direccion_1"
@@ -2179,7 +2186,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_direccion_2.AutoSize = True
-        Me.lbl_direccion_2.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_direccion_2.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_direccion_2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_direccion_2.Location = New System.Drawing.Point(714, 120)
         Me.lbl_direccion_2.Name = "lbl_direccion_2"
@@ -2194,7 +2201,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Tolerancia.AutoSize = True
-        Me.lbl_Tolerancia.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Tolerancia.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Tolerancia.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Tolerancia.Location = New System.Drawing.Point(242, 159)
         Me.lbl_Tolerancia.Name = "lbl_Tolerancia"
@@ -2209,7 +2216,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Estilo.AutoSize = True
-        Me.lbl_Estilo.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Estilo.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Estilo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Estilo.Location = New System.Drawing.Point(478, 159)
         Me.lbl_Estilo.Name = "lbl_Estilo"
@@ -2224,7 +2231,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Observacion.AutoSize = True
-        Me.lbl_Observacion.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Observacion.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Observacion.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Observacion.Location = New System.Drawing.Point(596, 237)
         Me.lbl_Observacion.Name = "lbl_Observacion"
@@ -2239,7 +2246,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Certificado.AutoSize = True
-        Me.lbl_Certificado.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_Certificado.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_Certificado.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Certificado.Location = New System.Drawing.Point(596, 198)
         Me.lbl_Certificado.Name = "lbl_Certificado"
@@ -2254,7 +2261,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_NKit.AutoSize = True
-        Me.lbl_NKit.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_NKit.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_NKit.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_NKit.Location = New System.Drawing.Point(360, 198)
         Me.lbl_NKit.Name = "lbl_NKit"
@@ -2380,7 +2387,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_SitDespacho.AutoSize = True
-        Me.lbl_SitDespacho.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_SitDespacho.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_SitDespacho.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_SitDespacho.Location = New System.Drawing.Point(950, 159)
         Me.lbl_SitDespacho.Name = "lbl_SitDespacho"
@@ -2433,7 +2440,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_fEntrega.AutoSize = True
-        Me.lbl_fEntrega.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_fEntrega.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_fEntrega.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_fEntrega.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lbl_fEntrega.Location = New System.Drawing.Point(6, 159)
@@ -2461,7 +2468,7 @@ Partial Class frmLector
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_BillTo.AutoSize = True
-        Me.lbl_BillTo.BackColor = System.Drawing.Color.Turquoise
+        Me.lbl_BillTo.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(245, Byte), Integer))
         Me.lbl_BillTo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_BillTo.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lbl_BillTo.Location = New System.Drawing.Point(6, 120)

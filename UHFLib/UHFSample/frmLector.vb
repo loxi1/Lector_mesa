@@ -45,11 +45,6 @@ Public Class frmLector
     End Sub
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Console.WriteLine($"Dime si existe Cache")
-        For Each kvp As KeyValuePair(Of String, Boolean) In cacheRFID
-            Console.WriteLine("Clave: " & kvp.Key & " - Valor: " & kvp.Value.ToString())
-        Next
-
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -163,10 +158,10 @@ Public Class frmLector
         ConfigurarEstiloDataGridView(DataGridView1)
         MejorarDataGridView(DataGridView2)
         MejorarDataGridView(DataGridView3)
-        EstiloBoton(btnClear)
+        EstiloBoton(btnClear, "#d9534f", "#ffffff", "#c9302c")
         EstiloBoton(btnLimpiarRFID, "#E0E0E0", "#000000", "#BDBDBD")
         EstiloContenedorTablaRFID()
-        EstiloBoton(BtnBuscarHM)
+        EstiloBoton(BtnBuscarHM, "#3BA873", "#000000", "#0d5934")
         EstiloBoton(BtnLimpiarHM, "#E0E0E0", "#000000", "#BDBDBD")
     End Sub
 
@@ -197,9 +192,9 @@ Public Class frmLector
         Dim textColor As Color = Color.Black
 
         ' Definir colores de pestañas
-        Dim activeTabColor As Color = ColorTranslator.FromHtml("#1ABC9C") ' Verde turquesa
-        Dim inactiveTabColor As Color = ColorTranslator.FromHtml("#BDC3C7") ' Gris claro
-        Dim hoverTabColor As Color = ColorTranslator.FromHtml("#16A085") ' Verde oscuro
+        Dim activeTabColor As Color = ColorTranslator.FromHtml("#3BA873") ' Verde turquesa
+        Dim inactiveTabColor As Color = ColorTranslator.FromHtml("#F5F5F5") ' Gris claro
+        Dim hoverTabColor As Color = ColorTranslator.FromHtml("#0d5934") ' Verde oscuro
 
         ' Determinar si está en hover
         Dim mousePosition As Point = tabControl.PointToClient(Cursor.Position)
@@ -331,7 +326,6 @@ Public Class frmLector
     End Sub
 
     Private Sub btnConnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConnect.Click
-        Console.WriteLine($"Nombre text {btnConnect.Text}")
         Select Case btnConnect.Text
             Case "Conectar"
                 ConnectDevice()
@@ -1147,7 +1141,7 @@ Public Class frmLector
         If cacheRFID.ContainsKey(sCodigoRFID) Then
             SafeUpdateLabel(MsnVincular, "")
             SafeUpdateTextBox(CodBarras, "")
-            Alerta($"Error: El RFID ya existe. Verifique.", Color.FromArgb(238, 26, 36), 3, 5)
+            AlertaManager.MostrarAlerta($"Error: El RFID ya existe. Verifique.", Color.Red, 3, 10)
             MostrarAlerta($"Error: El RFID ya existe. Verifique.")
             Exit Sub
         End If
@@ -1167,7 +1161,7 @@ Public Class frmLector
             If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
                 cacheRFID(sCodigoRFID) = True
             End If
-            Alerta($"{lsResult.Item2}", Color.FromArgb(238, 26, 36), 3, 5)
+            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 5)
             SafeUpdateLabel(MsnVincular, lsResult.Item2)
             SafeUpdateTextBox(CodBarras, "")
             Exit Sub
@@ -1219,7 +1213,7 @@ Public Class frmLector
                 LlenarDataGridView(DataGridView1, insertData)
                 CantidadFilas()
                 SafeUpdateTextBox(CodBarras, "")
-                Alerta("Registrado Ok", Color.FromArgb(16, 175, 76), 1, 15)
+                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 15)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
@@ -1383,23 +1377,9 @@ Public Class frmLector
         End Try
     End Sub
 
-    Private Sub CodBarras_Bloqueado()
-        CodBarras.Enabled = False
-    End Sub
-    Private Sub CodBarras_Desbloqueado()
-        CodBarras.Enabled = True
-    End Sub
-
     Private Sub CodBarras_ClearFoco()
         CodBarras.Clear()
         CodBarras.Focus()
-    End Sub
-
-    ' Deshabilitar todos los controles dentro de un TabPage
-    Private Sub DeshabilitarControles(tabPage As TabPage, habilitar As Boolean)
-        For Each control As Control In tabPage.Controls
-            control.Enabled = habilitar
-        Next
     End Sub
 
     Private Sub BtnStartInventoryEx_Click(sender As Object, e As EventArgs) Handles btnStartInventoryEx.Click
@@ -1453,11 +1433,6 @@ Public Class frmLector
             ' Configurar estilo de encabezado
             .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 15, FontStyle.Bold) ' Fuente Arial, tamaño 10, negrita
         End With
-    End Sub
-    Private Sub BuscarCodBarras_TextChanged(sender As Object, e As EventArgs) Handles BuscarCodBarras.TextChanged
-        If BuscarCodBarras.TextLength = 20 Or BuscarCodBarras.TextLength = 21 Then
-            BuscarPrenda()
-        End If
     End Sub
 
     Private Sub TableCabecera_Paint(sender As Object, e As PaintEventArgs) Handles tableCabecera.Paint
@@ -1765,20 +1740,20 @@ Public Class frmLector
             ' Fuente y alineación
             .DefaultCellStyle.Font = New Font("Arial", 10.0!)
             .DefaultCellStyle.Padding = New Padding(5)
-            .DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue
-            .DefaultCellStyle.SelectionForeColor = Color.Black
+            .DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#0d5934")
+            .DefaultCellStyle.SelectionForeColor = Color.White
             .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
 
             ' Encabezados de columna
             .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12.0!, FontStyle.Bold)
-            .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(44, 62, 80) ' Azul oscuro
-            .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
+            .ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#E1FEDA")
+            .ColumnHeadersDefaultCellStyle.ForeColor = Color.Black
             .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised
             .EnableHeadersVisualStyles = False
 
             ' Filas alternas
-            .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241) ' Gris claro
+            .AlternatingRowsDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#CCFFFF")
             .RowTemplate.Height = 30
 
             ' Ajustar la columna RFID para que sea más ancha
@@ -1824,6 +1799,8 @@ Public Class frmLector
 
     Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
         ' Configuración mejorada para el botón btnClear
+        'btnClear, "#d9534f", "#ffffff", "#c9302c"
+        Console.WriteLine($"{btnViste.Name} Dime el texcolor-->{txtcolor}")
         With btnViste
             .Anchor = System.Windows.Forms.AnchorStyles.Left
             .BackColor = ColorTranslator.FromHtml(bkcolor)
@@ -2178,6 +2155,27 @@ Public Class frmLector
                                        CodBarras.Focus()
                                        CodBarras.Select() ' Asegurar que el cursor esté en el TextBox
                                    End Sub))
+            ' Evitar que el Enter produzca un sonido o afecte otros eventos
+            e.SuppressKeyPress = True
+            e.Handled = True
+        End If
+    End Sub
+    ' Evento cuando el mouse sale en el botón
+    Private Sub BtnClear_MouseLeave(sender As Object, e As EventArgs) Handles btnClear.MouseLeave
+        btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+    End Sub
+    ' Evento cuando el mouse entra en el botón
+    Private Sub BtnClear_MouseEnter(sender As Object, e As EventArgs) Handles btnClear.MouseEnter
+        btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(13, Byte), Integer), CType(CType(89, Byte), Integer), CType(CType(52, Byte), Integer))
+    End Sub
+
+    Private Sub BuscarCodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles BuscarCodBarras.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            ' Evita múltiples ejecuciones del evento
+            If enterPressed Then Exit Sub
+            enterPressed = True
+
+            BuscarPrenda()
             ' Evitar que el Enter produzca un sonido o afecte otros eventos
             e.SuppressKeyPress = True
             e.Handled = True

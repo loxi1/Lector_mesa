@@ -182,6 +182,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertaManager.vb" />
     <Compile Include="BDPrenda.vb" />
     <Compile Include="BDPrendaScm.vb" />
     <Compile Include="CryptoHelper.vb" />

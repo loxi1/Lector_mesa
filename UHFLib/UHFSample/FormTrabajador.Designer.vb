@@ -71,7 +71,7 @@ Partial Class FormTrabajador
         '
         'ButtonOk
         '
-        Me.ButtonOk.BackColor = System.Drawing.Color.MediumSeaGreen
+        Me.ButtonOk.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
         Me.ButtonOk.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonOk.ForeColor = System.Drawing.Color.White
         Me.ButtonOk.Location = New System.Drawing.Point(315, 133)
@@ -83,7 +83,7 @@ Partial Class FormTrabajador
         '
         'buttonCancelar
         '
-        Me.buttonCancelar.BackColor = System.Drawing.Color.MediumSeaGreen
+        Me.buttonCancelar.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
         Me.buttonCancelar.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.buttonCancelar.ForeColor = System.Drawing.Color.White
         Me.buttonCancelar.Location = New System.Drawing.Point(40, 134)
