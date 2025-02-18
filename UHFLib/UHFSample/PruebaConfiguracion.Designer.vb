@@ -35,6 +35,7 @@ Partial Class PruebaConfiguracion
         Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cod_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -130,7 +131,7 @@ Partial Class PruebaConfiguracion
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.cod_talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -169,6 +170,12 @@ Partial Class PruebaConfiguracion
         Me.talla.HeaderText = "Talla"
         Me.talla.Name = "talla"
         Me.talla.ReadOnly = True
+        '
+        'cod_talla
+        '
+        Me.cod_talla.HeaderText = "Cod_Talla"
+        Me.cod_talla.Name = "cod_talla"
+        Me.cod_talla.ReadOnly = True
         '
         'linea
         '
@@ -480,14 +487,6 @@ Partial Class PruebaConfiguracion
     Friend WithEvents tablaContenedorTimbrado As TableLayoutPanel
     Friend WithEvents tabaLadoTimbrado As TableLayoutPanel
     Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents op As DataGridViewTextBoxColumn
-    Friend WithEvents corte As DataGridViewTextBoxColumn
-    Friend WithEvents subcorte As DataGridViewTextBoxColumn
-    Friend WithEvents talla As DataGridViewTextBoxColumn
-    Friend WithEvents linea As DataGridViewTextBoxColumn
-    Friend WithEvents id_talla As DataGridViewTextBoxColumn
-    Friend WithEvents fecha As DataGridViewTextBoxColumn
-    Friend WithEvents id_rfid As DataGridViewTextBoxColumn
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents btnLimpiarRFID As Button
     Friend WithEvents btnClear As Button
@@ -506,4 +505,13 @@ Partial Class PruebaConfiguracion
     Friend WithEvents cbxInventory As ComboBox
     Friend WithEvents btnStartInventoryEx As Button
     Friend WithEvents pruebaCodigos As Label
+    Friend WithEvents op As DataGridViewTextBoxColumn
+    Friend WithEvents corte As DataGridViewTextBoxColumn
+    Friend WithEvents subcorte As DataGridViewTextBoxColumn
+    Friend WithEvents talla As DataGridViewTextBoxColumn
+    Friend WithEvents cod_talla As DataGridViewTextBoxColumn
+    Friend WithEvents linea As DataGridViewTextBoxColumn
+    Friend WithEvents id_talla As DataGridViewTextBoxColumn
+    Friend WithEvents fecha As DataGridViewTextBoxColumn
+    Friend WithEvents id_rfid As DataGridViewTextBoxColumn
 End Class

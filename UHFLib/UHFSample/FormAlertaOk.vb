@@ -18,6 +18,15 @@
 
     Private Sub FormAlertaOk_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Tiempo.Start()
+        ' Usar UtilidadesSVG para cargar el icono SVG
+        Dim utilSVG As New UtilidadesSVG()
+        Dim svgPath As String = utilSVG.ObtenerRutaSVG("icono_checking_512.svg")
+
+        If Not String.IsNullOrEmpty(svgPath) Then
+            utilSVG.CargarIconoSVG(Me.icon_ok, svgPath)
+        Else
+            Debug.Print("⚠️ No se pudo encontrar la imagen SVG.")
+        End If
     End Sub
 
     Private Sub FormAlertaOk_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed

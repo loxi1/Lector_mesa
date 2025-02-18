@@ -11,6 +11,61 @@ Public Class FormTrabajador
         InitializeComponent()
     End Sub
 
+    Private Sub FormTrabajador_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        txtCodTrabajador.Focus()
+    End Sub
+
+    ' === Métodos Auxiliares ===
+
+    Private Function ValidarEntradas() As Boolean
+        Return Not String.IsNullOrWhiteSpace(txtCodTrabajador.Text) AndAlso
+        Not String.IsNullOrWhiteSpace(ClaveTrabajador.Text)
+    End Function
+
+    Private Sub LimpiarEntradas()
+        txtCodTrabajador.Text = ""
+        ClaveTrabajador.Text = ""
+        txtCodTrabajador.Focus()
+    End Sub
+
+    Private Sub ClaveTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles ClaveTrabajador.KeyDown
+        If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Tab Then
+            e.SuppressKeyPress = True
+            ButtonOk.Focus()
+        End If
+    End Sub
+
+    Private Sub AlertaError(mensaje As String, color_ As Color)
+        Using alerta As New FormAlertaError("Upss...", mensaje, color_)
+            alerta.ShowDialog()
+        End Using
+    End Sub
+    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
+        ' Configuración mejorada para el botón btnClear
+        With btnViste
+            .Anchor = System.Windows.Forms.AnchorStyles.Left
+            .BackColor = ColorTranslator.FromHtml(bkcolor)
+            .ForeColor = ColorTranslator.FromHtml(txtcolor)
+            .FlatStyle = FlatStyle.Flat
+            .FlatAppearance.BorderSize = 1 ' Sin borde
+            .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
+            .Font = New Font("Arial", 12, FontStyle.Bold) ' Fuente más grande y negrita
+            .Size = New Size(150, 40) ' Aumentar el tamaño del botón
+            .TextAlign = ContentAlignment.MiddleCenter
+            .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
+        End With
+    End Sub
+
+    Private Sub FormTrabajador_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'EstiloBoton(ButtonOk)
+        'EstiloBoton(buttonCancelar, "#E0E0E0", "#000000", "#BDBDBD")
+    End Sub
+
+    Private Sub buttonCancelar_MouseLeave_(sender As Object, e As EventArgs)
+        buttonCancelar.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+    End Sub
+
+
     Private Sub ButtonOk_Click(sender As Object, e As EventArgs) Handles ButtonOk.Click
         Try
             ' Validar campos
@@ -50,73 +105,33 @@ Public Class FormTrabajador
         End Try
     End Sub
 
-    Private Sub buttonCancelar_Click(sender As Object, e As EventArgs) Handles buttonCancelar.Click
+    Private Sub ButtonCancelar_Click(sender As Object, e As EventArgs) Handles buttonCancelar.Click
         txtCodTrabajador.Text = ""
         ClaveTrabajador.Text = ""
     End Sub
 
-    Private Sub txtCodTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCodTrabajador.KeyDown
-        If e.KeyCode = Keys.Enter Then
+    Private Sub ButtonCancelar_Leave(sender As Object, e As EventArgs) Handles buttonCancelar.Leave
+        ButtonOk.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+    End Sub
+
+    Private Sub TxtCodTrabajador_Enter(sender As Object, e As EventArgs) Handles txtCodTrabajador.Enter
+        If txtCodTrabajador.Text = "Ingrese su usuario..." Then
+            txtCodTrabajador.Text = ""
+            txtCodTrabajador.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+        End If
+    End Sub
+
+    Private Sub TxtCodTrabajador_Leave(sender As Object, e As EventArgs) Handles txtCodTrabajador.Leave
+        If String.IsNullOrWhiteSpace(txtCodTrabajador.Text) Then
+            txtCodTrabajador.Text = "Ingrese su usuario..."
+            txtCodTrabajador.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+        End If
+    End Sub
+
+    Private Sub TxtCodTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles txtCodTrabajador.KeyDown
+        If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Tab Then
             e.SuppressKeyPress = True
             ClaveTrabajador.Focus()
         End If
-    End Sub
-
-    Private Sub FormTrabajador_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        txtCodTrabajador.Focus()
-    End Sub
-
-    ' === Métodos Auxiliares ===
-
-    Private Function ValidarEntradas() As Boolean
-        Return Not String.IsNullOrWhiteSpace(txtCodTrabajador.Text) AndAlso
-               Not String.IsNullOrWhiteSpace(ClaveTrabajador.Text)
-    End Function
-
-    Private Sub LimpiarEntradas()
-        txtCodTrabajador.Text = ""
-        ClaveTrabajador.Text = ""
-        txtCodTrabajador.Focus()
-    End Sub
-
-    Private Sub ClaveTrabajador_KeyDown(sender As Object, e As KeyEventArgs) Handles ClaveTrabajador.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            e.SuppressKeyPress = True
-            ButtonOk.Focus()
-        End If
-    End Sub
-
-    Private Sub AlertaError(mensaje As String, color_ As Color)
-        Using alerta As New FormAlertaError("Upss...", mensaje, color_)
-            alerta.ShowDialog()
-        End Using
-    End Sub
-    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
-        ' Configuración mejorada para el botón btnClear
-        With btnViste
-            .Anchor = System.Windows.Forms.AnchorStyles.Left
-            .BackColor = ColorTranslator.FromHtml(bkcolor)
-            .ForeColor = ColorTranslator.FromHtml(txtcolor)
-            .FlatStyle = FlatStyle.Flat
-            .FlatAppearance.BorderSize = 1 ' Sin borde
-            .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
-            .Font = New Font("Arial", 12, FontStyle.Bold) ' Fuente más grande y negrita
-            .Size = New Size(150, 40) ' Aumentar el tamaño del botón
-            .TextAlign = ContentAlignment.MiddleCenter
-            .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
-        End With
-    End Sub
-
-    Private Sub FormTrabajador_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        EstiloBoton(ButtonOk)
-        EstiloBoton(buttonCancelar, "#E0E0E0", "#000000", "#BDBDBD")
-    End Sub
-
-    Private Sub ButtonCancelar_MouseLeave(sender As Object, e As EventArgs) Handles buttonCancelar.MouseLeave
-        buttonCancelar.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
-    End Sub
-
-    Private Sub ButtonOk_MouseLeave(sender As Object, e As EventArgs) Handles ButtonOk.MouseLeave
-        ButtonOk.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
     End Sub
 End Class

@@ -5,6 +5,12 @@ Public Class frmMain
     Private WithEvents _MainForm As System.Windows.Forms.Form
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
+        '_MainForm = New PruebaConfiguracion()
+        '_MainForm.Show()
+        'With Me
+        '    .Size = New Size(0, 0)
+        '    .Hide()
+        'End With
         ' Obtener tipo de conexión de red
         ObtenerTipoConexionRed()
 

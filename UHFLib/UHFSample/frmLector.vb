@@ -31,6 +31,9 @@ Public Class frmLector
     Private CodBarrasQueue As New ConcurrentQueue(Of String)()
     Private IsProcessingQueue As Boolean = False
     Private cacheRFID As New Dictionary(Of String, Boolean)
+    Private Const MAX_CACHE_SIZE As Integer = 500
+    ' Variable global para almacenar el índice de la columna seleccionada
+    Private columnaSeleccionada As Integer = -1
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
@@ -161,7 +164,7 @@ Public Class frmLector
         EstiloBoton(btnClear, "#d9534f", "#ffffff", "#c9302c")
         EstiloBoton(btnLimpiarRFID, "#E0E0E0", "#000000", "#BDBDBD")
         EstiloContenedorTablaRFID()
-        EstiloBoton(BtnBuscarHM, "#3BA873", "#000000", "#0d5934")
+        EstiloBoton(BtnBuscarHM, "#3BA873", "#ffffff", "#0d5934")
         EstiloBoton(BtnLimpiarHM, "#E0E0E0", "#000000", "#BDBDBD")
     End Sub
 
@@ -217,8 +220,6 @@ Public Class frmLector
         ' Dibujar el texto centrado
         TextRenderer.DrawText(g, tabPage.Text, tabFont, tabBounds, textColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
     End Sub
-
-
 
     Private Sub StartConnection()
         Dim oPortList As New List(Of Object)
@@ -830,38 +831,6 @@ Public Class frmLector
         nudInventoryRoundInterval.Value = inventoryRoundInterval
     End Sub
 
-    Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
-        Dim selectedTab As TabPage = tabControl.SelectedTab
-        'Validar de que exita contenido mCodTrabajador
-        If String.IsNullOrEmpty(mCodTrabajador) Then
-            AlertaError("Debe ingresar un trabajador antes de Vincular.", Color.FromArgb(238, 26, 36))
-            'MessageBox.Show("Debe ingresar un trabajador antes de acceder a Inventario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            ' Redirigir al usuario a otra pestaña (por ejemplo, tpPerformance)
-            tabControl.SelectedTab = tpPerformance
-            Exit Sub
-        End If
-
-        ' Configuración específica para tpInventory
-        Me.tabControl.Dock = DockStyle.None
-
-        ' Ajustar tamaño y posición del TabControl
-        Me.tabControl.Height = Me.ClientSize.Height - pnlConnect.Height
-        Me.tabControl.Width = Me.ClientSize.Width
-        Me.tabControl.Location = New Point(0, 0)
-
-        ' Configuración de pnlConnect en la parte inferior
-        pnlConnect.Dock = DockStyle.None
-        pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
-
-
-        If selectedTab.Name = "tpInventory" Then
-            TabInventario()
-        ElseIf selectedTab.Name = "tpSearch" Then
-            TbBuscarPrenda()
-        ElseIf selectedTab.Name = "tpPapper" Then
-            TbHojaMarcacion()
-        End If
-    End Sub
     Private Sub AdjustDataGridView(dgv As DataGridView)
         ' Desactivar ajuste automático antes de realizar cambios
         dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
@@ -1161,7 +1130,7 @@ Public Class frmLector
             If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
                 cacheRFID(sCodigoRFID) = True
             End If
-            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 5)
+            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 10)
             SafeUpdateLabel(MsnVincular, lsResult.Item2)
             SafeUpdateTextBox(CodBarras, "")
             Exit Sub
@@ -1213,7 +1182,7 @@ Public Class frmLector
                 LlenarDataGridView(DataGridView1, insertData)
                 CantidadFilas()
                 SafeUpdateTextBox(CodBarras, "")
-                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 15)
+                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 10)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
@@ -1293,7 +1262,34 @@ Public Class frmLector
     Private Sub CantidadFilas()
         Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
         SafeUpdateLabel(lblTotalCount, CType(totalRegistros, String))
+
+        ' 🔥 Verificar si se supera el límite de 500 registros
+        If totalRegistros >= 500 Then
+            LimpiarTodo()
+        End If
     End Sub
+
+    Private Sub LimpiarTodo()
+        Try
+            Console.WriteLine("🚨 Se alcanzaron 500 registros. Limpiando todo...")
+
+            ' ✅ Ejecutar los métodos de limpieza
+            BtnClear_Click(Nothing, EventArgs.Empty) ' Simula el clic en BtnClear
+            BtnLimpiarRFID_Click(Nothing, EventArgs.Empty) ' Simula el clic en BtnLimpiarRFID
+
+            ' ✅ Forzar actualización de UI
+            BeginInvoke(New Action(Sub()
+                                       CodBarras.Focus()
+                                       CodBarras.Select()
+                                   End Sub))
+
+            Console.WriteLine("✅ Limpieza completada.")
+
+        Catch ex As Exception
+            Console.WriteLine($"❌ Error al limpiar registros: {ex.Message}")
+        End Try
+    End Sub
+
 
     Private Function CantidadFilasLeidas() As Integer
         Dim totalRegistrosLeidos As Integer = -1
@@ -1353,7 +1349,7 @@ Public Class frmLector
         SetFocusCodBarras() ' ✅ Restaurar el foco inmediatamente
     End Sub
 
-    Private Sub SetFocusCodBarras()
+    Private Sub SetFocusCodBarras_()
         If CodBarras.InvokeRequired Then
             CodBarras.Invoke(New MethodInvoker(AddressOf SetFocusCodBarras))
         Else
@@ -1363,18 +1359,11 @@ Public Class frmLector
         End If
     End Sub
 
-
-    ' Método para procesar un código de barras
-    Private Sub ProcessBarcode(barcode As String)
-        Try
-            ' Aquí colocas la lógica que procesará cada código de barras.
-            ' Por ejemplo, llamar a LeerCodigoRFID con el código.
-            Console.WriteLine($"Procesando: {barcode}")
-            ' Simula el procesamiento
-            Thread.Sleep(100) ' Simulación de tarea
-        Catch ex As Exception
-            Console.WriteLine($"Error procesando el código {barcode}: {ex.Message}")
-        End Try
+    Private Sub SetFocusCodBarras()
+        BeginInvoke(New Action(Sub()
+                                   CodBarras.Focus()
+                                   CodBarras.Select()
+                               End Sub))
     End Sub
 
     Private Sub CodBarras_ClearFoco()
@@ -1742,7 +1731,7 @@ Public Class frmLector
             .DefaultCellStyle.Padding = New Padding(5)
             .DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#0d5934")
             .DefaultCellStyle.SelectionForeColor = Color.White
-            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
             ' Encabezados de columna
             .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12.0!, FontStyle.Bold)
@@ -2180,5 +2169,232 @@ Public Class frmLector
             e.SuppressKeyPress = True
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub CodBarras_Enter(sender As Object, e As EventArgs) Handles CodBarras.Enter
+        If CodBarras.Text = "Codigo de Barras..." Then
+            CodBarras.Text = ""
+            CodBarras.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+        End If
+    End Sub
+
+    Private Sub CodBarras_Leave(sender As Object, e As EventArgs) Handles CodBarras.Leave
+        If String.IsNullOrWhiteSpace(CodBarras.Text) Then
+            CodBarras.Text = "Codigo de Barras..."
+            CodBarras.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+        End If
+    End Sub
+
+    Private Sub TextBoxOP_Enter(sender As Object, e As EventArgs) Handles TextBoxOP.Enter
+        If TextBoxOP.Text = "Nro OP..." Then
+            TextBoxOP.Text = ""
+            TextBoxOP.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+        End If
+    End Sub
+
+    Private Sub TextBoxOP_Leave(sender As Object, e As EventArgs) Handles TextBoxOP.Leave
+        If String.IsNullOrWhiteSpace(TextBoxOP.Text) Then
+            TextBoxOP.Text = "Nro OP..."
+            TextBoxOP.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+        End If
+    End Sub
+
+    Private Sub TextBoxHM_Enter(sender As Object, e As EventArgs) Handles TextBoxHM.Enter
+        If TextBoxHM.Text = "H. M...." Then
+            TextBoxHM.Text = ""
+            TextBoxHM.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+        End If
+    End Sub
+
+    Private Sub TextBoxHM_Leave(sender As Object, e As EventArgs) Handles TextBoxHM.Leave
+        If String.IsNullOrWhiteSpace(TextBoxHM.Text) Then
+            TextBoxHM.Text = "H. M...."
+            TextBoxHM.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+        End If
+    End Sub
+
+    Private Sub BuscarCodBarras_Enter(sender As Object, e As EventArgs) Handles BuscarCodBarras.Enter
+        If BuscarCodBarras.Text = "Codigo de Barras..." Then
+            BuscarCodBarras.Text = ""
+            BuscarCodBarras.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+        End If
+    End Sub
+
+    Private Sub BuscarCodBarras_Leave(sender As Object, e As EventArgs) Handles BuscarCodBarras.Leave
+        If String.IsNullOrWhiteSpace(BuscarCodBarras.Text) Then
+            BuscarCodBarras.Text = "Codigo de Barras..."
+            BuscarCodBarras.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+        End If
+    End Sub
+
+    Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabControl.SelectedIndexChanged
+        Dim selectedTab As TabPage = tabControl.SelectedTab
+
+        ' Configuración específica para tpInventory
+        Me.tabControl.Dock = DockStyle.None
+
+        ' Ajustar tamaño y posición del TabControl
+        Me.tabControl.Height = Me.ClientSize.Height - pnlConnect.Height
+        Me.tabControl.Width = Me.ClientSize.Width
+        Me.tabControl.Location = New Point(0, 0)
+
+        ' Configuración de pnlConnect en la parte inferior
+        pnlConnect.Dock = DockStyle.None
+        pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
+
+
+        If selectedTab.Name = "tpInventory" Then
+            TabInventario()
+            ' Forzar el foco a CodBarras al cambiar a esta pestaña
+            BeginInvoke(New Action(Sub()
+                                       CodBarras.Focus()
+                                       CodBarras.Select()
+                                   End Sub))
+        ElseIf selectedTab.Name = "tpSearch" Then
+            TbBuscarPrenda()
+            ' Asegurar que BuscarCodBarras reciba el foco al cambiar a tpSearch
+            BeginInvoke(New Action(Sub()
+                                       BuscarCodBarras.Focus()
+                                       BuscarCodBarras.Select()
+                                   End Sub))
+        ElseIf selectedTab.Name = "tpPapper" Then
+            TbHojaMarcacion()
+        End If
+    End Sub
+    ' Método para verificar y limpiar la caché cuando supera los 500 elementos
+    Private Sub CheckAndClearCache()
+        If cacheRFID.Count > MAX_CACHE_SIZE Then
+            Console.WriteLine($"⚠️ Caché superó {MAX_CACHE_SIZE} elementos, limpiando...")
+            cacheRFID.Clear() ' Limpiar completamente la caché
+            Console.WriteLine("✅ Caché vaciada.")
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
+            MostrarAlerta("Hiciste click en la cabecera")
+            Exit Sub
+        End If
+
+        Dim cantLeidas As Integer = CantidadFilasLeidas()
+        If cantLeidas > 1 Then
+            MostrarAlerta("Verificar existen 2 RFID")
+            Exit Sub
+        End If
+
+        If Confirmacion() Then
+            ' Verificar que la fila seleccionada no es de los encabezados
+            If e.RowIndex >= 0 Then
+                ' Obtener la fila seleccionada
+                Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+
+                ' Obtener valores de la fila seleccionada
+                Dim op As String = selectedRow.Cells("op").Value.ToString()
+                Dim corte As String = selectedRow.Cells("corte").Value.ToString()
+                Dim subcorte As String = selectedRow.Cells("subcorte").Value.ToString()
+                Dim cod_talla As String = selectedRow.Cells("cod_talla").Value.ToString()
+                Dim idTalla As String = selectedRow.Cells("id_talla").Value.ToString()
+                ' Obtener el código RFID y preparar el código de barras
+                Dim rfidCode As String = Task.Run(Function() ObtenerPCEPC()).Result
+                rfidCode = rfidCode.Trim().Replace(" ", "")
+                rfidCode = If(rfidCode.Length > 24, rfidCode.Substring(rfidCode.Length - 24), rfidCode)
+                Console.WriteLine($" rfidCode-->{rfidCode}")
+
+                Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
+
+                ' Diccionario con los parámetros para la actualización
+                Dim whereParameters As New Dictionary(Of String, Object) From {
+                    {"nnope", op},
+                    {"nordencorte", corte},
+                    {"nordensubcorte", subcorte},
+                    {"cod_talla", cod_talla},
+                    {"id_talla", idTalla}
+                }
+
+                ' Llamar al método para actualizar la base de datos
+                Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, mCodTrabajador, rfidCode)
+                ' Verificar resultado y mostrar alertas
+                If resultado > 0 Then
+                    AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 10)
+                    ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
+                    selectedRow.Cells("fecha").Value = fechaSalida
+                    selectedRow.Cells("id_rfid").Value = rfidCode
+                Else
+                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 10)
+                End If
+            End If
+        End If
+
+        ' Limpiar la DataGridView después de procesar la cola
+        SafeUpdateControl(Me, Sub(form)
+                                  form.dgvTagList.Rows.Clear()
+                                  form._tagList.Clear()
+                                  form.cantidadRFID.Text = "0"
+                              End Sub)
+        ' ✅ FORZAR REACTIVACIÓN DEL `Enter` EN ASÍNCRONO
+        BeginInvoke(New Action(Sub()
+                                   CodBarras.Focus()
+                                   CodBarras.Select() ' Asegurar que el cursor esté en el TextBox
+                               End Sub))
+        ' Evitar que el Enter produzca un sonido o afecte otros eventos
+    End Sub
+
+    ''' <summary>
+    ''' Muestra un cuadro de diálogo de confirmación y devuelve un booleano.
+    ''' </summary>
+    ''' <returns>True si el usuario confirmó, False en caso contrario.</returns>
+    Private Function Confirmacion() As Boolean
+        Try
+            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
+                Return confirmForm.ShowDialog() = DialogResult.OK
+            End Using
+        Catch ex As Exception
+            Console.WriteLine($"Error en Confirmacion(): {ex.Message}")
+            Return False
+        End Try
+    End Function
+
+    Private Sub DataGridView1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellClick
+        ' Si se hace clic en una celda válida (no en la cabecera)
+        If e.RowIndex >= 0 Then
+            columnaSeleccionada = e.ColumnIndex
+            DataGridView1.Invalidate() ' Redibujar el DataGridView
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridView1.CellPainting
+        ' Verifica si es una celda de cabecera
+        If e.RowIndex = -1 Then
+            ' Pinta el fondo de la cabecera
+            e.PaintBackground(e.CellBounds, False)
+
+            Dim colorFondo As Color = DataGridView1.ColumnHeadersDefaultCellStyle.BackColor
+            Dim colorTexto As Color = DataGridView1.ColumnHeadersDefaultCellStyle.ForeColor
+
+            ' Si la columna está seleccionada, cambiar el color de fondo y texto
+            If e.ColumnIndex = columnaSeleccionada Then
+                colorFondo = Color.Teal ' Color de fondo cuando está seleccionada
+                colorTexto = Color.White ' Texto en blanco si se cambia el fondo
+            End If
+
+            Using brush As New SolidBrush(colorFondo)
+                e.Graphics.FillRectangle(brush, e.CellBounds)
+            End Using
+
+            Using sf As New StringFormat()
+                sf.Alignment = StringAlignment.Center ' Centrar horizontalmente
+                sf.LineAlignment = StringAlignment.Center ' Centrar verticalmente
+                Using brushTexto As New SolidBrush(colorTexto)
+                    e.Graphics.DrawString(e.Value?.ToString(), e.CellStyle.Font, brushTexto, e.CellBounds, sf)
+                End Using
+            End Using
+
+            e.Handled = True ' Evitar que el sistema sobrescriba la cabecera
+        End If
+    End Sub
+
+    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
+        ' Redibujar la cabecera al cambiar de selección
+        DataGridView1.Invalidate()
     End Sub
 End Class

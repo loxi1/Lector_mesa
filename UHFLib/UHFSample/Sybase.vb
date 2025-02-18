@@ -14,7 +14,7 @@ Public Class Sybase
 
     ' Método para conectarse a la base de datos
     '27-12-2024
-    'Public Function Connect() As AseConnection
+    'Public Function Conectar() As AseConnection
     '    If LoadConfig("tsconfig.json") Then
     '        Dim sCadenaConexion As String = $"Data Source={m_ServerName};Port={m_Port};Database={m_DataBase};Uid={m_Usuario};Pwd={m_Password};"
     '        Debug.Print($"Cadena de conexión generada: {sCadenaConexion}")
