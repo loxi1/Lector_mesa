@@ -32,8 +32,9 @@ Public Class frmLector
     Private IsProcessingQueue As Boolean = False
     Private cacheRFID As New Dictionary(Of String, Boolean)
     Private Const MAX_CACHE_SIZE As Integer = 500
-    ' Variable global para almacenar el índice de la columna seleccionada
-    Private columnaSeleccionada As Integer = -1
+
+    Private columnaSeleccionada As Integer = -1 ' Variable global para almacenar el índice de la columna seleccionada
+    Dim alertaMostrada As Boolean = False ' Bandera para evitar múltiples alertas
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
@@ -1110,8 +1111,8 @@ Public Class frmLector
         If cacheRFID.ContainsKey(sCodigoRFID) Then
             SafeUpdateLabel(MsnVincular, "")
             SafeUpdateTextBox(CodBarras, "")
-            AlertaManager.MostrarAlerta($"Error: El RFID ya existe. Verifique.", Color.Red, 3, 10)
-            MostrarAlerta($"Error: El RFID ya existe. Verifique.")
+            AlertaManager.MostrarAlerta($"Error: El RFID ya existe. Verifique.", Color.Red, 3, 5)
+            'MostrarAlerta($"Error: El RFID ya existe. Verifique.")
             Exit Sub
         End If
 
@@ -1130,7 +1131,7 @@ Public Class frmLector
             If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
                 cacheRFID(sCodigoRFID) = True
             End If
-            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 10)
+            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 5)
             SafeUpdateLabel(MsnVincular, lsResult.Item2)
             SafeUpdateTextBox(CodBarras, "")
             Exit Sub
@@ -1182,7 +1183,7 @@ Public Class frmLector
                 LlenarDataGridView(DataGridView1, insertData)
                 CantidadFilas()
                 SafeUpdateTextBox(CodBarras, "")
-                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 10)
+                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 5)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
@@ -2104,9 +2105,15 @@ Public Class frmLector
                 ' Verificar si hay más de un RFID leído
                 Dim cantLeidas As Integer = CantidadFilasLeidas()
                 If cantLeidas > 1 Then
-                    MostrarAlerta("Verificar existen 2 RFID")
+                    If Not alertaMostrada Then ' Mostrar la alerta solo si no se ha mostrado en este timbrado
+                        alertaMostrada = True
+                        MostrarAlerta("Verificar existen 2 RFID")
+                    End If
                     CodBarras_ClearFoco()
                     Exit Sub
+                Else
+                    ' Reiniciar la bandera de alerta solo cuando finaliza el timbrado correctamente
+                    alertaMostradaPorTimbrado = False
                 End If
 
                 ' Obtener el código RFID y preparar el código de barras
@@ -2160,14 +2167,9 @@ Public Class frmLector
 
     Private Sub BuscarCodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles BuscarCodBarras.KeyDown
         If e.KeyCode = Keys.Enter Then
-            ' Evita múltiples ejecuciones del evento
-            If enterPressed Then Exit Sub
-            enterPressed = True
-
-            BuscarPrenda()
             ' Evitar que el Enter produzca un sonido o afecte otros eventos
             e.SuppressKeyPress = True
-            e.Handled = True
+            BuscarPrenda()
         End If
     End Sub
 
@@ -2245,14 +2247,19 @@ Public Class frmLector
 
         If selectedTab.Name = "tpInventory" Then
             TabInventario()
-            ' Forzar el foco a CodBarras al cambiar a esta pestaña
+            ' Asegurar que CodBarras siempre tiene el KeyDown activo
+            RemoveHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
+            AddHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
+            ' Forzar el foco y evento de tecla en CodBarras
             BeginInvoke(New Action(Sub()
                                        CodBarras.Focus()
-                                       CodBarras.Select()
+                                       AddHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
                                    End Sub))
         ElseIf selectedTab.Name = "tpSearch" Then
             TbBuscarPrenda()
             ' Asegurar que BuscarCodBarras reciba el foco al cambiar a tpSearch
+            RemoveHandler BuscarCodBarras.KeyDown, AddressOf BuscarCodBarras_KeyDown
+            AddHandler BuscarCodBarras.KeyDown, AddressOf BuscarCodBarras_KeyDown
             BeginInvoke(New Action(Sub()
                                        BuscarCodBarras.Focus()
                                        BuscarCodBarras.Select()
@@ -2315,12 +2322,12 @@ Public Class frmLector
                 Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, mCodTrabajador, rfidCode)
                 ' Verificar resultado y mostrar alertas
                 If resultado > 0 Then
-                    AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 10)
+                    AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 5)
                     ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
                     selectedRow.Cells("fecha").Value = fechaSalida
                     selectedRow.Cells("id_rfid").Value = rfidCode
                 Else
-                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 10)
+                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 5)
                 End If
             End If
         End If
@@ -2397,4 +2404,34 @@ Public Class frmLector
         ' Redibujar la cabecera al cambiar de selección
         DataGridView1.Invalidate()
     End Sub
+
+    'Private Sub DataGridView_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) _
+    'Handles DataGridView1.CellPainting, DataGridView2.CellPainting, DataGridView3.CellPainting
+
+    '    Dim dgv As DataGridView = DirectCast(sender, DataGridView) ' Determina cuál DataGridView activó el evento
+
+    '    If e.RowIndex = -1 Then ' Solo para la cabecera
+    '        Dim isColumnSelected As Boolean = False
+
+    '        ' Verifica si alguna celda de la columna actual está seleccionada
+    '        For Each cell As DataGridViewCell In dgv.SelectedCells
+    '            If cell.ColumnIndex = e.ColumnIndex Then
+    '                isColumnSelected = True
+    '                Exit For
+    '            End If
+    '        Next
+
+    '        ' Dibujar el fondo de la celda con color distinto si está seleccionada
+    '        If isColumnSelected Then
+    '            e.Graphics.FillRectangle(New SolidBrush(Color.DarkSlateGray), e.CellBounds) ' Cambia este color según el diseño
+    '            e.Graphics.DrawString(e.Value?.ToString(), e.CellStyle.Font, Brushes.White, e.CellBounds, StringFormat.GenericDefault)
+    '        Else
+    '            e.Graphics.FillRectangle(New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor), e.CellBounds)
+    '            e.Graphics.DrawString(e.Value?.ToString(), e.CellStyle.Font, Brushes.Black, e.CellBounds, StringFormat.GenericDefault)
+    '        End If
+
+    '        e.Handled = True ' Indica que ya se ha manejado el pintado
+    '    End If
+    'End Sub
+
 End Class

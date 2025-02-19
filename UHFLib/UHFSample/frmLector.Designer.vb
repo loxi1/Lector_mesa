@@ -225,49 +225,49 @@ Partial Class frmLector
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-        Me.pnlConnect.SuspendLayout()
-        Me.tabControl.SuspendLayout()
-        Me.tpPerformance.SuspendLayout()
-        Me.tablaContenConf.SuspendLayout()
-        Me.gbxEPCSettings.SuspendLayout()
-        Me.GroupBox8.SuspendLayout()
-        Me.gbxScanMode.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
+        Me.pnlConnect.SuspendLayout
+        Me.tabControl.SuspendLayout
+        Me.tpPerformance.SuspendLayout
+        Me.tablaContenConf.SuspendLayout
+        Me.gbxEPCSettings.SuspendLayout
+        Me.GroupBox8.SuspendLayout
+        Me.gbxScanMode.SuspendLayout
+        Me.GroupBox5.SuspendLayout
         CType(Me.nudInventoryRoundInterval, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox4.SuspendLayout()
+        Me.GroupBox4.SuspendLayout
         CType(Me.nudTagRemoveThreshold, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox2.SuspendLayout()
+        Me.GroupBox2.SuspendLayout
         CType(Me.nudTagPresentRepeatInterval, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBoxLinkFrequency.SuspendLayout()
-        Me.GroupBoxRxDecode.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
+        Me.GroupBoxLinkFrequency.SuspendLayout
+        Me.GroupBoxRxDecode.SuspendLayout
+        Me.GroupBox1.SuspendLayout
         CType(Me.tbRfSensitivity, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox3.SuspendLayout()
+        Me.GroupBox3.SuspendLayout
         CType(Me.tbRfPower, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel5.SuspendLayout()
-        Me.gbJapanFrequency.SuspendLayout()
-        Me.gbTaiwanFrequency.SuspendLayout()
-        Me.TableLayoutPanel4.SuspendLayout()
-        Me.tpInventory.SuspendLayout()
-        Me.gbxInventoryEx.SuspendLayout()
-        Me.tablaContenedorTimbrado.SuspendLayout()
-        Me.tabaLadoTimbrado.SuspendLayout()
+        Me.TableLayoutPanel5.SuspendLayout
+        Me.gbJapanFrequency.SuspendLayout
+        Me.gbTaiwanFrequency.SuspendLayout
+        Me.TableLayoutPanel4.SuspendLayout
+        Me.tpInventory.SuspendLayout
+        Me.gbxInventoryEx.SuspendLayout
+        Me.tablaContenedorTimbrado.SuspendLayout
+        Me.tabaLadoTimbrado.SuspendLayout
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel1.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel2.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        Me.tpSearch.SuspendLayout()
-        Me.gbxBuscarPrenda.SuspendLayout()
-        Me.tablaBuscarPrenda.SuspendLayout()
-        Me.ContenedorBuscarPrenda.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout
+        Me.TableLayoutPanel3.SuspendLayout
+        Me.tpSearch.SuspendLayout
+        Me.gbxBuscarPrenda.SuspendLayout
+        Me.tablaBuscarPrenda.SuspendLayout
+        Me.ContenedorBuscarPrenda.SuspendLayout
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tpPapper.SuspendLayout()
-        Me.TablaContenedorHM.SuspendLayout()
-        Me.tabaCabecera.SuspendLayout()
-        Me.tableCabecera.SuspendLayout()
+        Me.tpPapper.SuspendLayout
+        Me.TablaContenedorHM.SuspendLayout
+        Me.tabaCabecera.SuspendLayout
+        Me.tableCabecera.SuspendLayout
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
+        Me.SuspendLayout
         '
         'pnlConnect
         '
@@ -2702,39 +2702,39 @@ Partial Class frmLector
         Me.Text = "TS800 Sample"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.pnlConnect.ResumeLayout(False)
-        Me.pnlConnect.PerformLayout()
+        Me.pnlConnect.PerformLayout
         Me.tabControl.ResumeLayout(False)
         Me.tpPerformance.ResumeLayout(False)
         Me.tablaContenConf.ResumeLayout(False)
         Me.gbxEPCSettings.ResumeLayout(False)
-        Me.gbxEPCSettings.PerformLayout()
+        Me.gbxEPCSettings.PerformLayout
         Me.GroupBox8.ResumeLayout(False)
-        Me.GroupBox8.PerformLayout()
+        Me.GroupBox8.PerformLayout
         Me.gbxScanMode.ResumeLayout(False)
         Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
+        Me.GroupBox5.PerformLayout
         CType(Me.nudInventoryRoundInterval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
+        Me.GroupBox4.PerformLayout
         CType(Me.nudTagRemoveThreshold, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
+        Me.GroupBox2.PerformLayout
         CType(Me.nudTagPresentRepeatInterval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBoxLinkFrequency.ResumeLayout(False)
-        Me.GroupBoxLinkFrequency.PerformLayout()
+        Me.GroupBoxLinkFrequency.PerformLayout
         Me.GroupBoxRxDecode.ResumeLayout(False)
-        Me.GroupBoxRxDecode.PerformLayout()
+        Me.GroupBoxRxDecode.PerformLayout
         Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
+        Me.GroupBox1.PerformLayout
         CType(Me.tbRfSensitivity, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
+        Me.GroupBox3.PerformLayout
         CType(Me.tbRfPower, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel5.ResumeLayout(False)
         Me.gbJapanFrequency.ResumeLayout(False)
-        Me.gbJapanFrequency.PerformLayout()
+        Me.gbJapanFrequency.PerformLayout
         Me.gbTaiwanFrequency.ResumeLayout(False)
-        Me.gbTaiwanFrequency.PerformLayout()
+        Me.gbTaiwanFrequency.PerformLayout
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.tpInventory.ResumeLayout(False)
         Me.gbxInventoryEx.ResumeLayout(False)
@@ -2742,24 +2742,24 @@ Partial Class frmLector
         Me.tabaLadoTimbrado.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
+        Me.TableLayoutPanel1.PerformLayout
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout()
+        Me.TableLayoutPanel2.PerformLayout
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.tpSearch.ResumeLayout(False)
         Me.gbxBuscarPrenda.ResumeLayout(False)
         Me.tablaBuscarPrenda.ResumeLayout(False)
-        Me.tablaBuscarPrenda.PerformLayout()
+        Me.tablaBuscarPrenda.PerformLayout
         Me.ContenedorBuscarPrenda.ResumeLayout(False)
-        Me.ContenedorBuscarPrenda.PerformLayout()
+        Me.ContenedorBuscarPrenda.PerformLayout
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpPapper.ResumeLayout(False)
         Me.TablaContenedorHM.ResumeLayout(False)
         Me.tabaCabecera.ResumeLayout(False)
-        Me.tabaCabecera.PerformLayout()
+        Me.tabaCabecera.PerformLayout
         Me.tableCabecera.ResumeLayout(False)
-        Me.tableCabecera.PerformLayout()
+        Me.tableCabecera.PerformLayout
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
