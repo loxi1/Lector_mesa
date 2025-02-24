@@ -134,7 +134,6 @@ Public Class DBConsultarPrenda
         Return result
     End Function
     Public Function BuscarHMDetalle(whereParameters As Dictionary(Of String, Object)) As Tuple(Of Integer, List(Of Dictionary(Of String, Object)), Dictionary(Of String, List(Of Dictionary(Of String, Object))))
-        Console.WriteLine($"Ingreso BuscarHMDetalle")
         Dim queryBuilder As New StringBuilder()
         queryBuilder.AppendLine("SELECT ")
         queryBuilder.AppendLine("    alt.cclrcl,")
@@ -225,7 +224,6 @@ Public Class DBConsultarPrenda
 
         Return Tuple.Create(1, totalTalla, detalleTalla)
     End Function
-
 
     Public Function BuscarHMCabecera(whereParameters As Dictionary(Of String, Object)) As DataTable
         ' Crear un StringBuilder para construir la consulta SQL
@@ -319,6 +317,103 @@ Public Class DBConsultarPrenda
         End Try
 
         Return datos
+    End Function
+
+    Public Function VerConsolidado(whereParameters As Dictionary(Of String, Object)) As Tuple(Of Integer, List(Of Dictionary(Of String, Object)), Dictionary(Of String, List(Of Dictionary(Of String, Object))))
+
+        'SELECT linea, op,color,talla, count(id_timb) AS cant FROM tmp_etiq_timbradas 
+        'WHERE fotocheck ='030302' AND estado='SALIDA EMBALAJE' GROUP BY linea, op,color,talla
+        If Not whereParameters.ContainsKey("fecha_modificacion") Then
+            whereParameters.Add("estado", ESTADO_EMBALAJE)
+        End If
+        Dim queryBuilder As New StringBuilder()
+        queryBuilder.AppendLine("SELECT ")
+        queryBuilder.AppendLine("    linea,")
+        queryBuilder.AppendLine("    op,")
+        queryBuilder.AppendLine("    color,")
+        queryBuilder.AppendLine("    talla,")
+        queryBuilder.AppendLine("    count(id_timb) AS cant")
+        queryBuilder.AppendLine("FROM tmp_etiq_timbradas")
+
+        Dim datos As New DataTable()
+        Dim totalTalla As New List(Of Dictionary(Of String, Object))
+        Dim detalleTalla As New Dictionary(Of String, List(Of Dictionary(Of String, Object)))()
+        Dim codigo As Integer = 0
+
+        ' Validar parámetros
+        If whereParameters Is Nothing OrElse whereParameters.Count = 0 Then
+            Throw New ArgumentException("El parámetro whereParameters no puede estar vacío o ser nulo.")
+        End If
+
+        ' Construir WHERE dinámico
+        Dim l_where As String = BuildWhereClause(whereParameters)
+        Console.WriteLine($"l_where(1)=>{l_where}")
+        queryBuilder.Append(" WHERE ").Append(l_where)
+        queryBuilder.AppendLine(" GROUP BY linea, op,color,talla")
+        Try
+            ' Ejecutar consulta y cargar datos
+            Dim query As String = queryBuilder.ToString()
+            Console.WriteLine($"Query ejecutado: {query}")
+            Using connectionAse = myConexion.Connect()
+                If connectionAse Is Nothing OrElse connectionAse.State <> ConnectionState.Open Then
+                    Throw New Exception("Error en conexión con la base de datos.")
+                End If
+
+                Using comando As New AseCommand(query, connectionAse)
+                    For Each param In whereParameters
+                        comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                    Next
+
+                    Using reader As AseDataReader = comando.ExecuteReader()
+                        datos.Load(reader)
+                    End Using
+                End Using
+            End Using
+
+            If datos.Rows.Count = 0 Then
+                Return Tuple.Create(0, totalTalla, detalleTalla)
+            End If
+            ' Agrupar manualmente los datos
+            Dim agrupados = New Dictionary(Of String, (linea As String, total As Integer, detalles As List(Of Dictionary(Of String, Object))))()
+
+            For Each row As DataRow In datos.Rows
+                Dim linea = row("linea").ToString()
+                Dim op = row("op").ToString()
+                Dim color = row("color").ToString()
+                Dim talla = row("talla").ToString()
+                Dim canti = Convert.ToInt32(row("cant"))
+
+                ' Crear clave única para agrupar
+                If Not agrupados.ContainsKey(linea) Then
+                    agrupados(linea) = (linea, 0, New List(Of Dictionary(Of String, Object))())
+                End If
+
+                ' Actualizar total y detalles
+                agrupados(linea) = (agrupados(linea).linea, agrupados(linea).total + canti, agrupados(linea).detalles)
+                agrupados(linea).detalles.Add(New Dictionary(Of String, Object) From {
+                    {"op", op},
+                    {"color", color},
+                    {"talla", talla},
+                    {"cantidad", canti}
+                })
+            Next
+
+            ' Convertir resultados a totalTalla y detalleTalla
+            For Each grupo In agrupados
+                totalTalla.Add(New Dictionary(Of String, Object) From {
+                    {"linea", grupo.Key},
+                    {"total", grupo.Value.total}
+                })
+
+                detalleTalla.Add(grupo.Key, grupo.Value.detalles)
+            Next
+
+        Catch ex As Exception
+            Dim errorMessage As String = $"Error al Buscar HM: {ex.Message}"
+            Console.WriteLine(errorMessage)
+        End Try
+
+        Return Tuple.Create(1, totalTalla, detalleTalla)
     End Function
 
     ' Método para construir la cláusula WHERE dinámicamente

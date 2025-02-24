@@ -117,14 +117,14 @@ Public Class FormTrabajador
     Private Sub TxtCodTrabajador_Enter(sender As Object, e As EventArgs) Handles txtCodTrabajador.Enter
         If txtCodTrabajador.Text = "Ingrese su usuario..." Then
             txtCodTrabajador.Text = ""
-            txtCodTrabajador.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+            'txtCodTrabajador.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
         End If
     End Sub
 
     Private Sub TxtCodTrabajador_Leave(sender As Object, e As EventArgs) Handles txtCodTrabajador.Leave
         If String.IsNullOrWhiteSpace(txtCodTrabajador.Text) Then
             txtCodTrabajador.Text = "Ingrese su usuario..."
-            txtCodTrabajador.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+            'txtCodTrabajador.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
         End If
     End Sub
 

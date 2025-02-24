@@ -4,6 +4,7 @@
         ' Agregar una fila al DataGridView
         DataGridView1.Rows.Add()
         DataGridView1.Rows(0).Cells("op").Value = "1000038527"
+        DataGridView1.Rows(0).Cells("hoja_marcacion").Value = "006"
         DataGridView1.Rows(0).Cells("corte").Value = "0001"
         DataGridView1.Rows(0).Cells("subcorte").Value = "000103"
         DataGridView1.Rows(0).Cells("cod_talla").Value = "01"
@@ -11,6 +12,20 @@
         DataGridView1.Rows(0).Cells("id_talla").Value = "0341"
         DataGridView1.Rows(0).Cells("fecha").Value = "17-02-2025 10:35:00"
         DataGridView1.Rows(0).Cells("id_rfid").Value = "3BD000002550130EBC5AC930"
+
+
+        ' Permitir edición en el DataGridView
+        Me.DataGridView1.ReadOnly = False
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect ' Permite editar celdas individualmente
+
+        ' Asegurar que todas las columnas sean de solo lectura excepto "hoja_marcacion"
+        For Each column As DataGridViewColumn In DataGridView1.Columns
+            column.ReadOnly = (column.Name <> "hoja_marcacion")
+        Next
+
+        Me.KeyPreview = True
     End Sub
 
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
@@ -44,8 +59,14 @@
                     {"cod_talla", cod_talla},
                     {"id_talla", idTalla}
                 }
+
+                Dim updateParameters As New Dictionary(Of String, Object) From {
+                    {"codQR", idRfid},
+                    {"usregsalemb", mCodTrabajador}
+                }
+
                 ' Llamar al método UpdateOrdenAcabadoTallasMov con los parámetros y el ID RFID
-                Dim lsResult = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, mCodTrabajador, idRfid)
+                Dim lsResult = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
                 If lsResult > 0 Then
                     mColor = Color.Green
                     mTipo = 1
@@ -82,7 +103,7 @@
     ''' <returns>True si el usuario confirmó, False en caso contrario.</returns>
     Private Function Confirmacion() As Boolean
         Try
-            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
+            Using confirmForm As New FormConfirmacion("¿Deseas editar el RFID?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
                 Return confirmForm.ShowDialog() = DialogResult.OK
             End Using
         Catch ex As Exception
@@ -115,5 +136,66 @@
         alerta.Show()
     End Sub
 
+    Private Sub DataGridView1_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseClick
+        ' Verificar que el clic sea con el botón izquierdo y en una celda válida
+        If e.Button = MouseButtons.Left AndAlso e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            ' Verificar si la columna es "hoja_marcacion"
+            If DataGridView1.Columns(e.ColumnIndex).Name = "hoja_marcacion" Then
+                DataGridView1.BeginEdit(True) ' Habilitar edición
+                Console.WriteLine($"Editara HM")
+            Else
+                DataGridView1.EndEdit() ' Evitar edición en otras columnas
+                Console.WriteLine($"NO editar")
+            End If
+        End If
+    End Sub
 
+    Private Sub DataGridView1_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellEndEdit
+        If e.RowIndex >= 0 AndAlso DataGridView1.Columns(e.ColumnIndex).Name = "hoja_marcacion" Then
+            Dim nuevaHojaMarcacion As String = DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value.ToString()
+
+            ' Verificar que el valor sea numérico antes de formatearlo
+            If IsNumeric(nuevaHojaMarcacion) Then
+                ' Completar con ceros a la izquierda hasta tres dígitos
+                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = nuevaHojaMarcacion.PadLeft(3, "0"c)
+
+            Else
+                ' En caso de que el usuario ingrese un valor no numérico, mostrar alerta
+                MessageBox.Show("Ingrese solo valores numéricos en Hoja Marcación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                ' Restaurar el valor anterior si es inválido
+                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = "000"
+            End If
+
+            Console.WriteLine($"Valor actualizado en hoja_marcacion: {DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value}")
+        End If
+    End Sub
+
+
+    Private Sub DataGridView1_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
+        ' Solo permitir la entrada si es la columna "hoja_marcacion"
+        If DataGridView1.CurrentCell.ColumnIndex = DataGridView1.Columns("hoja_marcacion").Index Then
+            Dim txt As TextBox = TryCast(e.Control, TextBox)
+        End If
+    End Sub
+
+    ' Validar que solo se ingresen valores específicos en "hoja_marcacion"    
+    Private Sub ValidarEntradaHojaMarcacion(sender As Object, e As KeyPressEventArgs)
+        ' Permitir solo números y borrar con Backspace
+        If Not Char.IsDigit(e.KeyChar) AndAlso e.KeyChar <> Chr(8) Then
+            e.Handled = True ' Bloquea la entrada
+        End If
+    End Sub
+
+    Private Sub PruebaConfiguracion_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        Select Case e.KeyCode
+            Case Keys.F1 ' Tecla F1 para "Nuevo Timbrado"
+                'btnClear.PerformClick()
+                Console.WriteLine($"Tecla F1 para Nuevo Timbrado")
+
+            Case Keys.F2 ' Tecla F2 para "Limpiar"
+                'btnLimpiarRFID.PerformClick()
+                Console.WriteLine($"Tecla F2 para Nuevo Timbrado")
+
+        End Select
+    End Sub
 End Class

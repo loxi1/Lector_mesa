@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Linq
 Imports Sybase.Data.AseClient
 
 Public Class BDPrenda
@@ -224,7 +225,7 @@ Public Class BDPrenda
         Return li_return
     End Function
 
-    Public Function SaveRFID(sCodBarra As String, sCompania As String, sCodTrabajador As String, sIDRfid As String) As Tuple(Of Integer, String)
+    Public Function SaveRFID(sCodBarra As String, sCompania As String, sCodTrabajador As String, sIDRfid As String, nHoja As String) As Tuple(Of Integer, String)
         Dim li_return As Integer = 0
         Dim s_mensaje As String = ""
         Dim tabla As New DataTable()
@@ -243,6 +244,7 @@ Public Class BDPrenda
                             command.Parameters.Add(New AseParameter("@empresa", AseDbType.VarChar)).Value = sCompania
                             command.Parameters.Add(New AseParameter("@usr", AseDbType.VarChar)).Value = sCodTrabajador
                             command.Parameters.Add(New AseParameter("@rfid", AseDbType.VarChar)).Value = sIDRfid
+                            command.Parameters.Add(New AseParameter("@nHoja", AseDbType.VarChar)).Value = nHoja
 
                             Using reader As AseDataReader = command.ExecuteReader()
                                 tabla.Load(reader)
@@ -345,7 +347,7 @@ Public Class BDPrenda
         Return Tuple.Create(li_return, s_mensaje)
     End Function
 
-    Public Function UPDAcabadosTallaMov(whereParameters As Dictionary(Of String, Object), sCodTrabajador As String, codQR As String) As Integer
+    Public Function UPDAcabadosTallaMov(whereParameters As Dictionary(Of String, Object), updateParameters As Dictionary(Of String, Object)) As Integer
         Dim li_return As Integer = 0
 
         ' Verificar que los parámetros necesarios estén en el diccionario
@@ -355,12 +357,9 @@ Public Class BDPrenda
             Throw New ArgumentException("Faltan parámetros necesarios en el diccionario.")
         End If
 
-        ' Crear la consulta UPDATE con parámetros
-        Dim query As String = "UPDATE ordenacabadostallasmov " &
-                          "SET codQR = @rfid, usregsalemb = @usregsalemb, fsalemb = GETDATE() " &
-                          "WHERE ccmpn = @ccmpn AND flgestado = @flgestado " &
-                          "AND nnope = @nnope AND nordencorte = @nordencorte AND nordensubcorte = @nordensubcorte " &
-                          "AND cod_talla = @cod_talla AND id_talla = @id_talla"
+        ' Agregar ccmpn y flgestado a whereParameters si no están ya presentes
+        If Not whereParameters.ContainsKey("ccmpn") Then whereParameters.Add("ccmpn", COMPANIA)
+        If Not whereParameters.ContainsKey("flgestado") Then whereParameters.Add("flgestado", ESTADO_EMBALAJE)
 
         Try
             Using connectionAse As AseConnection = GetConnection()
@@ -372,31 +371,29 @@ Public Class BDPrenda
                 ' Manejo de transacción
                 Using trans = connectionAse.BeginTransaction()
                     Try
-                        ' Obtener valores desde el diccionario
-                        Dim nnope As String = whereParameters("nnope").ToString()
-                        Dim nordencorte As String = whereParameters("nordencorte").ToString()
-                        Dim nordensubcorte As String = whereParameters("nordensubcorte").ToString()
-                        Dim cod_talla As String = whereParameters("cod_talla").ToString()
-                        Dim id_talla As String = whereParameters("id_talla").ToString()
+                        ' Construcción dinámica del SET en el UPDATE
+                        Dim setClause As String = String.Join(", ", updateParameters.Keys.Select(Function(k) $"{k} = @{k}"))
 
-                        ' Depuración: Imprimir valores antes de ejecutar
-                        Console.WriteLine($"Ejecutando consulta con los siguientes parámetros:")
-                        Console.WriteLine($"@rfid: {codQR}, @usregsalemb: {sCodTrabajador}, @fsalemb: GETDATE()")
-                        Console.WriteLine($"@ccmpn: {COMPANIA}, @flgestado: {ESTADO_EMBALAJE}, @nnope: {nnope}, @nordencorte: {nordencorte}, @nordensubcorte: {nordensubcorte}")
-                        Console.WriteLine($"@cod_talla: {cod_talla}, @id_talla: {id_talla}")
+                        ' Construcción dinámica del WHERE en el UPDATE
+                        Dim whereClause As String = String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
+
+                        ' Construir la consulta final
+                        Dim query As String = $"UPDATE ordenacabadostallasmov SET fsalemb = GETDATE(), {setClause} WHERE {whereClause}"
+
+                        ' Depuración: imprimir consulta
+                        Console.WriteLine($"Consulta generada: {query}")
 
                         ' Crear comando con transacción
                         Using comando As New AseCommand(query, connectionAse, trans)
-                            ' Agregar parámetros a la consulta
-                            comando.Parameters.AddWithValue("@rfid", codQR)
-                            comando.Parameters.AddWithValue("@ccmpn", COMPANIA)
-                            comando.Parameters.AddWithValue("@flgestado", ESTADO_EMBALAJE)
-                            comando.Parameters.AddWithValue("@nnope", nnope)
-                            comando.Parameters.AddWithValue("@nordencorte", nordencorte)
-                            comando.Parameters.AddWithValue("@nordensubcorte", nordensubcorte)
-                            comando.Parameters.AddWithValue("@cod_talla", cod_talla)
-                            comando.Parameters.AddWithValue("@id_talla", id_talla)
-                            comando.Parameters.AddWithValue("@usregsalemb", sCodTrabajador)
+                            ' Agregar parámetros de actualización (SET), excepto fsalemb que ya está en GETDATE()
+                            For Each param In updateParameters
+                                comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                            Next
+
+                            ' Agregar parámetros de condición (WHERE)
+                            For Each param In whereParameters
+                                comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                            Next
 
                             ' Ejecutar la actualización
                             li_return = comando.ExecuteNonQuery()

@@ -409,6 +409,8 @@
     <None Include="Resources\password.png" />
     <None Include="Resources\icon_women_use.jpg" />
     <None Include="Resources\women_user.png" />
+    <None Include="Resources\clear.png" />
+    <None Include="Resources\limpiar.png" />
     <Content Include="SampleRevision.txt" />
   </ItemGroup>
   <ItemGroup>

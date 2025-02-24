@@ -133,34 +133,33 @@ Partial Class frmLector
         Me.gbxInventoryEx = New System.Windows.Forms.GroupBox()
         Me.tablaContenedorTimbrado = New System.Windows.Forms.TableLayoutPanel()
         Me.tabaLadoTimbrado = New System.Windows.Forms.TableLayoutPanel()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.cod_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.id_rfid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.btnLimpiarRFID = New System.Windows.Forms.Button()
         Me.btnClear = New System.Windows.Forms.Button()
         Me.cantidadRFID = New System.Windows.Forms.Label()
         Me.MsnVincular = New System.Windows.Forms.Label()
+        Me.CodBarras = New System.Windows.Forms.TextBox()
+        Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
         Me.dgvTagList = New System.Windows.Forms.DataGridView()
         Me.clnEPC = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnTID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clnCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.CodBarras = New System.Windows.Forms.TextBox()
+        Me.nroOP = New System.Windows.Forms.TextBox()
+        Me.nroHM = New System.Windows.Forms.TextBox()
+        Me.btnLimpiarOPHM = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.pruebaCodigos = New System.Windows.Forms.Label()
         Me.lblTotalCount = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.tbContEspacioVertical = New System.Windows.Forms.TableLayoutPanel()
         Me.btnStopInventoryEx = New System.Windows.Forms.Button()
         Me.cbxInventory = New System.Windows.Forms.ComboBox()
         Me.btnStartInventoryEx = New System.Windows.Forms.Button()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.TableLayoutPanel7 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnVerConsolidado = New System.Windows.Forms.Button()
+        Me.dGVConsolidado = New System.Windows.Forms.DataGridView()
         Me.tpSearch = New System.Windows.Forms.TabPage()
         Me.gbxBuscarPrenda = New System.Windows.Forms.GroupBox()
         Me.tablaBuscarPrenda = New System.Windows.Forms.TableLayoutPanel()
@@ -225,49 +224,63 @@ Partial Class frmLector
         Me.text_cod_lugrent_cobro = New System.Windows.Forms.Label()
         Me.txt_BillToDet = New System.Windows.Forms.Label()
         Me.DataGridView3 = New System.Windows.Forms.DataGridView()
-        Me.pnlConnect.SuspendLayout
-        Me.tabControl.SuspendLayout
-        Me.tpPerformance.SuspendLayout
-        Me.tablaContenConf.SuspendLayout
-        Me.gbxEPCSettings.SuspendLayout
-        Me.GroupBox8.SuspendLayout
-        Me.gbxScanMode.SuspendLayout
-        Me.GroupBox5.SuspendLayout
+        Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.hoja_marcacion = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cod_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.linea = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fecha = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.id_rfid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pnlConnect.SuspendLayout()
+        Me.tabControl.SuspendLayout()
+        Me.tpPerformance.SuspendLayout()
+        Me.tablaContenConf.SuspendLayout()
+        Me.gbxEPCSettings.SuspendLayout()
+        Me.GroupBox8.SuspendLayout()
+        Me.gbxScanMode.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         CType(Me.nudInventoryRoundInterval, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox4.SuspendLayout
+        Me.GroupBox4.SuspendLayout()
         CType(Me.nudTagRemoveThreshold, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox2.SuspendLayout
+        Me.GroupBox2.SuspendLayout()
         CType(Me.nudTagPresentRepeatInterval, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBoxLinkFrequency.SuspendLayout
-        Me.GroupBoxRxDecode.SuspendLayout
-        Me.GroupBox1.SuspendLayout
+        Me.GroupBoxLinkFrequency.SuspendLayout()
+        Me.GroupBoxRxDecode.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         CType(Me.tbRfSensitivity, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox3.SuspendLayout
+        Me.GroupBox3.SuspendLayout()
         CType(Me.tbRfPower, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel5.SuspendLayout
-        Me.gbJapanFrequency.SuspendLayout
-        Me.gbTaiwanFrequency.SuspendLayout
-        Me.TableLayoutPanel4.SuspendLayout
-        Me.tpInventory.SuspendLayout
-        Me.gbxInventoryEx.SuspendLayout
-        Me.tablaContenedorTimbrado.SuspendLayout
-        Me.tabaLadoTimbrado.SuspendLayout
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel1.SuspendLayout
+        Me.TableLayoutPanel5.SuspendLayout()
+        Me.gbJapanFrequency.SuspendLayout()
+        Me.gbTaiwanFrequency.SuspendLayout()
+        Me.TableLayoutPanel4.SuspendLayout()
+        Me.tpInventory.SuspendLayout()
+        Me.gbxInventoryEx.SuspendLayout()
+        Me.tablaContenedorTimbrado.SuspendLayout()
+        Me.tabaLadoTimbrado.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.TableLayoutPanel6.SuspendLayout()
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel2.SuspendLayout
-        Me.TableLayoutPanel3.SuspendLayout
-        Me.tpSearch.SuspendLayout
-        Me.gbxBuscarPrenda.SuspendLayout
-        Me.tablaBuscarPrenda.SuspendLayout
-        Me.ContenedorBuscarPrenda.SuspendLayout
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.tbContEspacioVertical.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel7.SuspendLayout()
+        CType(Me.dGVConsolidado, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpSearch.SuspendLayout()
+        Me.gbxBuscarPrenda.SuspendLayout()
+        Me.tablaBuscarPrenda.SuspendLayout()
+        Me.ContenedorBuscarPrenda.SuspendLayout()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tpPapper.SuspendLayout
-        Me.TablaContenedorHM.SuspendLayout
-        Me.tabaCabecera.SuspendLayout
-        Me.tableCabecera.SuspendLayout
+        Me.tpPapper.SuspendLayout()
+        Me.TablaContenedorHM.SuspendLayout()
+        Me.tabaCabecera.SuspendLayout()
+        Me.tableCabecera.SuspendLayout()
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout
+        Me.SuspendLayout()
         '
         'pnlConnect
         '
@@ -1353,10 +1366,10 @@ Partial Class frmLector
         '
         Me.tabaLadoTimbrado.ColumnCount = 1
         Me.tabaLadoTimbrado.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tabaLadoTimbrado.Controls.Add(Me.DataGridView1, 0, 3)
         Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel1, 0, 0)
         Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel2, 0, 1)
-        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel3, 0, 2)
+        Me.tabaLadoTimbrado.Controls.Add(Me.tbContEspacioVertical, 0, 2)
+        Me.tabaLadoTimbrado.Controls.Add(Me.TableLayoutPanel3, 0, 3)
         Me.tabaLadoTimbrado.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tabaLadoTimbrado.Location = New System.Drawing.Point(0, 0)
         Me.tabaLadoTimbrado.Margin = New System.Windows.Forms.Padding(0)
@@ -1369,102 +1382,6 @@ Partial Class frmLector
         Me.tabaLadoTimbrado.Size = New System.Drawing.Size(1183, 600)
         Me.tabaLadoTimbrado.TabIndex = 0
         '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.DataGridView1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.cod_talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle3
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 171)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1177, 426)
-        Me.DataGridView1.TabIndex = 41
-        '
-        'op
-        '
-        Me.op.HeaderText = "OP"
-        Me.op.Name = "op"
-        Me.op.ReadOnly = True
-        '
-        'corte
-        '
-        Me.corte.HeaderText = "Corte"
-        Me.corte.Name = "corte"
-        Me.corte.ReadOnly = True
-        '
-        'subcorte
-        '
-        Me.subcorte.HeaderText = "Sub_Corte"
-        Me.subcorte.Name = "subcorte"
-        Me.subcorte.ReadOnly = True
-        '
-        'talla
-        '
-        Me.talla.HeaderText = "Talla"
-        Me.talla.Name = "talla"
-        Me.talla.ReadOnly = True
-        '
-        'cod_talla
-        '
-        Me.cod_talla.HeaderText = "Cod_Talla"
-        Me.cod_talla.Name = "cod_talla"
-        Me.cod_talla.ReadOnly = True
-        '
-        'linea
-        '
-        Me.linea.HeaderText = "Linea"
-        Me.linea.Name = "linea"
-        Me.linea.ReadOnly = True
-        '
-        'id_talla
-        '
-        Me.id_talla.HeaderText = "ID"
-        Me.id_talla.Name = "id_talla"
-        Me.id_talla.ReadOnly = True
-        '
-        'fecha
-        '
-        Me.fecha.HeaderText = "Fecha"
-        Me.fecha.Name = "fecha"
-        Me.fecha.ReadOnly = True
-        '
-        'id_rfid
-        '
-        Me.id_rfid.HeaderText = "RFID"
-        Me.id_rfid.Name = "id_rfid"
-        Me.id_rfid.ReadOnly = True
-        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 4
@@ -1476,8 +1393,8 @@ Partial Class frmLector
         Me.TableLayoutPanel1.Controls.Add(Me.btnClear, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cantidadRFID, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.MsnVincular, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.dgvTagList, 3, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.CodBarras, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel6, 3, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
@@ -1486,6 +1403,7 @@ Partial Class frmLector
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(1183, 126)
         Me.TableLayoutPanel1.TabIndex = 44
         '
@@ -1546,43 +1464,81 @@ Partial Class frmLector
         Me.MsnVincular.TabIndex = 28
         Me.MsnVincular.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'CodBarras
+        '
+        Me.CodBarras.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CodBarras.ForeColor = System.Drawing.Color.Gray
+        Me.CodBarras.Location = New System.Drawing.Point(3, 32)
+        Me.CodBarras.Name = "CodBarras"
+        Me.TableLayoutPanel1.SetRowSpan(Me.CodBarras, 2)
+        Me.CodBarras.Size = New System.Drawing.Size(467, 30)
+        Me.CodBarras.TabIndex = 25
+        Me.CodBarras.Text = "Codigo de Barras..."
+        Me.CodBarras.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'TableLayoutPanel6
+        '
+        Me.TableLayoutPanel6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel6.ColumnCount = 3
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.22222!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.11111!))
+        Me.TableLayoutPanel6.Controls.Add(Me.dgvTagList, 0, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.nroOP, 0, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.nroHM, 1, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.btnLimpiarOPHM, 2, 1)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(768, 0)
+        Me.TableLayoutPanel6.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
+        Me.TableLayoutPanel6.RowCount = 2
+        Me.TableLayoutPanel1.SetRowSpan(Me.TableLayoutPanel6, 3)
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.TableLayoutPanel6.Size = New System.Drawing.Size(415, 126)
+        Me.TableLayoutPanel6.TabIndex = 52
+        '
         'dgvTagList
         '
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.dgvTagList.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvTagList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvTagList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvTagList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dgvTagList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Arial", 10.0!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvTagList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvTagList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvTagList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clnEPC, Me.clnTID, Me.clnCount})
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Arial", 9.0!)
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.Padding = New System.Windows.Forms.Padding(5)
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.LightBlue
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle7
-        Me.dgvTagList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel6.SetColumnSpan(Me.dgvTagList, 3)
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Arial", 9.0!)
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(5)
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightBlue
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvTagList.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvTagList.EnableHeadersVisualStyles = False
         Me.dgvTagList.GridColor = System.Drawing.Color.LightGray
-        Me.dgvTagList.Location = New System.Drawing.Point(771, 3)
+        Me.dgvTagList.Location = New System.Drawing.Point(3, 3)
         Me.dgvTagList.Name = "dgvTagList"
         Me.dgvTagList.ReadOnly = True
         Me.dgvTagList.RowHeadersVisible = False
-        Me.TableLayoutPanel1.SetRowSpan(Me.dgvTagList, 3)
         Me.dgvTagList.RowTemplate.Height = 24
         Me.dgvTagList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvTagList.Size = New System.Drawing.Size(409, 120)
+        Me.dgvTagList.Size = New System.Drawing.Size(409, 69)
         Me.dgvTagList.TabIndex = 47
         '
         'clnEPC
@@ -1609,18 +1565,45 @@ Partial Class frmLector
         Me.clnCount.Name = "clnCount"
         Me.clnCount.ReadOnly = True
         '
-        'CodBarras
+        'nroOP
         '
-        Me.CodBarras.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CodBarras.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CodBarras.ForeColor = System.Drawing.Color.Gray
-        Me.CodBarras.Location = New System.Drawing.Point(3, 32)
-        Me.CodBarras.Name = "CodBarras"
-        Me.TableLayoutPanel1.SetRowSpan(Me.CodBarras, 2)
-        Me.CodBarras.Size = New System.Drawing.Size(467, 30)
-        Me.CodBarras.TabIndex = 25
-        Me.CodBarras.Text = "Codigo de Barras..."
-        Me.CodBarras.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.nroOP.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.nroOP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.nroOP.ForeColor = System.Drawing.Color.Gray
+        Me.nroOP.Location = New System.Drawing.Point(3, 89)
+        Me.nroOP.Margin = New System.Windows.Forms.Padding(3, 0, 3, 3)
+        Me.nroOP.Name = "nroOP"
+        Me.nroOP.Size = New System.Drawing.Size(270, 20)
+        Me.nroOP.TabIndex = 48
+        Me.nroOP.Text = "Nro OP..."
+        '
+        'nroHM
+        '
+        Me.nroHM.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.nroHM.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.nroHM.ForeColor = System.Drawing.Color.Gray
+        Me.nroHM.Location = New System.Drawing.Point(279, 90)
+        Me.nroHM.Name = "nroHM"
+        Me.nroHM.Size = New System.Drawing.Size(86, 20)
+        Me.nroHM.TabIndex = 49
+        Me.nroHM.Text = "H. M...."
+        '
+        'btnLimpiarOPHM
+        '
+        Me.btnLimpiarOPHM.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnLimpiarOPHM.BackColor = System.Drawing.Color.Transparent
+        Me.btnLimpiarOPHM.FlatAppearance.BorderSize = 0
+        Me.btnLimpiarOPHM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent
+        Me.btnLimpiarOPHM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent
+        Me.btnLimpiarOPHM.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLimpiarOPHM.ForeColor = System.Drawing.Color.Transparent
+        Me.btnLimpiarOPHM.Location = New System.Drawing.Point(371, 78)
+        Me.btnLimpiarOPHM.Name = "btnLimpiarOPHM"
+        Me.btnLimpiarOPHM.Size = New System.Drawing.Size(41, 45)
+        Me.btnLimpiarOPHM.TabIndex = 50
+        Me.btnLimpiarOPHM.UseVisualStyleBackColor = False
         '
         'TableLayoutPanel2
         '
@@ -1680,24 +1663,24 @@ Partial Class frmLector
         Me.Label3.Text = "La Cantidad De Prendas Timbradas Es:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.BottomRight
         '
-        'TableLayoutPanel3
+        'tbContEspacioVertical
         '
-        Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.btnStopInventoryEx, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.cbxInventory, 2, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.btnStartInventoryEx, 1, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 162)
-        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(1183, 6)
-        Me.TableLayoutPanel3.TabIndex = 47
+        Me.tbContEspacioVertical.ColumnCount = 3
+        Me.tbContEspacioVertical.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
+        Me.tbContEspacioVertical.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
+        Me.tbContEspacioVertical.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.0!))
+        Me.tbContEspacioVertical.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.tbContEspacioVertical.Controls.Add(Me.btnStopInventoryEx, 0, 0)
+        Me.tbContEspacioVertical.Controls.Add(Me.cbxInventory, 2, 0)
+        Me.tbContEspacioVertical.Controls.Add(Me.btnStartInventoryEx, 1, 0)
+        Me.tbContEspacioVertical.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbContEspacioVertical.Location = New System.Drawing.Point(0, 162)
+        Me.tbContEspacioVertical.Margin = New System.Windows.Forms.Padding(0)
+        Me.tbContEspacioVertical.Name = "tbContEspacioVertical"
+        Me.tbContEspacioVertical.RowCount = 1
+        Me.tbContEspacioVertical.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tbContEspacioVertical.Size = New System.Drawing.Size(1183, 6)
+        Me.tbContEspacioVertical.TabIndex = 47
         '
         'btnStopInventoryEx
         '
@@ -1731,6 +1714,105 @@ Partial Class frmLector
         Me.btnStartInventoryEx.Text = "Start"
         Me.btnStartInventoryEx.UseVisualStyleBackColor = True
         Me.btnStartInventoryEx.Visible = False
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel3.ColumnCount = 2
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.DataGridView1, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.TableLayoutPanel7, 1, 0)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 171)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(1177, 426)
+        Me.TableLayoutPanel3.TabIndex = 48
+        '
+        'DataGridView1
+        '
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.DataGridView1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
+        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.hoja_marcacion, Me.corte, Me.subcorte, Me.talla, Me.cod_talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle6
+        Me.DataGridView1.Location = New System.Drawing.Point(3, 3)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.ReadOnly = True
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle7
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridView1.Size = New System.Drawing.Size(700, 400)
+        Me.DataGridView1.TabIndex = 54
+        '
+        'TableLayoutPanel7
+        '
+        Me.TableLayoutPanel7.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel7.ColumnCount = 1
+        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel7.Controls.Add(Me.btnVerConsolidado, 0, 0)
+        Me.TableLayoutPanel7.Controls.Add(Me.dGVConsolidado, 0, 1)
+        Me.TableLayoutPanel7.Location = New System.Drawing.Point(709, 3)
+        Me.TableLayoutPanel7.Name = "TableLayoutPanel7"
+        Me.TableLayoutPanel7.RowCount = 2
+        Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
+        Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.0!))
+        Me.TableLayoutPanel7.Size = New System.Drawing.Size(465, 400)
+        Me.TableLayoutPanel7.TabIndex = 55
+        '
+        'btnVerConsolidado
+        '
+        Me.btnVerConsolidado.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btnVerConsolidado.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnVerConsolidado.Location = New System.Drawing.Point(183, 8)
+        Me.btnVerConsolidado.Name = "btnVerConsolidado"
+        Me.btnVerConsolidado.Size = New System.Drawing.Size(99, 23)
+        Me.btnVerConsolidado.TabIndex = 0
+        Me.btnVerConsolidado.Text = "Ver Consolidado"
+        Me.btnVerConsolidado.UseVisualStyleBackColor = True
+        '
+        'dGVConsolidado
+        '
+        Me.dGVConsolidado.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dGVConsolidado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dGVConsolidado.Location = New System.Drawing.Point(3, 43)
+        Me.dGVConsolidado.Name = "dGVConsolidado"
+        Me.dGVConsolidado.Size = New System.Drawing.Size(459, 354)
+        Me.dGVConsolidado.TabIndex = 1
         '
         'tpSearch
         '
@@ -2687,6 +2769,70 @@ Partial Class frmLector
         Me.DataGridView3.Size = New System.Drawing.Size(1189, 245)
         Me.DataGridView3.TabIndex = 2
         '
+        'op
+        '
+        Me.op.HeaderText = "OP"
+        Me.op.Name = "op"
+        Me.op.ReadOnly = True
+        '
+        'hoja_marcacion
+        '
+        Me.hoja_marcacion.HeaderText = "HM"
+        Me.hoja_marcacion.Name = "hoja_marcacion"
+        Me.hoja_marcacion.ReadOnly = True
+        '
+        'corte
+        '
+        Me.corte.HeaderText = "Corte"
+        Me.corte.Name = "corte"
+        Me.corte.ReadOnly = True
+        Me.corte.Visible = False
+        '
+        'subcorte
+        '
+        Me.subcorte.HeaderText = "Sub_Corte"
+        Me.subcorte.Name = "subcorte"
+        Me.subcorte.ReadOnly = True
+        Me.subcorte.Visible = False
+        '
+        'talla
+        '
+        Me.talla.HeaderText = "Talla"
+        Me.talla.Name = "talla"
+        Me.talla.ReadOnly = True
+        '
+        'cod_talla
+        '
+        Me.cod_talla.HeaderText = "Cod_Talla"
+        Me.cod_talla.Name = "cod_talla"
+        Me.cod_talla.ReadOnly = True
+        '
+        'linea
+        '
+        Me.linea.HeaderText = "Linea"
+        Me.linea.Name = "linea"
+        Me.linea.ReadOnly = True
+        '
+        'id_talla
+        '
+        Me.id_talla.HeaderText = "ID"
+        Me.id_talla.Name = "id_talla"
+        Me.id_talla.ReadOnly = True
+        Me.id_talla.Visible = False
+        '
+        'fecha
+        '
+        Me.fecha.HeaderText = "Fecha"
+        Me.fecha.Name = "fecha"
+        Me.fecha.ReadOnly = True
+        Me.fecha.Visible = False
+        '
+        'id_rfid
+        '
+        Me.id_rfid.HeaderText = "RFID"
+        Me.id_rfid.Name = "id_rfid"
+        Me.id_rfid.ReadOnly = True
+        '
         'frmLector
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2702,64 +2848,69 @@ Partial Class frmLector
         Me.Text = "TS800 Sample"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.pnlConnect.ResumeLayout(False)
-        Me.pnlConnect.PerformLayout
+        Me.pnlConnect.PerformLayout()
         Me.tabControl.ResumeLayout(False)
         Me.tpPerformance.ResumeLayout(False)
         Me.tablaContenConf.ResumeLayout(False)
         Me.gbxEPCSettings.ResumeLayout(False)
-        Me.gbxEPCSettings.PerformLayout
+        Me.gbxEPCSettings.PerformLayout()
         Me.GroupBox8.ResumeLayout(False)
-        Me.GroupBox8.PerformLayout
+        Me.GroupBox8.PerformLayout()
         Me.gbxScanMode.ResumeLayout(False)
         Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout
+        Me.GroupBox5.PerformLayout()
         CType(Me.nudInventoryRoundInterval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout
+        Me.GroupBox4.PerformLayout()
         CType(Me.nudTagRemoveThreshold, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout
+        Me.GroupBox2.PerformLayout()
         CType(Me.nudTagPresentRepeatInterval, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBoxLinkFrequency.ResumeLayout(False)
-        Me.GroupBoxLinkFrequency.PerformLayout
+        Me.GroupBoxLinkFrequency.PerformLayout()
         Me.GroupBoxRxDecode.ResumeLayout(False)
-        Me.GroupBoxRxDecode.PerformLayout
+        Me.GroupBoxRxDecode.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout
+        Me.GroupBox1.PerformLayout()
         CType(Me.tbRfSensitivity, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout
+        Me.GroupBox3.PerformLayout()
         CType(Me.tbRfPower, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel5.ResumeLayout(False)
         Me.gbJapanFrequency.ResumeLayout(False)
-        Me.gbJapanFrequency.PerformLayout
+        Me.gbJapanFrequency.PerformLayout()
         Me.gbTaiwanFrequency.ResumeLayout(False)
-        Me.gbTaiwanFrequency.PerformLayout
+        Me.gbTaiwanFrequency.PerformLayout()
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.tpInventory.ResumeLayout(False)
         Me.gbxInventoryEx.ResumeLayout(False)
         Me.tablaContenedorTimbrado.ResumeLayout(False)
         Me.tabaLadoTimbrado.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout
+        Me.TableLayoutPanel1.PerformLayout()
+        Me.TableLayoutPanel6.ResumeLayout(False)
+        Me.TableLayoutPanel6.PerformLayout()
         CType(Me.dgvTagList, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout
+        Me.TableLayoutPanel2.PerformLayout()
+        Me.tbContEspacioVertical.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel7.ResumeLayout(False)
+        CType(Me.dGVConsolidado, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpSearch.ResumeLayout(False)
         Me.gbxBuscarPrenda.ResumeLayout(False)
         Me.tablaBuscarPrenda.ResumeLayout(False)
-        Me.tablaBuscarPrenda.PerformLayout
+        Me.tablaBuscarPrenda.PerformLayout()
         Me.ContenedorBuscarPrenda.ResumeLayout(False)
-        Me.ContenedorBuscarPrenda.PerformLayout
+        Me.ContenedorBuscarPrenda.PerformLayout()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpPapper.ResumeLayout(False)
         Me.TablaContenedorHM.ResumeLayout(False)
         Me.tabaCabecera.ResumeLayout(False)
-        Me.tabaCabecera.PerformLayout
+        Me.tabaCabecera.PerformLayout()
         Me.tableCabecera.ResumeLayout(False)
-        Me.tableCabecera.PerformLayout
+        Me.tableCabecera.PerformLayout()
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -2922,12 +3073,11 @@ Partial Class frmLector
     Friend WithEvents tablaContenedorTimbrado As TableLayoutPanel
     Friend WithEvents tabaLadoTimbrado As TableLayoutPanel
     Friend WithEvents MsnVincular As Label
-    Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents lblTotalCount As Label
     Friend WithEvents Label3 As Label
-    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents tbContEspacioVertical As TableLayoutPanel
     Friend WithEvents dgvTagList As DataGridView
     Friend WithEvents clnEPC As DataGridViewTextBoxColumn
     Friend WithEvents clnTID As DataGridViewTextBoxColumn
@@ -2949,7 +3099,17 @@ Partial Class frmLector
     Friend WithEvents btnLimpiarRFID As Button
     Friend WithEvents btnClear As Button
     Friend WithEvents pruebaCodigos As Label
+    Friend WithEvents TableLayoutPanel6 As TableLayoutPanel
+    Friend WithEvents nroOP As TextBox
+    Friend WithEvents nroHM As TextBox
+    Friend WithEvents btnLimpiarOPHM As Button
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents TableLayoutPanel7 As TableLayoutPanel
+    Friend WithEvents btnVerConsolidado As Button
+    Friend WithEvents dGVConsolidado As DataGridView
     Friend WithEvents op As DataGridViewTextBoxColumn
+    Friend WithEvents hoja_marcacion As DataGridViewTextBoxColumn
     Friend WithEvents corte As DataGridViewTextBoxColumn
     Friend WithEvents subcorte As DataGridViewTextBoxColumn
     Friend WithEvents talla As DataGridViewTextBoxColumn

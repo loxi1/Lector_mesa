@@ -33,6 +33,7 @@ Partial Class PruebaConfiguracion
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.op = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.corte = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.hoja_marcacion = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.subcorte = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cod_talla = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -131,7 +132,7 @@ Partial Class PruebaConfiguracion
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.subcorte, Me.talla, Me.cod_talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.op, Me.corte, Me.hoja_marcacion, Me.subcorte, Me.talla, Me.cod_talla, Me.linea, Me.id_talla, Me.fecha, Me.id_rfid})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -142,8 +143,7 @@ Partial Class PruebaConfiguracion
         Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.Location = New System.Drawing.Point(3, 192)
         Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridView1.Size = New System.Drawing.Size(1188, 486)
         Me.DataGridView1.TabIndex = 41
         '
@@ -158,6 +158,12 @@ Partial Class PruebaConfiguracion
         Me.corte.HeaderText = "Corte"
         Me.corte.Name = "corte"
         Me.corte.ReadOnly = True
+        '
+        'hoja_marcacion
+        '
+        Me.hoja_marcacion.HeaderText = "HM"
+        Me.hoja_marcacion.Name = "hoja_marcacion"
+        Me.hoja_marcacion.ReadOnly = True
         '
         'subcorte
         '
@@ -507,6 +513,7 @@ Partial Class PruebaConfiguracion
     Friend WithEvents pruebaCodigos As Label
     Friend WithEvents op As DataGridViewTextBoxColumn
     Friend WithEvents corte As DataGridViewTextBoxColumn
+    Friend WithEvents hoja_marcacion As DataGridViewTextBoxColumn
     Friend WithEvents subcorte As DataGridViewTextBoxColumn
     Friend WithEvents talla As DataGridViewTextBoxColumn
     Friend WithEvents cod_talla As DataGridViewTextBoxColumn

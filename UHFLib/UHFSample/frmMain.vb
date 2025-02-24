@@ -11,7 +11,7 @@ Public Class frmMain
         '    .Size = New Size(0, 0)
         '    .Hide()
         'End With
-        ' Obtener tipo de conexión de red
+        'Obtener tipo de conexión de red
         ObtenerTipoConexionRed()
 
         If Tipo_de_red = 2 Then

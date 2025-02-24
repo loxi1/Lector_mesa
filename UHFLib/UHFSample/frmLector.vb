@@ -36,6 +36,10 @@ Public Class frmLector
     Private columnaSeleccionada As Integer = -1 ' Variable global para almacenar el índice de la columna seleccionada
     Dim alertaMostrada As Boolean = False ' Bandera para evitar múltiples alertas
 
+    Dim colorFondo As Color = Color.White
+    Dim colorSeleccion As Color = Color.LightBlue
+
+
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
         InitializeComponent()
@@ -162,11 +166,29 @@ Public Class frmLector
         ConfigurarEstiloDataGridView(DataGridView1)
         MejorarDataGridView(DataGridView2)
         MejorarDataGridView(DataGridView3)
+        ConfigurarEstiloDataGridView(dGVConsolidado)
         EstiloBoton(btnClear, "#d9534f", "#ffffff", "#c9302c")
         EstiloBoton(btnLimpiarRFID, "#E0E0E0", "#000000", "#BDBDBD")
         EstiloContenedorTablaRFID()
         EstiloBoton(BtnBuscarHM, "#3BA873", "#ffffff", "#0d5934")
         EstiloBoton(BtnLimpiarHM, "#E0E0E0", "#000000", "#BDBDBD")
+        EstiloBoton(btnVerConsolidado, "#5cb85c", "#ffffff", "#303030")
+
+        ' Permitir edición en el DataGridView1
+        Me.DataGridView1.ReadOnly = False
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect ' Permite editar celdas individualmente
+
+        ' Hacer que todas las celdas sean de solo lectura excepto "hoja_marcacion"
+        For Each column As DataGridViewColumn In DataGridView1.Columns
+            If column.Name <> "hoja_marcacion" Then
+                column.ReadOnly = True
+            End If
+        Next
+
+        'Permitir teclas en el formulario
+        Me.KeyPreview = True
     End Sub
 
     Private Sub AdjustTabWidth()
@@ -926,6 +948,7 @@ Public Class frmLector
         Next
     End Sub
     Private Sub TabInventario()
+
         CodBarras.Focus()
         ActualizarCantidadRFID() ' Refrescar la cantidad de RFID al entrar en la pestaña
         ' Redimensionar elementos dentro de tablaContenedorTimbrado
@@ -1008,7 +1031,7 @@ Public Class frmLector
                 ResizeTableLayoutPanelControls(TryCast(control, TableLayoutPanel), fontSize, fontSize1)
             ElseIf Not String.IsNullOrEmpty(control.Name) Then
                 ' Ajustar la fuente de otros controles si es necesario
-                If control.Name = "CodBarras" Or control.Name = "BuscarCodBarras" Then
+                If control.Name = "CodBarras" Or control.Name = "BuscarCodBarras" Or control.Name = "nroOP" Or control.Name = "nroHM" Then
                     ' Ajustar el tamaño de la fuente del control CodBarras
                     control.Font = New Font(control.Font.FontFamily, fontSize)
                 ElseIf control.Name = "Label34" Or control.Name = "Label5" Then
@@ -1101,6 +1124,7 @@ Public Class frmLector
         Dim partes() As String = cadena.Split("~"c) ' Divide la cadena por el símbolo ~
         Dim mCodBarra As String = partes(0)
         Dim sCodigoRFID As String = partes(1)
+        Dim hm As String = partes(2)
         sCodigoRFID = sCodigoRFID.Trim().Replace(" ", "")
         sCodigoRFID = If(sCodigoRFID.Length > 24, sCodigoRFID.Substring(sCodigoRFID.Length - 24), sCodigoRFID)
 
@@ -1124,7 +1148,7 @@ Public Class frmLector
         'Se intertan los valores al procedimento almacenado USP_SAL_EMB_CON_RFID
         'El procediento valida y muestra msn con codigo de error lugo se actualiza la taba ordenacabadostallasmov y inserta en tmp_etiq_timbradas
         Console.WriteLine($"Se envia este valor de :{sCodigoRFID}:")
-        Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID)
+        Dim lsResult = m_BDPrenda.SaveRFID(mCodBarra, mEmpresa, mCodTrabajador, sCodigoRFID, hm)
         ' Actualizar el control 'MsnVincular' de forma segura
         SafeUpdateLabel(MsnVincular, lsResult.Item2)
         If lsResult.Item1 <> 0 Then
@@ -1162,7 +1186,8 @@ Public Class frmLector
                 {"talla", row("talla")},
                 {"cod_combinacion", row("cod_comb")},
                 {"color", row("color")},
-                {"cod_trabajador", row("fotocheck")}
+                {"cod_trabajador", row("fotocheck")},
+                {"hoja_marcacion", hm}
             }
             Console.WriteLine($"sCodigoRFID-->{sCodigoRFID}")
 
@@ -1190,12 +1215,12 @@ Public Class frmLector
             SafeUpdateLabel(MsnVincular, "Error inesperado al registrar la prenda. Consulte con el administrador.")
         End Try
     End Sub
-    Private Sub MostrarAlerta(mensaje As String)
+    Private Sub MostrarAlerta(mensaje As String, Optional callback As Action = Nothing)
         SafeUpdateLabel(MsnVincular, mensaje)
-        AlertaError(mensaje, Color.FromArgb(238, 26, 36))
+        AlertaError(mensaje, Color.FromArgb(238, 26, 36), callback)
     End Sub
-    Private Sub AlertaError(mensaje As String, color As Color)
-        Using alerta As New FormAlertaError("Error", mensaje, color)
+    Private Sub AlertaError(mensaje As String, color As Color, Optional callback As Action = Nothing)
+        Using alerta As New FormAlertaError("Error", mensaje, color, callback)
             alerta.ShowDialog()
         End Using
     End Sub
@@ -1478,7 +1503,7 @@ Public Class frmLector
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True ' Evitar el sonido "ding" del sistema
             ' Acción a realizar cuando se presiona valida HM
-            ValidarHM()
+            ValidarHM(TextBoxOP, TextBoxHM, BtnBuscarHM)
         End If
         Dim controlConFoco As Control = Me.ActiveControl
     End Sub
@@ -1509,15 +1534,15 @@ Public Class frmLector
         ' Capturar la tecla Tab en PreviewKeyDown
         If e.KeyCode = Keys.Tab Then
             ' Acción para la tecla Tab valida HM
-            ValidarHM()
+            ValidarHM(TextBoxOP, TextBoxHM, BtnBuscarHM)
             e.IsInputKey = True ' Marca la tecla Tab como una entrada válida para personalizar el comportamiento
         End If
     End Sub
 
-    Private Sub ValidarHM()
+    Private Sub ValidarHM(txtOp As TextBox, txtHM As TextBox, btnNext As Button)
         Dim tipo As String = "nhjmr"
-        Dim pOp As String = TextBoxOP.Text
-        Dim pHm As String = TextBoxHM.Text
+        Dim pOp As String = txtOp.Text
+        Dim pHm As String = txtHM.Text
 
         If pHm.Length = 0 Then
             Return
@@ -1527,13 +1552,15 @@ Public Class frmLector
         Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
 
         If String.IsNullOrWhiteSpace(valor) Then
-            TextBoxHM.Text = ""
-            TextBoxHM.Focus()
+            txtHM.Text = ""
+            txtHM.Focus()
             AlertaError($"Verificar la Hoja Marcación: {pHm} .", Color.FromArgb(238, 26, 36))
         Else
-            TextBoxHM.Text = valor
-            TextBoxHM.Enabled = False
-            BtnBuscarHM.Focus()
+            txtHM.Text = valor
+            If (txtHM.Name = "TextBoxHM") Then
+                txtHM.Enabled = False
+            End If
+            btnNext.Focus()
         End If
     End Sub
 
@@ -1667,9 +1694,9 @@ Public Class frmLector
 
                     ' Alternar color para las filas de detalle
                     If detalleRowIndex Mod 2 = 0 Then
-                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = Color.White
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorFondo
                     Else
-                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = Color.LightBlue
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorSeleccion
                     End If
                 Next
             End If
@@ -1745,16 +1772,6 @@ Public Class frmLector
             ' Filas alternas
             .AlternatingRowsDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#CCFFFF")
             .RowTemplate.Height = 30
-
-            ' Ajustar la columna RFID para que sea más ancha
-            If .Columns.Contains("fecha") Then
-                .Columns("fecha").Width = 180 ' Ajusta el ancho de la columna RFID según sea necesario
-            End If
-
-            ' Ajustar la columna RFID para que sea más ancha
-            If .Columns.Contains("id_rfid") Then
-                .Columns("id_rfid").Width = 270 ' Ajusta el ancho de la columna RFID según sea necesario
-            End If
         End With
     End Sub
     Private Sub MejorarDataGridView(ByVal dgv As DataGridView)
@@ -2107,19 +2124,19 @@ Public Class frmLector
                 If cantLeidas > 1 Then
                     If Not alertaMostrada Then ' Mostrar la alerta solo si no se ha mostrado en este timbrado
                         alertaMostrada = True
-                        MostrarAlerta("Verificar existen 2 RFID")
+                        MostrarAlerta("Verificar existen 2 RFID", Sub()
+                                                                      alertaMostrada = False ' 🔥 Resetear la bandera al cerrar la alerta
+                                                                  End Sub)
                     End If
                     CodBarras_ClearFoco()
                     Exit Sub
-                Else
-                    ' Reiniciar la bandera de alerta solo cuando finaliza el timbrado correctamente
-                    alertaMostradaPorTimbrado = False
                 End If
 
                 ' Obtener el código RFID y preparar el código de barras
                 Dim rfidCode As String = Task.Run(Function() ObtenerPCEPC()).Result
-
-                Dim barcode As String = $"{codbarr}~{rfidCode}"
+                Dim hm As String = nroHM.Text.Trim()
+                hm = If(hm = "H. M....", "", hm)
+                Dim barcode As String = $"{codbarr}~{rfidCode}~{hm}"
                 'Dim rfidCode_ As String = ObtenerPrimerEPC()
                 ' Mostrar en pantalla el valor capturado para depuración
                 'Console.WriteLine($"barcode::{barcode}:: conseguido::{rfidCode_}")
@@ -2245,6 +2262,16 @@ Public Class frmLector
         pnlConnect.Location = New Point(0, Me.ClientSize.Height - pnlConnect.Height)
 
 
+        Dim img As Image = Global.UHF_Sample.My.Resources.Resources.limpiar
+        Dim ratio As Double = img.Width / img.Height
+
+        ' Ajustamos la imagen para que solo se adapte al alto del botón
+        Dim newWidth As Integer = CInt(btnLimpiarOPHM.Height * ratio)
+
+        Dim newImg As New Bitmap(img, New Size(newWidth, btnLimpiarOPHM.Height))
+
+        btnLimpiarOPHM.Image = newImg
+
         If selectedTab.Name = "tpInventory" Then
             TabInventario()
             ' Asegurar que CodBarras siempre tiene el KeyDown activo
@@ -2274,6 +2301,316 @@ Public Class frmLector
             Console.WriteLine($"⚠️ Caché superó {MAX_CACHE_SIZE} elementos, limpiando...")
             cacheRFID.Clear() ' Limpiar completamente la caché
             Console.WriteLine("✅ Caché vaciada.")
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Muestra un cuadro de diálogo de confirmación y devuelve un booleano.
+    ''' </summary>
+    ''' <returns>True si el usuario confirmó, False en caso contrario.</returns>
+    Private Function Confirmacion() As Boolean
+        Try
+            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
+                Return confirmForm.ShowDialog() = DialogResult.OK
+            End Using
+        Catch ex As Exception
+            Console.WriteLine($"Error en Confirmacion(): {ex.Message}")
+            Return False
+        End Try
+    End Function
+
+    Private Sub NroHM_Enter(sender As Object, e As EventArgs) Handles nroHM.Enter
+        If nroHM.Text = "H. M...." Then
+            nroHM.Text = ""
+        End If
+    End Sub
+
+    Private Sub NroHM_Leave(sender As Object, e As EventArgs) Handles nroHM.Leave
+        If String.IsNullOrWhiteSpace(nroHM.Text) Then
+            nroHM.Text = "H. M...."
+        End If
+    End Sub
+
+    Private Sub NroOP_Enter(sender As Object, e As EventArgs) Handles nroOP.Enter
+        If nroOP.Text = "Nro OP..." Then
+            nroOP.Text = ""
+        End If
+    End Sub
+
+    Private Sub NroOP_Leave(sender As Object, e As EventArgs) Handles nroOP.Leave
+        If String.IsNullOrWhiteSpace(nroOP.Text) Then
+            nroOP.Text = "Nro OP..."
+        End If
+    End Sub
+
+    Private Sub NroOP_KeyPress(sender As Object, e As KeyPressEventArgs) Handles nroOP.KeyPress
+        ' Permitir números, punto decimal y teclas de control
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso e.KeyChar <> "." Then
+            e.Handled = True
+        End If
+
+        ' Asegurarse de que solo haya un punto decimal
+        If e.KeyChar = "." AndAlso nroOP.Text.Contains(".") Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub NroOP_TextChanged(sender As Object, e As EventArgs) Handles nroOP.TextChanged
+        If nroOP.TextLength = 5 Then
+            ' Preparar el diccionario de parámetros
+            Dim pOp As String = "10000" & nroOP.Text
+            Dim tipo As String = "norpd"
+            Dim whereParameters As New Dictionary(Of String, Object) From {{tipo, pOp}}
+            Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
+
+            If String.IsNullOrWhiteSpace(valor) Then
+                nroOP.Text = ""
+                nroOP.Focus()
+                AlertaError($"Verificar la OP: {pOp} .", Color.FromArgb(238, 26, 36))
+            Else
+                nroOP.Text = valor
+                nroOP.Enabled = False
+                nroHM.Text = ""
+                nroHM.Focus()
+            End If
+        End If
+    End Sub
+
+    Private Sub NroHM_KeyPress(sender As Object, e As KeyPressEventArgs) Handles nroHM.KeyPress
+        ' Permitir números, punto decimal y teclas de control
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso e.KeyChar <> "." Then
+            e.Handled = True
+        End If
+
+        ' Asegurarse de que solo haya un punto decimal
+        If e.KeyChar = "." AndAlso nroHM.Text.Contains(".") Then
+            e.Handled = True
+        End If
+
+        ' Limitar a 3 caracteres
+        If nroHM.Text.Length >= 3 AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+
+        ' Manejar el carácter Tab si AcceptsTab es True
+        If e.KeyChar = Chr(Keys.Tab) Then
+            e.Handled = True ' Opcional: Evitar la inserción si no deseas un carácter Tab
+        End If
+    End Sub
+
+    Private Sub NroHM_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles nroHM.PreviewKeyDown
+        ' Capturar la tecla Tab en PreviewKeyDown
+        If e.KeyCode = Keys.Tab Then
+            ' Acción para la tecla Tab valida HM
+            ValidarHM(nroOP, nroHM, btnLimpiarOPHM)
+            e.IsInputKey = True ' Marca la tecla Tab como una entrada válida para personalizar el comportamiento
+        End If
+    End Sub
+
+    Private Sub BtnLimpiarOPHM_Click(sender As Object, e As EventArgs) Handles btnLimpiarOPHM.Click
+        nroOP.Text = ""
+        nroOP.Enabled = True
+        nroOP.Focus()
+        nroHM.Text = ""
+    End Sub
+
+    Private Sub NroHM_KeyDown(sender As Object, e As KeyEventArgs) Handles nroHM.KeyDown
+        ' Verificar si se presionó la tecla Enter o Tab
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True ' Evitar el sonido "ding" del sistema
+            ' Acción a realizar cuando se presiona valida HM
+            ValidarHM(nroOP, nroHM, btnLimpiarOPHM)
+        End If
+        Dim controlConFoco As Control = Me.ActiveControl
+    End Sub
+
+    Private Sub FrmLector_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        Select Case e.KeyCode
+            Case Keys.N ' Tecla Ctrl+N para Nuevo Timbrado
+                btnClear.PerformClick()
+                Console.WriteLine($"Tecla Ctrl+N para Nuevo Timbrado")
+
+            Case Keys.B ' Tecla Ctrl+B Limpiar"
+                btnLimpiarRFID.PerformClick()
+                Console.WriteLine($"Tecla Ctrl+B Limpiar")
+
+            Case Keys.R ' Tecla Cltrl+R Borrar HM"
+                btnLimpiarOPHM.PerformClick()
+                Console.WriteLine($"Tecla Cltrl+R Borrar HM")
+
+        End Select
+    End Sub
+
+    Private Sub BtnVerConsolidado_Click(sender As Object, e As EventArgs) Handles btnVerConsolidado.Click
+        Dim whereParameters As New Dictionary(Of String, Object) From {{"fotocheck", mCodTrabajador}}
+        Dim l_return = m_DBConsultarPrenda.VerConsolidado(whereParameters)
+
+        If l_return.Item1 = 0 Then
+            Return
+        End If
+
+        ' Mostrar los datos en el DataGridView3
+        MostrarEnDataConsolidado(l_return.Item2, l_return.Item3)
+    End Sub
+
+    Private Sub MostrarEnDataConsolidado(totalTalla As List(Of Dictionary(Of String, Object)), detalleTalla As Dictionary(Of String, List(Of Dictionary(Of String, Object))))
+        ' Limpiar cualquier configuración previa
+        dGVConsolidado.DataSource = Nothing
+        dGVConsolidado.Rows.Clear()
+        dGVConsolidado.Columns.Clear()
+
+        ' Configurar las columnas del DataGridView
+        dGVConsolidado.Columns.Add("Linea", "Linea")
+        dGVConsolidado.Columns.Add("Op", "Op")
+        dGVConsolidado.Columns.Add("Talla", "Talla")
+        dGVConsolidado.Columns.Add("Color", "Color")
+        dGVConsolidado.Columns.Add("Cantidad", "Cantidad")
+        dGVConsolidado.Columns.Add("Total", "Total")
+
+        ' Iterar sobre los datos y agregar filas al DataGridView
+        For Each total In totalTalla
+            Dim linea As String = total("linea").ToString()
+            Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
+
+            ' Agregar fila del resumen (Color y Total)
+            Dim resumenRowIndex As Integer = dGVConsolidado.Rows.Add()
+            dGVConsolidado.Rows(resumenRowIndex).Cells("Linea").Value = linea
+            dGVConsolidado.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad.ToString("N0") ' Formato numérico
+
+            ' Aplicar estilos para resaltar la fila de resumen
+            With dGVConsolidado.Rows(resumenRowIndex)
+                .DefaultCellStyle.BackColor = Color.LightGray
+                .DefaultCellStyle.Font = New Font(dGVConsolidado.Font, FontStyle.Bold)
+
+                ' Resaltar totales altos
+                If totalCantidad > 500 Then
+                    .DefaultCellStyle.ForeColor = Color.DarkGreen
+                End If
+            End With
+
+            ' Agregar filas de detalle (Talla y Cantidad)
+            If detalleTalla.ContainsKey(linea) Then
+                For Each detalle In detalleTalla(linea)
+                    Dim op As String = detalle("op").ToString()
+                    Dim color As String = detalle("color").ToString()
+                    Dim talla As String = detalle("talla").ToString()
+                    Dim cantidad As Integer = Convert.ToInt32(detalle("cantidad"))
+
+                    Dim detalleRowIndex As Integer = dGVConsolidado.Rows.Add()
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Op").Value = op
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Color").Value = color
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Talla").Value = talla
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Cantidad").Value = cantidad.ToString("N0") ' Formato numérico
+
+                    ' Dejar las celdas de Color y Total en blanco para que visualmente parezca un detalle
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Linea").Value = ""
+                    dGVConsolidado.Rows(detalleRowIndex).Cells("Total").Value = ""
+
+                    ' Alternar color para las filas de detalle
+                    If detalleRowIndex Mod 2 = 0 Then
+                        dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorFondo
+                    Else
+                        dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorSeleccion
+                    End If
+                Next
+            End If
+        Next
+    End Sub
+
+    Private Sub DataGridView1_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellEndEdit
+        ' Validar que la celda editada es la columna "hoja_marcacion"
+        If DataGridView1.Columns(e.ColumnIndex).Name = "hoja_marcacion" Then
+            ' Obtener el nuevo valor editado
+            Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+            Dim nuevaHM As String = selectedRow.Cells("hoja_marcacion").Value.ToString()
+
+            ' Verificar que el valor sea numérico antes de formatearlo
+            If IsNumeric(nuevaHM) Then
+                ' Completar con ceros a la izquierda hasta tres dígitos
+                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = nuevaHM.PadLeft(3, "0"c)
+
+                ' Obtener los valores adicionales necesarios para la base de datos
+                Dim op As String = DataGridView1.Rows(e.RowIndex).Cells("op").Value.ToString()
+                Dim corte As String = DataGridView1.Rows(e.RowIndex).Cells("corte").Value.ToString()
+                Dim subcorte As String = DataGridView1.Rows(e.RowIndex).Cells("subcorte").Value.ToString()
+                Dim cod_talla As String = DataGridView1.Rows(e.RowIndex).Cells("cod_talla").Value.ToString()
+                Dim id_talla As String = DataGridView1.Rows(e.RowIndex).Cells("id_talla").Value.ToString()
+
+                ' Aquí puedes llamar a un método para guardar estos datos en la base de datos
+                'Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
+
+                ' Diccionario con los parámetros para la actualización
+                Dim whereParameters As New Dictionary(Of String, Object) From {
+                    {"nnope", op},
+                    {"nordencorte", corte},
+                    {"nordensubcorte", subcorte},
+                    {"cod_talla", cod_talla},
+                    {"id_talla", id_talla}
+                }
+
+                Dim updateParameters As New Dictionary(Of String, Object) From {
+                    {"nhoja", nuevaHM},
+                    {"usregsalemb", mCodTrabajador}
+                }
+
+                ' Llamar al método para actualizar la base de datos
+                Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
+
+                whereParameters.Clear() ' Elimina todos los elementos existentes
+
+                ' Agregar nuevos valores
+                whereParameters.Add("op", op)
+                whereParameters.Add("corte", corte)
+                whereParameters.Add("subcorte", subcorte)
+                whereParameters.Add("cod_talla", cod_talla)
+                whereParameters.Add("id_talla", id_talla)
+                whereParameters.Add("cod_trabajador", mCodTrabajador)
+
+                updateParameters.Clear() ' Elimina todos los elementos existentes
+
+                ' Agregar nuevos valores
+                updateParameters.Add("hoja_marcacion", nuevaHM)
+                updateParameters.Add("cod_trabajador_modificacion", mCodTrabajador)
+
+                Dim lsResult = m_BDPrendaScm.UpdatePrenda(whereParameters, updateParameters)
+
+                ' Verificar resultado y mostrar alertas
+                'If resultado > 0 Then
+                'AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 5)
+                ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
+                'selectedRow.Cells("fecha").Value = fechaSalida
+                'selectedRow.Cells("id_rfid").Value = nuevaHM
+                'End If
+
+                If lsResult > 0 Then
+                    AlertaManager.MostrarAlerta("Registro Prenda.", Color.Green, 1, 5)
+                Else
+                    AlertaManager.MostrarAlerta("Error al actualizar Prenda.", Color.Red, 3, 5)
+                End If
+            Else
+                ' En caso de que el usuario ingrese un valor no numérico, mostrar alerta
+                AlertaManager.MostrarAlerta("Error ingrese #s.", Color.Red, 3, 5)
+                ' Restaurar el valor anterior si es inválido
+                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = "000"
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseClick
+        ' Verificar que el clic sea con el botón izquierdo y en una celda válida
+        If e.Button = MouseButtons.Left AndAlso e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            ' Verificar si la columna es "hoja_marcacion"
+            If DataGridView1.Columns(e.ColumnIndex).Name = "hoja_marcacion" Then
+                DataGridView1.BeginEdit(True) ' Habilitar edición
+            Else
+                DataGridView1.EndEdit() ' Evitar edición en otras columnas
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
+        If DataGridView1.CurrentCell.ColumnIndex = DataGridView1.Columns("hoja_marcacion").Index Then
+            Dim txt As TextBox = TryCast(e.Control, TextBox)
         End If
     End Sub
 
@@ -2307,7 +2644,7 @@ Public Class frmLector
                 rfidCode = If(rfidCode.Length > 24, rfidCode.Substring(rfidCode.Length - 24), rfidCode)
                 Console.WriteLine($" rfidCode-->{rfidCode}")
 
-                Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
+                'Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
 
                 ' Diccionario con los parámetros para la actualización
                 Dim whereParameters As New Dictionary(Of String, Object) From {
@@ -2318,14 +2655,43 @@ Public Class frmLector
                     {"id_talla", idTalla}
                 }
 
+                Dim updateParameters As New Dictionary(Of String, Object) From {
+                    {"codQR", rfidCode},
+                    {"usregsalemb", mCodTrabajador}
+                }
+
                 ' Llamar al método para actualizar la base de datos
-                Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, mCodTrabajador, rfidCode)
+                Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
+
+                whereParameters.Clear() ' Elimina todos los elementos existentes
+
+                ' Agregar nuevos valores
+                whereParameters.Add("op", op)
+                whereParameters.Add("corte", corte)
+                whereParameters.Add("subcorte", subcorte)
+                whereParameters.Add("cod_talla", cod_talla)
+                whereParameters.Add("id_talla", id_talla)
+                whereParameters.Add("cod_trabajador", mCodTrabajador)
+
+                updateParameters.Clear() ' Elimina todos los elementos existentes
+
+                ' Agregar nuevos valores
+                updateParameters.Add("id_rfid", rfidCode)
+                updateParameters.Add("cod_trabajador_modificacion", mCodTrabajador)
+
+                Dim lsResult = m_BDPrendaScm.UpdatePrenda(whereParameters, updateParameters)
                 ' Verificar resultado y mostrar alertas
                 If resultado > 0 Then
                     AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 5)
                     ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
-                    selectedRow.Cells("fecha").Value = fechaSalida
+                    'selectedRow.Cells("fecha").Value = fechaSalida
                     selectedRow.Cells("id_rfid").Value = rfidCode
+                Else
+                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 5)
+                End If
+
+                If lsResult > 0 Then
+                    AlertaManager.MostrarAlerta("Registro Prenda.", Color.Green, 1, 5)
                 Else
                     AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 5)
                 End If
@@ -2344,29 +2710,6 @@ Public Class frmLector
                                    CodBarras.Select() ' Asegurar que el cursor esté en el TextBox
                                End Sub))
         ' Evitar que el Enter produzca un sonido o afecte otros eventos
-    End Sub
-
-    ''' <summary>
-    ''' Muestra un cuadro de diálogo de confirmación y devuelve un booleano.
-    ''' </summary>
-    ''' <returns>True si el usuario confirmó, False en caso contrario.</returns>
-    Private Function Confirmacion() As Boolean
-        Try
-            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
-                Return confirmForm.ShowDialog() = DialogResult.OK
-            End Using
-        Catch ex As Exception
-            Console.WriteLine($"Error en Confirmacion(): {ex.Message}")
-            Return False
-        End Try
-    End Function
-
-    Private Sub DataGridView1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellClick
-        ' Si se hace clic en una celda válida (no en la cabecera)
-        If e.RowIndex >= 0 Then
-            columnaSeleccionada = e.ColumnIndex
-            DataGridView1.Invalidate() ' Redibujar el DataGridView
-        End If
     End Sub
 
     Private Sub DataGridView1_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridView1.CellPainting

@@ -39,8 +39,8 @@ Partial Class FormTrabajador
         Me.panelBotones = New System.Windows.Forms.FlowLayoutPanel()
         Me.ButtonOk = New System.Windows.Forms.Button()
         Me.buttonCancelar = New System.Windows.Forms.Button()
-        Me.tableLayoutPanel1.SuspendLayout()
-        Me.tbContUsuario.SuspendLayout()
+        Me.tableLayoutPanel1.SuspendLayout
+        Me.tbContUsuario.SuspendLayout
         CType(Me.iconPassword, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.iconUsuario, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tbContClave.SuspendLayout()

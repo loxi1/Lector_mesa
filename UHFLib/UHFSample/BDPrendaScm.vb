@@ -84,18 +84,86 @@ Public Class BDPrendaScm
         Return ll_return
     End Function
 
+    ' Método para actualizar la tabla `prenda` con whereParameters y updateParameters
+    Public Function UpdatePrenda(whereParameters As Dictionary(Of String, Object), updateParameters As Dictionary(Of String, Object)) As Integer
+        Dim li_return As Integer = 0
+
+        If whereParameters Is Nothing Then whereParameters = New Dictionary(Of String, Object)()
+        If updateParameters Is Nothing Then updateParameters = New Dictionary(Of String, Object)()
+
+        If updateParameters.Count = 0 Then
+            Throw New ArgumentException("Debe proporcionar al menos un campo a actualizar en updateParameters.")
+        End If
+
+        Try
+            Using connection = conexion.Connect()
+                If connection.State <> ConnectionState.Open Then connection.Open()
+
+                Using trans = connection.BeginTransaction()
+                    Try
+                        ' Construcción de cláusulas SQL
+                        Dim setClause As String = BuildWhereClause(updateParameters, ", ")
+                        Dim whereClause As String = BuildWhereClause(whereParameters)
+
+                        ' Construir la consulta
+                        Dim query As String = $"UPDATE prenda SET fecha_modificacion = NOW(), {setClause} WHERE {whereClause}"
+                        Console.WriteLine($"Consulta generada: {query}")
+
+                        Using comando As New MySqlCommand(query, connection, trans)
+                            ' Agregar parámetros
+                            AddParametersToCommand(comando, updateParameters)
+                            AddParametersToCommand(comando, whereParameters)
+
+                            ' Ejecutar actualización
+                            li_return = comando.ExecuteNonQuery()
+                            Console.WriteLine($"Filas afectadas: {li_return}")
+
+                            ' Confirmar transacción si se actualizaron filas
+                            If li_return > 0 Then
+                                trans.Commit()
+                            Else
+                                trans.Rollback()
+                            End If
+                        End Using
+                    Catch ex As Exception
+                        trans.Rollback()
+                        Throw New Exception($"Error en UpdatePrenda (Rollback ejecutado): {ex.Message}")
+                    End Try
+                End Using
+            End Using
+        Catch ex As Exception
+            ss_error = ex.Message
+            Console.WriteLine($"Error en UpdatePrenda: {ex.Message}")
+            LogError("Error en UpdatePrenda", ex)
+        End Try
+
+        Return li_return
+    End Function
+
+
+
     ' Método para construir la cláusula WHERE dinámicamente
-    Private Function BuildWhereClause(parameters As Dictionary(Of String, Object)) As String
-        Return String.Join(" AND ", parameters.Keys.Select(Function(key) $"{key} = @{key}"))
+    Private Function BuildWhereClause(parameters As Dictionary(Of String, Object), Optional separacion As String = " AND ") As String
+        If parameters Is Nothing OrElse parameters.Count = 0 Then Return "" ' Evita el error si el diccionario está vacío o nulo
+        Return String.Join(separacion, parameters.Keys.Select(Function(key) $"{key} = @{key}"))
     End Function
 
     ' Método para agregar parámetros al comando
+    ' Método para agregar parámetros al comando
     Private Sub AddParametersToCommand(comando As MySqlCommand, parameters As Dictionary(Of String, Object))
-        comando.Parameters.Clear()
+        If parameters Is Nothing OrElse parameters.Count = 0 Then Exit Sub
+
         For Each param In parameters
-            comando.Parameters.AddWithValue($"@{param.Key}", If(param.Value, DBNull.Value))
+            Dim valorParametro As Object = If(param.Value Is Nothing, DBNull.Value, param.Value)
+            Console.WriteLine($"@{param.Key} valor: {valorParametro}") ' Debug en consola
+
+            ' Verificar si el parámetro ya existe antes de agregarlo
+            If Not comando.Parameters.Contains($"@{param.Key}") Then
+                comando.Parameters.AddWithValue($"@{param.Key}", valorParametro)
+            End If
         Next
     End Sub
+
 
     ' Método para registrar errores en un archivo de log
     Private Sub LogError(message As String, Optional ex As Exception = Nothing)
