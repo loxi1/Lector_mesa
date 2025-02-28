@@ -40,8 +40,8 @@ Public Class BDPrenda
                 End Using
             End Using
         Catch ex As Exception
-            Console.WriteLine($"Error al ejecutar GetTimbradasByWorkerAndEtiqueta: {ex.Message}")
-            LogError("Error en GetTimbradasByWorkerAndEtiqueta", ex)
+            Console.WriteLine($"Error al ejecutar TieneRFID: {ex.Message}")
+            LogError("Error en TieneRFID", ex)
         End Try
 
         Return esRFID
@@ -426,6 +426,194 @@ Public Class BDPrenda
         Return li_return
     End Function
 
+    Public Function ListarTimbradas(whereParameters As Dictionary(Of String, Object)) As Tuple(Of Integer, String, DataTable)
+        Dim li_return As Integer = 0
+        Dim s_mensaje As String = ""
+        Dim tabla As New DataTable()
+
+        ' Agregar estado a whereParameters si no están ya presentes
+        If Not whereParameters.ContainsKey("estado") Then whereParameters.Add("estado", ESTADO_EMBALAJE)
+
+        Try
+            Using connectionAse As AseConnection = GetConnection()
+                ' Validar que la conexión esté abierta
+                If connectionAse Is Nothing OrElse connectionAse.State <> ConnectionState.Open Then
+                    Throw New InvalidOperationException("La conexión a la base de datos no está abierta.")
+                End If
+
+                ' Construcción dinámica del WHERE en el select
+                Dim whereClause As String = String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
+
+                ' Construir la consulta final
+                Dim query As String = $"select linea,op,nhoja AS hoja_marcacion,corte,sub_corte AS subcorte,color,talla,cod_talla,id_talla,fecha,rfid AS id_rfid from tmp_etiq_timbradas WHERE {whereClause} order by fecha desc"
+
+                ' Depuración: imprimir la consulta generada
+                Console.WriteLine($"Consulta generada: {query}")
+
+                ' Crear y ejecutar el comando SQL
+                Using comando As New AseCommand(query, connectionAse)
+                    ' Agregar parámetros al comando
+                    For Each param In whereParameters
+                        comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                    Next
+
+                    ' Ejecutar la consulta y cargar los datos en el DataTable
+                    Using reader As AseDataReader = comando.ExecuteReader()
+                        tabla.Load(reader)
+                    End Using
+                End Using
+
+                ' Determinar el número de filas devueltas
+                li_return = tabla.Rows.Count
+                s_mensaje = If(li_return > 0, "Datos obtenidos correctamente", "No se encontraron resultados")
+
+            End Using
+
+        Catch ex As Exception
+            Console.WriteLine($"Error en ListarTimbradas: {ex.Message}")
+            LogError("Error en ListarTimbradas", ex)
+            li_return = -1
+            s_mensaje = "Error en la consulta"
+        End Try
+
+        Return Tuple.Create(li_return, s_mensaje, tabla)
+    End Function
+
+    ' Método para eliminar registros de tmp_etiq_timbradas
+    Public Function NuevoTimbrado(whereParameters As Dictionary(Of String, Object)) As Integer
+        Dim li_return As Integer = 0
+        ' Agregar estado a whereParameters si no están ya presentes
+        If Not whereParameters.ContainsKey("estado") Then whereParameters.Add("estado", ESTADO_EMBALAJE)
+
+        Try
+            Using connectionAse As AseConnection = GetConnection()
+                ' Validar que la conexión esté abierta
+                If connectionAse.State <> ConnectionState.Open Then
+                    Throw New InvalidOperationException("La conexión a la base de datos no está abierta.")
+                End If
+
+                ' Manejo de transacción
+                Using trans = connectionAse.BeginTransaction()
+                    Try
+
+                        ' Construcción dinámica del WHERE en el UPDATE
+                        Dim whereClause As String = String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
+
+                        ' Construir la consulta final
+                        Dim query As String = $"DELETE FROM tmp_etiq_timbradas WHERE {whereClause}"
+
+                        ' Depuración: imprimir consulta
+                        Console.WriteLine($"Consulta generada: {query}")
+
+                        ' Crear comando con transacción
+                        Using comando As New AseCommand(query, connectionAse, trans)
+
+                            ' Agregar parámetros de condición (WHERE)
+                            For Each param In whereParameters
+                                comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                            Next
+
+                            ' Ejecutar la actualización
+                            li_return = comando.ExecuteNonQuery()
+
+                            ' Depuración: mostrar resultado
+                            Console.WriteLine($"Filas afectadas: {li_return}")
+
+                            ' Confirmar transacción si se actualizaron filas
+                            If li_return > 0 Then
+                                trans.Commit()
+                            Else
+                                trans.Rollback()
+                            End If
+                        End Using
+
+                    Catch ex As Exception
+                        ' Si hay error, revertir cambios
+                        trans.Rollback()
+                        Console.WriteLine($"Error en NuevoTimbrado: {ex.Message}")
+                        LogError("Error en NuevoTimbrado", ex)
+                    End Try
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Console.WriteLine($"Error en la conexión o ejecución del query: {ex.Message}")
+            LogError("Error general en NuevoTimbrado", ex)
+        End Try
+
+        Return li_return
+    End Function
+
+    Public Function UpdateTimbrado(whereParameters As Dictionary(Of String, Object), updateParameters As Dictionary(Of String, Object)) As Integer
+        Dim li_return As Integer = 0
+
+        ' Agregar estado a whereParameters si no están ya presentes
+        If Not whereParameters.ContainsKey("estado") Then whereParameters.Add("estado", ESTADO_EMBALAJE)
+
+        Try
+            Using connectionAse As AseConnection = GetConnection()
+                ' Validar que la conexión esté abierta
+                If connectionAse.State <> ConnectionState.Open Then
+                    Throw New InvalidOperationException("La conexión a la base de datos no está abierta.")
+                End If
+
+                ' Manejo de transacción
+                Using trans = connectionAse.BeginTransaction()
+                    Try
+                        ' Construcción dinámica del SET en el UPDATE
+                        Dim setClause As String = String.Join(", ", updateParameters.Keys.Select(Function(k) $"{k} = @{k}"))
+
+                        ' Construcción dinámica del WHERE en el UPDATE
+                        Dim whereClause As String = String.Join(" AND ", whereParameters.Keys.Select(Function(k) $"{k} = @{k}"))
+
+                        ' Construir la consulta final
+                        Dim query As String = $"UPDATE tmp_etiq_timbradas SET fecha = GETDATE(), {setClause} WHERE {whereClause}"
+
+                        ' Depuración: imprimir consulta
+                        Console.WriteLine($"Consulta generada: {query}")
+
+                        ' Crear comando con transacción
+                        Using comando As New AseCommand(query, connectionAse, trans)
+                            ' Agregar parámetros de actualización (SET), excepto fsalemb que ya está en GETDATE()
+                            For Each param In updateParameters
+                                comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                            Next
+
+                            ' Agregar parámetros de condición (WHERE)
+                            For Each param In whereParameters
+                                comando.Parameters.AddWithValue($"@{param.Key}", param.Value)
+                            Next
+
+                            ' Ejecutar la actualización
+                            li_return = comando.ExecuteNonQuery()
+
+                            ' Depuración: mostrar resultado
+                            Console.WriteLine($"Filas afectadas: {li_return}")
+
+                            ' Confirmar transacción si se actualizaron filas
+                            If li_return > 0 Then
+                                trans.Commit()
+                            Else
+                                trans.Rollback()
+                            End If
+                        End Using
+
+                    Catch ex As Exception
+                        ' Si hay error, revertir cambios
+                        trans.Rollback()
+                        Console.WriteLine($"Error en UpdateTimbrado: {ex.Message}")
+                        LogError("Error en UpdateTimbrado", ex)
+                    End Try
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Console.WriteLine($"Error en la conexión o ejecución del query: {ex.Message}")
+            LogError("Error general en UpdateTimbrado", ex)
+        End Try
+
+        Return li_return
+    End Function
 
     ' Método para registrar errores
     Private Sub LogError(message As String, Optional ex As Exception = Nothing)

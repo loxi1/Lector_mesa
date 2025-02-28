@@ -36,9 +36,36 @@ Public Class frmLector
     Private columnaSeleccionada As Integer = -1 ' Variable global para almacenar el índice de la columna seleccionada
     Dim alertaMostrada As Boolean = False ' Bandera para evitar múltiples alertas
 
-    Dim colorFondo As Color = Color.White
-    Dim colorSeleccion As Color = Color.LightBlue
+    Dim pinturaBlanca As Color = System.Drawing.Color.White '#FFFFFF
+    Dim pinturaBlancoHumo As Color = System.Drawing.Color.WhiteSmoke
 
+    Dim pinturaNegra As Color = System.Drawing.Color.Black '#000000
+
+    Dim pinturaRoja As Color = System.Drawing.Color.Red
+    Dim pinturaRojoIndio As Color = System.Drawing.Color.IndianRed '#d9534f
+    Dim pinturaRojoLadrillo As Color = System.Drawing.Color.Firebrick '#c9302c → Firebrick ladrillo refractario
+    Dim pinturaRojoCarmesi As Color = System.Drawing.Color.FromArgb(201, 48, 44) ' #c9302c
+    Dim pinturaRojoCoral As Color = System.Drawing.Color.FromArgb(217, 83, 79) ' #d9534f
+
+
+    Dim pinturaVerde As Color = System.Drawing.Color.Green
+    Dim pinturaVerdeOscuro As Color = System.Drawing.Color.DarkGreen    '#0d5934 218838
+    Dim pinturaVerdeMarMedio As Color = System.Drawing.Color.MediumSeaGreen '#3BA873 #5cb85c
+    Dim pinturaVerdeBosque As Color = System.Drawing.Color.FromArgb(13, 89, 52)
+    Dim pinturaVerdeClaro As Color = System.Drawing.Color.LightGreen
+    Dim pinturaVerdeAzulado As Color = System.Drawing.Color.Teal
+    Dim pinturaVerdeTurquesa As Color = System.Drawing.Color.FromArgb(59, 168, 115) ' #3BA873
+    Dim pinturaVerdeFuerte As Color = System.Drawing.Color.FromArgb(13, 89, 52) ' #0d5934
+    Dim pinturaVerdeMedio As Color = System.Drawing.Color.FromArgb(92, 184, 92) ' #5cb85c
+
+    Dim pinturaGris As Color = System.Drawing.Color.Gray
+    Dim pinturaGrisClaro As Color = System.Drawing.Color.LightGray '#E0E0E0
+    Dim pinturaGrisOscuro As Color = System.Drawing.Color.DimGray '#303030
+
+    Dim pinturaNaranja As Color = System.Drawing.Color.Orange
+    Dim pinturaPlata As Color = System.Drawing.Color.Silver '#BDBDBD
+
+    Dim pinturaAzulClaro As Color = System.Drawing.Color.LightBlue
 
     Public Sub New(codTrabajador As String, datoUsuario As String)
         ' Llamar al InitializeComponent para inicializar los componentes del formulario
@@ -53,6 +80,35 @@ Public Class frmLector
     End Sub
 
     Private Sub frmInitial_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ' 🔹 Aplicar configuración inicial de estilos
+        ConfigurarEstiloDataGridView(DataGridView1)
+
+        ' 🔹 Configuración básica del DataGridView
+        With DataGridView1
+            .ReadOnly = False
+            .AllowUserToAddRows = False
+            .AllowUserToDeleteRows = False
+            .SelectionMode = DataGridViewSelectionMode.CellSelect ' Permite editar celdas individualmente
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+            .DefaultCellStyle.WrapMode = DataGridViewTriState.True ' Habilita ajuste de texto
+        End With
+
+        ' 🔹 Configuración básica del DataGridView
+        'With dGVConsolidado
+        '    .ReadOnly = False
+        '    .AllowUserToAddRows = False
+        '    .AllowUserToDeleteRows = False
+        '    .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+        '    .DefaultCellStyle.WrapMode = DataGridViewTriState.True ' Habilita ajuste de texto
+        'End With
+
+        ' 🔹 Hacer que todas las celdas sean de solo lectura excepto "hoja_marcacion"
+        For Each column As DataGridViewColumn In DataGridView1.Columns
+            If column.Name <> "hoja_marcacion" Then
+                column.ReadOnly = True
+            End If
+        Next
+
         Me.Text = "TS800 Sample" & " V" &
                     My.Application.Info.Version.Major & "." &
                     My.Application.Info.Version.Minor & "R" &
@@ -163,29 +219,20 @@ Public Class frmLector
         ' Concatenar los datos al título de la ventana
         Me.Text = $"Vincular - Usuario: {mUsuTrabajador} - Trabajador: {mCodTrabajador}"
 
-        ConfigurarEstiloDataGridView(DataGridView1)
         MejorarDataGridView(DataGridView2)
         MejorarDataGridView(DataGridView3)
-        ConfigurarEstiloDataGridView(dGVConsolidado)
-        EstiloBoton(btnClear, "#d9534f", "#ffffff", "#c9302c")
-        EstiloBoton(btnLimpiarRFID, "#E0E0E0", "#000000", "#BDBDBD")
+        'ConfigurarEstiloDataGridView(dGVConsolidado)
+        EstiloBoton(btnClear, pinturaRojoIndio, pinturaBlanca, pinturaRojoCarmesi)
+        EstiloBoton(btnLimpiarRFID, pinturaGrisClaro, pinturaNegra, pinturaPlata)
         EstiloContenedorTablaRFID()
-        EstiloBoton(BtnBuscarHM, "#3BA873", "#ffffff", "#0d5934")
-        EstiloBoton(BtnLimpiarHM, "#E0E0E0", "#000000", "#BDBDBD")
-        EstiloBoton(btnVerConsolidado, "#5cb85c", "#ffffff", "#303030")
+        EstiloBoton(BtnBuscarHM, pinturaVerdeMarMedio, pinturaBlanca, pinturaVerdeOscuro)
+        EstiloBoton(BtnLimpiarHM, pinturaGrisClaro, pinturaNegra, pinturaPlata)
+        EstiloBoton(btnVerConsolidado, pinturaVerdeMarMedio, pinturaBlanca, pinturaGrisOscuro)
 
-        ' Permitir edición en el DataGridView1
-        Me.DataGridView1.ReadOnly = False
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect ' Permite editar celdas individualmente
+        'Listar las prendas timbradas
+        ListarTimbrados()
 
-        ' Hacer que todas las celdas sean de solo lectura excepto "hoja_marcacion"
-        For Each column As DataGridViewColumn In DataGridView1.Columns
-            If column.Name <> "hoja_marcacion" Then
-                column.ReadOnly = True
-            End If
-        Next
+        BtnVerConsolidado_Click(Nothing, EventArgs.Empty) ' Simula el clic en BtnClear
 
         'Permitir teclas en el formulario
         Me.KeyPreview = True
@@ -215,12 +262,12 @@ Public Class frmLector
 
         ' Fuente mejorada
         Dim tabFont As New Font("Arial", 12.0F, FontStyle.Bold, GraphicsUnit.Point)
-        Dim textColor As Color = Color.Black
+        Dim textColor As Color = pinturaNegra
 
         ' Definir colores de pestañas
-        Dim activeTabColor As Color = ColorTranslator.FromHtml("#3BA873") ' Verde turquesa
-        Dim inactiveTabColor As Color = ColorTranslator.FromHtml("#F5F5F5") ' Gris claro
-        Dim hoverTabColor As Color = ColorTranslator.FromHtml("#0d5934") ' Verde oscuro
+        Dim activeTabColor As Color = pinturaVerdeMarMedio ' Verde mar medio 
+        Dim inactiveTabColor As Color = pinturaBlancoHumo ' Gris claro
+        Dim hoverTabColor As Color = pinturaVerdeOscuro ' Verde oscuro
 
         ' Determinar si está en hover
         Dim mousePosition As Point = tabControl.PointToClient(Cursor.Position)
@@ -228,7 +275,7 @@ Public Class frmLector
 
         ' Color de fondo de la pestaña
         Dim bgColor As Color = If(isSelected, activeTabColor, If(isHovered, hoverTabColor, inactiveTabColor))
-        textColor = If(isSelected, Color.White, Color.Black)
+        textColor = If(isSelected, pinturaBlanca, pinturaNegra)
 
         ' Dibujar fondo de pestaña
         Using brush As New SolidBrush(bgColor)
@@ -237,7 +284,7 @@ Public Class frmLector
 
         ' Dibujar línea inferior para pestaña activa
         If isSelected Then
-            g.DrawLine(New Pen(Color.White, 3), tabBounds.Left, tabBounds.Bottom - 2, tabBounds.Right, tabBounds.Bottom - 2)
+            g.DrawLine(New Pen(pinturaBlanca, 3), tabBounds.Left, tabBounds.Bottom - 2, tabBounds.Right, tabBounds.Bottom - 2)
         End If
 
         ' Dibujar el texto centrado
@@ -320,7 +367,7 @@ Public Class frmLector
             'SaveQ()
             'ObtenerSessTarj()
             'SaveSessTar()
-            AlertaOk("Conexion", Color.FromArgb(16, 175, 76), 30, "Exitosa al reader.")
+            AlertaOk("Conexion", pinturaVerdeMarMedio, 30, "Exitosa al reader.")
         End If
         _host.NetDeviceSearcherEnabled = True
         Me.Cursor = cursor
@@ -1020,7 +1067,8 @@ Public Class frmLector
         For Each control As Control In panel.Controls
             If TypeOf control Is Button Then
                 Dim btn As Button = TryCast(control, Button)
-                If btn IsNot Nothing And (control.Name = "btnClear" Or control.Name = "btnLimpiarRFID") Then
+                Console.WriteLine($"boton->{btn.Name}")
+                If btn IsNot Nothing And (control.Name = "btnClear" Or control.Name = "btnLimpiarRFID" Or control.Name = "btnVerConsolidado") Then
                     ' Ajustar el tamaño de la fuente del botón
                     'EstiloBoton(btn)
                     btn.Font = New Font(btn.Font.FontFamily, fontSize1)
@@ -1135,7 +1183,7 @@ Public Class frmLector
         If cacheRFID.ContainsKey(sCodigoRFID) Then
             SafeUpdateLabel(MsnVincular, "")
             SafeUpdateTextBox(CodBarras, "")
-            AlertaManager.MostrarAlerta($"Error: El RFID ya existe. Verifique.", Color.Red, 3, 5)
+            AlertaManager.MostrarAlerta($"Error: El RFID ya existe. Verifique.", pinturaRoja, 3, 5)
             'MostrarAlerta($"Error: El RFID ya existe. Verifique.")
             Exit Sub
         End If
@@ -1155,7 +1203,7 @@ Public Class frmLector
             If lsResult.Item1 = 3 And sCodigoRFID.Length > 0 Then
                 cacheRFID(sCodigoRFID) = True
             End If
-            AlertaManager.MostrarAlerta($"{lsResult.Item2}", Color.Red, 3, 5)
+            AlertaManager.MostrarAlerta($"{lsResult.Item2}", pinturaRoja, 3, 5)
             SafeUpdateLabel(MsnVincular, lsResult.Item2)
             SafeUpdateTextBox(CodBarras, "")
             Exit Sub
@@ -1195,6 +1243,7 @@ Public Class frmLector
             If llReturn <> 1 Then
                 M_S_N = Msn(llReturn)
                 MostrarAlerta(M_S_N)
+                Exit Sub
             Else
                 SafeUpdateLabel(MsnVincular, "Prenda registrada exitosamente.")
                 ' Eliminar el elemento "id_barras" del diccionario insertData
@@ -1202,28 +1251,42 @@ Public Class frmLector
                 If insertData.ContainsKey("id_barras") Then
                     insertData.Remove("id_barras")
                     insertData.Remove("cod_combinacion")
-                    insertData.Remove("color")
                     insertData.Remove("cod_trabajador")
                 End If
-                LlenarDataGridView(DataGridView1, insertData)
+                insertData.Add("linea", row("linea"))
+                'LlenarDataGridView(DataGridView1, insertData)
+                LlenarPrimeraFila(DataGridView1, insertData)
                 CantidadFilas()
                 SafeUpdateTextBox(CodBarras, "")
-                AlertaManager.MostrarAlerta("Registrado Ok", Color.Green, 1, 5)
+                AlertaManager.MostrarAlerta("Registrado Ok", pinturaVerde, 1, 5)
             End If
         Catch ex As Exception
             Console.WriteLine($"Error en el flujo de registro: {ex.Message}")
             SafeUpdateLabel(MsnVincular, "Error inesperado al registrar la prenda. Consulte con el administrador.")
         End Try
     End Sub
+    Private Sub AlertaErrorMsn(mensaje As String, color As Color)
+        SafeUpdateLabel(MsnVincular, mensaje)
+        Dim alertaError As New FormAlertaError("Error", mensaje, color)
+        alertaError.ShowDialog()
+    End Sub
     Private Sub MostrarAlerta(mensaje As String, Optional callback As Action = Nothing)
         SafeUpdateLabel(MsnVincular, mensaje)
-        AlertaError(mensaje, Color.FromArgb(238, 26, 36), callback)
+
+        ' 🔥 Verificar si ya hay una alerta abierta antes de mostrar otra
+        If FormAlertaError.alertaAbierta Then Exit Sub
+
+        AlertaError(mensaje, pinturaRojoLadrillo, callback)
     End Sub
+
     Private Sub AlertaError(mensaje As String, color As Color, Optional callback As Action = Nothing)
-        Using alerta As New FormAlertaError("Error", mensaje, color, callback)
-            alerta.ShowDialog()
-        End Using
+        If FormAlertaError.alertaAbierta Then Exit Sub ' 🔥 Doble control para evitar ejecución múltiple
+
+        ' ✅ Llamar la alerta pasando el callback correctamente
+        Dim alertaError As New FormAlertaError("Error", mensaje, color, callback)
+        alertaError.ShowDialog()
     End Sub
+
     Private Sub Alerta(mensaje As String, color_ As Color, tipo As Integer, Optional tiempo As Integer = 10)
         Using alerta As New FormAlerta(mensaje, color_, tipo, tiempo)
             alerta.ShowDialog()
@@ -1285,12 +1348,57 @@ Public Class frmLector
         End Try
     End Sub
 
+    Private Sub LlenarPrimeraFila(dataGridView As DataGridView, data As Dictionary(Of String, Object))
+        If data Is Nothing OrElse data.Count = 0 Then
+            MostrarAlerta("No hay datos para llenar el DataGridView.")
+            Return
+        End If
+
+        Try
+            ' Verifica si la llamada está en un subproceso diferente
+            If dataGridView.InvokeRequired Then
+                dataGridView.Invoke(New Action(Of DataGridView, Dictionary(Of String, Object))(AddressOf LlenarPrimeraFila), dataGridView, data)
+            Else
+                ' 🔹 Verificar si el DataGridView tiene columnas
+                If dataGridView.Columns.Count = 0 Then
+                    MostrarAlerta("El DataGridView no tiene columnas definidas.")
+                    Return
+                End If
+
+                ' Crear una nueva fila y llenarla con los datos
+                Dim nuevaFila As DataGridViewRow = CType(dataGridView.RowTemplate.Clone(), DataGridViewRow)
+                nuevaFila.CreateCells(dataGridView)
+
+                For Each key As String In data.Keys
+                    If dataGridView.Columns.Contains(key) Then
+                        nuevaFila.Cells(dataGridView.Columns(key).Index).Value = data(key)
+                    End If
+                Next
+
+                ' 🔹 Insertar la fila en la primera posición
+                dataGridView.Rows.Insert(0, nuevaFila)
+
+                ' 🔹 Refrescar DataGridView
+                dataGridView.Refresh()
+
+                ' 🔹 Asegurar que la fila nueva sea visible
+                If dataGridView.Rows.Count > 0 Then
+                    dataGridView.FirstDisplayedScrollingRowIndex = 0
+                    dataGridView.Rows(0).Selected = True
+                End If
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error al llenar el DataGridView: {ex.Message}")
+            MostrarAlerta("Error inesperado al llenar los datos al poner a la primera fila")
+        End Try
+    End Sub
+
     Private Sub CantidadFilas()
         Dim totalRegistros As Integer = If(DataGridView1.AllowUserToAddRows, DataGridView1.Rows.Count - 1, DataGridView1.Rows.Count)
         SafeUpdateLabel(lblTotalCount, CType(totalRegistros, String))
 
         ' 🔥 Verificar si se supera el límite de 500 registros
-        If totalRegistros >= 500 Then
+        If totalRegistros >= MAX_CACHE_SIZE Then
             LimpiarTodo()
         End If
     End Sub
@@ -1389,6 +1497,7 @@ Public Class frmLector
         BeginInvoke(New Action(Sub()
                                    CodBarras.Focus()
                                    CodBarras.Select()
+                                   CodBarras.TabIndex = 0 ' 🔹 Asegurar que se mantenga como el primer control
                                End Sub))
     End Sub
 
@@ -1460,7 +1569,7 @@ Public Class frmLector
         rect.Height -= 1
 
         ' Dibujar el borde con el color y grosor deseado
-        Using pen As New Pen(Color.Black, 2) ' Cambia el color y grosor según sea necesario
+        Using pen As New Pen(pinturaNegra, 2) ' Cambia el color y grosor según sea necesario
             e.Graphics.DrawRectangle(pen, rect)
         End Using
     End Sub
@@ -1476,7 +1585,7 @@ Public Class frmLector
             If String.IsNullOrWhiteSpace(valor) Then
                 TextBoxOP.Text = ""
                 TextBoxOP.Focus()
-                AlertaError($"Verificar la OP: {pOp} .", Color.FromArgb(238, 26, 36))
+                AlertaError($"Verificar la OP: {pOp} .", pinturaRojoLadrillo)
             Else
                 TextBoxOP.Text = valor
                 TextBoxOP.Enabled = False
@@ -1544,7 +1653,8 @@ Public Class frmLector
         Dim pOp As String = txtOp.Text
         Dim pHm As String = txtHM.Text
 
-        If pHm.Length = 0 Then
+        If pHm.Length < 1 OrElse pHm.Length > 3 Then
+            AlertaError($"Ingrese # valido: {pHm} .", pinturaRojoLadrillo)
             Return
         End If
 
@@ -1554,7 +1664,7 @@ Public Class frmLector
         If String.IsNullOrWhiteSpace(valor) Then
             txtHM.Text = ""
             txtHM.Focus()
-            AlertaError($"Verificar la Hoja Marcación: {pHm} .", Color.FromArgb(238, 26, 36))
+            AlertaError($"Verificar la Hoja Marcación: {pHm} .", pinturaRojoLadrillo)
         Else
             txtHM.Text = valor
             If (txtHM.Name = "TextBoxHM") Then
@@ -1574,7 +1684,7 @@ Public Class frmLector
         ' Validar si el DataTable tiene datos
         If l_return Is Nothing OrElse l_return.Rows.Count = 0 Then
             ' Si no hay datos, mostrar una alerta y salir del método
-            AlertaError($"No se encontraron registros para la OP: {pOp} {pHm}", Color.FromArgb(238, 26, 36))
+            AlertaError($"No se encontraron registros para la OP: {pOp} {pHm}", pinturaRojoLadrillo)
             Return
         End If
 
@@ -1668,12 +1778,12 @@ Public Class frmLector
 
             ' Aplicar estilos para resaltar la fila de resumen
             With DataGridView3.Rows(resumenRowIndex)
-                .DefaultCellStyle.BackColor = Color.LightGray
+                .DefaultCellStyle.BackColor = pinturaGrisClaro
                 .DefaultCellStyle.Font = New Font(DataGridView3.Font, FontStyle.Bold)
 
                 ' Resaltar totales altos
                 If totalCantidad > 500 Then
-                    .DefaultCellStyle.ForeColor = Color.DarkGreen
+                    .DefaultCellStyle.ForeColor = pinturaVerdeOscuro
                 End If
             End With
 
@@ -1694,9 +1804,9 @@ Public Class frmLector
 
                     ' Alternar color para las filas de detalle
                     If detalleRowIndex Mod 2 = 0 Then
-                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorFondo
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = pinturaBlanca
                     Else
-                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorSeleccion
+                        DataGridView3.Rows(detalleRowIndex).DefaultCellStyle.BackColor = pinturaAzulClaro
                     End If
                 Next
             End If
@@ -1714,7 +1824,7 @@ Public Class frmLector
         scanMode = ComboBoxItem.GetCurrentItemValue(cbxScanMode)
         result = _ts800.SetScanMode(False, scanMode)
         If result Then
-            AlertaOk("Establecer el modo escaneo", Color.FromArgb(16, 175, 76), 30, "Exitoso.")
+            AlertaOk("Establecer el modo escaneo", pinturaVerdeMarMedio, 30, "Exitoso.")
         Else
             MostrarAlerta("Error al configurar el modo de escaneo.")
         End If
@@ -1750,30 +1860,36 @@ Public Class frmLector
                                          End Sub)
     End Sub
     Private Sub ConfigurarEstiloDataGridView(dgv As DataGridView)
+        ' Asegurar que `dgv` es el objeto correcto (DataGridView y no una columna)
+        If TypeOf dgv Is DataGridView Then
+            dgv.BackgroundColor = pinturaBlanca ' ✔ CORREGIDO
+        End If
+
         With dgv
-            .BackgroundColor = Color.White
             .BorderStyle = BorderStyle.Fixed3D
+            .RowTemplate.Height = 40 ' Ajuste de altura para mayor visibilidad
 
             ' Fuente y alineación
-            .DefaultCellStyle.Font = New Font("Arial", 10.0!)
-            .DefaultCellStyle.Padding = New Padding(5)
-            .DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#0d5934")
-            .DefaultCellStyle.SelectionForeColor = Color.White
+            .DefaultCellStyle.Font = New Font("Arial", 9.0!)
+            .DefaultCellStyle.Padding = New Padding(5) ' Agrega padding general
+            .DefaultCellStyle.SelectionBackColor = pinturaVerdeOscuro ' Verde oscuro al seleccionar
+            .DefaultCellStyle.SelectionForeColor = pinturaBlanca
             .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            .DefaultCellStyle.WrapMode = DataGridViewTriState.True ' Ajuste de texto
 
             ' Encabezados de columna
-            .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12.0!, FontStyle.Bold)
-            .ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#E1FEDA")
-            .ColumnHeadersDefaultCellStyle.ForeColor = Color.Black
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 11.0!, FontStyle.Bold)
+            .ColumnHeadersDefaultCellStyle.BackColor = pinturaVerdeClaro ' Verde claro
+            .ColumnHeadersDefaultCellStyle.ForeColor = pinturaNegra
             .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Raised
             .EnableHeadersVisualStyles = False
 
             ' Filas alternas
-            .AlternatingRowsDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#CCFFFF")
-            .RowTemplate.Height = 30
+            .AlternatingRowsDefaultCellStyle.BackColor = pinturaAzulClaro ' Azul claro
         End With
     End Sub
+
     Private Sub MejorarDataGridView(ByVal dgv As DataGridView)
         ' Hacer que el DataGridView ocupe el 100% del espacio disponible
         dgv.Dock = DockStyle.Fill
@@ -1804,18 +1920,23 @@ Public Class frmLector
         ConfigurarEstiloDataGridView(dgv)
     End Sub
 
-    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As String = "#28A745", Optional txtcolor As String = "#FFFFFF", Optional bkcolorHover As String = "#218838")
+    Private Sub EstiloBoton(btnViste As Button, Optional bkcolor As Color = Nothing, Optional txtcolor As Color = Nothing, Optional bkcolorHover As Color = Nothing)
         ' Configuración mejorada para el botón btnClear
-        'btnClear, "#d9534f", "#ffffff", "#c9302c"
-        Console.WriteLine($"{btnViste.Name} Dime el texcolor-->{txtcolor}")
+        'btnClear, pinturaRojoIndio, pinturaBlanca, pinturaRojoCarmesi, pinturaVerde, pinturaBlanca, pinturaVerdeOscuro
+
+        ' Asignar colores predeterminados si no se pasan valores
+        If bkcolor = Nothing Then bkcolor = pinturaVerde
+        If txtcolor = Nothing Then txtcolor = pinturaBlanca
+        If bkcolorHover = Nothing Then bkcolorHover = pinturaVerdeOscuro
+
         With btnViste
             .Anchor = System.Windows.Forms.AnchorStyles.Left
-            .BackColor = ColorTranslator.FromHtml(bkcolor)
-            .ForeColor = ColorTranslator.FromHtml(txtcolor)
+            .BackColor = bkcolor
+            .ForeColor = txtcolor
             .Dock = DockStyle.Fill
             .FlatStyle = FlatStyle.Flat
             .FlatAppearance.BorderSize = 1 ' Sin borde
-            .FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml(bkcolorHover) ' Cambio de color al pasar el mouse
+            .FlatAppearance.MouseOverBackColor = bkcolorHover ' Cambio de color al pasar el mouse
             .TextAlign = ContentAlignment.MiddleCenter
             .Cursor = Cursors.Hand ' Cambiar el cursor a mano al pasar por encima
         End With
@@ -1823,16 +1944,16 @@ Public Class frmLector
 
     Private Sub EstiloContenedorTablaRFID()
         With dgvTagList
-            .BackgroundColor = Color.White
-            .GridColor = Color.Gray
-            .DefaultCellStyle.BackColor = Color.White
-            .DefaultCellStyle.ForeColor = Color.Black
+            .BackgroundColor = pinturaBlanca
+            .GridColor = pinturaGris
+            .DefaultCellStyle.BackColor = pinturaBlanca
+            .DefaultCellStyle.ForeColor = pinturaNegra
             .DefaultCellStyle.Font = New Font("Arial", 10)
             .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
+            .ColumnHeadersDefaultCellStyle.ForeColor = pinturaBlanca
             .ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 12, FontStyle.Bold)
             .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(250, 250, 250) ' Fondo gris muy claro para filas alternas
+            .AlternatingRowsDefaultCellStyle.BackColor = pinturaBlancoHumo ' Fondo gris muy claro para filas alternas
             .RowTemplate.Height = 30
 
             ' Ocultar la columna clnTID
@@ -1860,7 +1981,7 @@ Public Class frmLector
 
     Private Sub BtnSetQValue_Click(sender As Object, e As EventArgs) Handles btnSetQValue.Click
         If SaveQ() Then
-            AlertaOk("Estableció valor Q", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
+            AlertaOk("Estableció valor Q", pinturaVerdeMarMedio, 30, "Inventario correctamente.")
             ObtenerQ() ' 🚀 Asegura que el comboBox tenga el valor actualizado
         Else
             MostrarAlerta("Error al establecer valor Q.")
@@ -1888,7 +2009,7 @@ Public Class frmLector
 
     Private Sub BtnSetSessionTarget_Click(sender As Object, e As EventArgs) Handles btnSetSessionTarget.Click
         If SaveSessTar() Then
-            AlertaOk("Estableció Sesión y Tarjeta", Color.FromArgb(16, 175, 76), 30, "Guardado correctamente.")
+            AlertaOk("Estableció Sesión y Tarjeta", pinturaVerdeMarMedio, 30, "Guardado correctamente.")
             ObtenerSessTarj() ' 🚀 Asegura que los comboBox tengan el valor actualizado
         Else
             MostrarAlerta("Error al establecer Sesión y Tarjeta.")
@@ -1922,7 +2043,7 @@ Public Class frmLector
         Dim result As Boolean = saveRepeatInterval()
 
         If result Then
-            AlertaOk("Establecio Intervalo de repeticion", Color.FromArgb(16, 175, 76), 30, "Guardao correctamente.")
+            AlertaOk("Establecio Intervalo de repeticion", pinturaVerdeMarMedio, 30, "Guardao correctamente.")
         Else
             MostrarAlerta("Error al establecer Intervalo de repeticion.")
         End If
@@ -1978,7 +2099,7 @@ Public Class frmLector
         Dim result As Boolean = SaveInvActivo()
 
         If result Then
-            AlertaOk("Establecer el modo activo", Color.FromArgb(16, 175, 76), 30, "Inventario correctamente.")
+            AlertaOk("Establecer el modo activo", pinturaVerdeMarMedio, 30, "Inventario correctamente.")
         Else
             MostrarAlerta("Error al establecer el modo activo de inventario.")
         End If
@@ -2063,7 +2184,7 @@ Public Class frmLector
     Private Sub BtnSetRfSensitivity_Click(sender As Object, e As EventArgs) Handles btnSetRfSensitivity.Click
         Dim result As Boolean = SaveRfSencibiliad()
         If result Then
-            AlertaOk("Establecer RF Sensibilidad", Color.FromArgb(16, 175, 76), 30, "Registro correctamente.")
+            AlertaOk("Establecer RF Sensibilidad", pinturaVerdeMarMedio, 30, "Registro correctamente.")
         Else
             MostrarAlerta("Error al establecer RF Sensibilidad.")
         End If
@@ -2080,7 +2201,7 @@ Public Class frmLector
     Private Sub BtnSetRfPower_Click(sender As Object, e As EventArgs) Handles btnSetRfPower.Click
         Dim result As Boolean = SaveRfPotencia()
         If result Then
-            AlertaOk("Establecer RF Potencia", Color.FromArgb(16, 175, 76), 30, "Registro correctamente.")
+            AlertaOk("Establecer RF Potencia", pinturaVerdeMarMedio, 30, "Registro correctamente.")
         Else
             MostrarAlerta("Error al establecer RF Potencia.")
         End If
@@ -2101,12 +2222,29 @@ Public Class frmLector
     End Sub
 
     Private Sub BtnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        ClearTagListView()
-        CountTags()
-        DataGridView1.Rows.Clear()
-        MsnVincular.Text = ""
-        CodBarras.Focus()
-        CodBarras.Text = ""
+        Try
+            ' Limpiar la lista de tags y contar etiquetas
+            ClearTagListView()
+            CountTags()
+
+            BtnLimpiarRFID_Click(Nothing, EventArgs.Empty) ' Simula el clic en BtnLimpiarRFID
+            BtnLimpiarOPHM_Click(Nothing, EventArgs.Empty)
+
+            ' Limpiar mensaje de estado y caja de texto
+            MsnVincular.Text = ""
+            CodBarras.Text = ""
+            CodBarras.Focus()
+
+            DataGridView1.Rows.Clear()
+
+            LimpiarGridConsolidado()
+
+            NuevoTimbrado()
+
+        Catch ex As Exception
+            Console.WriteLine($"Error al limpiar la tabla DataGridView1: {ex.Message}")
+            'MostrarAlerta("Error al limpiar la tabla. Consulte con el administrador.", pinturaRoja, 3, 5)
+        End Try
     End Sub
 
     Private Async Sub CodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles CodBarras.KeyDown
@@ -2122,12 +2260,8 @@ Public Class frmLector
                 ' Verificar si hay más de un RFID leído
                 Dim cantLeidas As Integer = CantidadFilasLeidas()
                 If cantLeidas > 1 Then
-                    If Not alertaMostrada Then ' Mostrar la alerta solo si no se ha mostrado en este timbrado
-                        alertaMostrada = True
-                        MostrarAlerta("Verificar existen 2 RFID", Sub()
-                                                                      alertaMostrada = False ' 🔥 Resetear la bandera al cerrar la alerta
-                                                                  End Sub)
-                    End If
+                    AlertaErrorMsn("Verificar existen 2 RFID", pinturaRojoCoral)
+                    BtnLimpiarRFID_Click(Nothing, EventArgs.Empty)
                     CodBarras_ClearFoco()
                     Exit Sub
                 End If
@@ -2175,11 +2309,11 @@ Public Class frmLector
     End Sub
     ' Evento cuando el mouse sale en el botón
     Private Sub BtnClear_MouseLeave(sender As Object, e As EventArgs) Handles btnClear.MouseLeave
-        btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(168, Byte), Integer), CType(CType(115, Byte), Integer))
+        btnClear.BackColor = pinturaVerdeMarMedio
     End Sub
     ' Evento cuando el mouse entra en el botón
     Private Sub BtnClear_MouseEnter(sender As Object, e As EventArgs) Handles btnClear.MouseEnter
-        btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(13, Byte), Integer), CType(CType(89, Byte), Integer), CType(CType(52, Byte), Integer))
+        btnClear.BackColor = pinturaVerdeBosque
     End Sub
 
     Private Sub BuscarCodBarras_KeyDown(sender As Object, e As KeyEventArgs) Handles BuscarCodBarras.KeyDown
@@ -2193,56 +2327,56 @@ Public Class frmLector
     Private Sub CodBarras_Enter(sender As Object, e As EventArgs) Handles CodBarras.Enter
         If CodBarras.Text = "Codigo de Barras..." Then
             CodBarras.Text = ""
-            CodBarras.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+            CodBarras.ForeColor = pinturaNegra ' Cambia el color del texto a negro cuando el usuario escribe
         End If
     End Sub
 
     Private Sub CodBarras_Leave(sender As Object, e As EventArgs) Handles CodBarras.Leave
         If String.IsNullOrWhiteSpace(CodBarras.Text) Then
             CodBarras.Text = "Codigo de Barras..."
-            CodBarras.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+            CodBarras.ForeColor = pinturaGris ' Cambia el color del texto a gris para parecer un placeholder
         End If
     End Sub
 
     Private Sub TextBoxOP_Enter(sender As Object, e As EventArgs) Handles TextBoxOP.Enter
         If TextBoxOP.Text = "Nro OP..." Then
             TextBoxOP.Text = ""
-            TextBoxOP.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+            TextBoxOP.ForeColor = pinturaNegra ' Cambia el color del texto a negro cuando el usuario escribe
         End If
     End Sub
 
     Private Sub TextBoxOP_Leave(sender As Object, e As EventArgs) Handles TextBoxOP.Leave
         If String.IsNullOrWhiteSpace(TextBoxOP.Text) Then
             TextBoxOP.Text = "Nro OP..."
-            TextBoxOP.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+            TextBoxOP.ForeColor = pinturaGris ' Cambia el color del texto a gris para parecer un placeholder
         End If
     End Sub
 
     Private Sub TextBoxHM_Enter(sender As Object, e As EventArgs) Handles TextBoxHM.Enter
         If TextBoxHM.Text = "H. M...." Then
             TextBoxHM.Text = ""
-            TextBoxHM.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+            TextBoxHM.ForeColor = pinturaNegra ' Cambia el color del texto a negro cuando el usuario escribe
         End If
     End Sub
 
     Private Sub TextBoxHM_Leave(sender As Object, e As EventArgs) Handles TextBoxHM.Leave
         If String.IsNullOrWhiteSpace(TextBoxHM.Text) Then
             TextBoxHM.Text = "H. M...."
-            TextBoxHM.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+            TextBoxHM.ForeColor = pinturaGris ' Cambia el color del texto a gris para parecer un placeholder
         End If
     End Sub
 
     Private Sub BuscarCodBarras_Enter(sender As Object, e As EventArgs) Handles BuscarCodBarras.Enter
         If BuscarCodBarras.Text = "Codigo de Barras..." Then
             BuscarCodBarras.Text = ""
-            BuscarCodBarras.ForeColor = Color.Black ' Cambia el color del texto a negro cuando el usuario escribe
+            BuscarCodBarras.ForeColor = pinturaNegra ' Cambia el color del texto a negro cuando el usuario escribe
         End If
     End Sub
 
     Private Sub BuscarCodBarras_Leave(sender As Object, e As EventArgs) Handles BuscarCodBarras.Leave
         If String.IsNullOrWhiteSpace(BuscarCodBarras.Text) Then
             BuscarCodBarras.Text = "Codigo de Barras..."
-            BuscarCodBarras.ForeColor = Color.Gray ' Cambia el color del texto a gris para parecer un placeholder
+            BuscarCodBarras.ForeColor = pinturaGris ' Cambia el color del texto a gris para parecer un placeholder
         End If
     End Sub
 
@@ -2274,19 +2408,22 @@ Public Class frmLector
 
         If selectedTab.Name = "tpInventory" Then
             TabInventario()
-            ' Asegurar que CodBarras siempre tiene el KeyDown activo
+            ' ✅ Asegurar que el evento `KeyDown` de CodBarras no se duplique
             RemoveHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
             AddHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
-            ' Forzar el foco y evento de tecla en CodBarras
+
+            ' ✅ Enfocar el control sin volver a asignar `KeyDown`
             BeginInvoke(New Action(Sub()
                                        CodBarras.Focus()
-                                       AddHandler CodBarras.KeyDown, AddressOf CodBarras_KeyDown
+                                       CodBarras.Select()
                                    End Sub))
         ElseIf selectedTab.Name = "tpSearch" Then
             TbBuscarPrenda()
-            ' Asegurar que BuscarCodBarras reciba el foco al cambiar a tpSearch
+            ' ✅ Asegurar que el evento `KeyDown` de BuscarCodBarras no se duplique
             RemoveHandler BuscarCodBarras.KeyDown, AddressOf BuscarCodBarras_KeyDown
             AddHandler BuscarCodBarras.KeyDown, AddressOf BuscarCodBarras_KeyDown
+
+            ' ✅ Enfocar el control sin volver a asignar `KeyDown`
             BeginInvoke(New Action(Sub()
                                        BuscarCodBarras.Focus()
                                        BuscarCodBarras.Select()
@@ -2310,7 +2447,7 @@ Public Class frmLector
     ''' <returns>True si el usuario confirmó, False en caso contrario.</returns>
     Private Function Confirmacion() As Boolean
         Try
-            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", Color.FromArgb(255, 165, 0), "¿Desea continuar con la edición?")
+            Using confirmForm As New FormConfirmacion("¿Está seguro de editar?", pinturaNaranja, "¿Desea continuar con la edición?")
                 Return confirmForm.ShowDialog() = DialogResult.OK
             End Using
         Catch ex As Exception
@@ -2366,7 +2503,7 @@ Public Class frmLector
             If String.IsNullOrWhiteSpace(valor) Then
                 nroOP.Text = ""
                 nroOP.Focus()
-                AlertaError($"Verificar la OP: {pOp} .", Color.FromArgb(238, 26, 36))
+                AlertaError($"Verificar la OP: {pOp} .", pinturaRojoLadrillo)
             Else
                 nroOP.Text = valor
                 nroOP.Enabled = False
@@ -2427,95 +2564,224 @@ Public Class frmLector
     Private Sub FrmLector_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         Select Case e.KeyCode
             Case Keys.N ' Tecla Ctrl+N para Nuevo Timbrado
-                btnClear.PerformClick()
-                Console.WriteLine($"Tecla Ctrl+N para Nuevo Timbrado")
+                If e.Control Then ' Solo ejecuta si se presiona Ctrl + N
+                    btnClear.PerformClick()
+                    Console.WriteLine($"Tecla Ctrl+N para Nuevo Timbrado")
+                End If
 
             Case Keys.B ' Tecla Ctrl+B Limpiar"
-                btnLimpiarRFID.PerformClick()
-                Console.WriteLine($"Tecla Ctrl+B Limpiar")
+                If e.Control Then ' Solo ejecuta si se presiona Ctrl + B
+                    btnLimpiarRFID.PerformClick()
+                    Console.WriteLine($"Tecla Ctrl+B Limpiar")
+                End If
 
             Case Keys.R ' Tecla Cltrl+R Borrar HM"
-                btnLimpiarOPHM.PerformClick()
-                Console.WriteLine($"Tecla Cltrl+R Borrar HM")
+                If e.Control Then ' Solo ejecuta si se presiona Ctrl + R
+                    btnLimpiarOPHM.PerformClick()
+                    Console.WriteLine($"Tecla Cltrl+R Borrar HM")
+                End If
 
+            Case Keys.D 'Tecla Cltrl+D Ver consolidado
+                If e.Control Then ' Solo ejecuta si se presiona Ctrl + D
+                    btnVerConsolidado.PerformClick()
+                End If
         End Select
     End Sub
 
     Private Sub BtnVerConsolidado_Click(sender As Object, e As EventArgs) Handles btnVerConsolidado.Click
         Dim whereParameters As New Dictionary(Of String, Object) From {{"fotocheck", mCodTrabajador}}
         Dim l_return = m_DBConsultarPrenda.VerConsolidado(whereParameters)
-
+        LimpiarGridConsolidado()
         If l_return.Item1 = 0 Then
             Return
         End If
-
+        Console.WriteLine($"---Mira la linea---")
         ' Mostrar los datos en el DataGridView3
-        MostrarEnDataConsolidado(l_return.Item2, l_return.Item3)
+        GenerarConsolidadoDinamico(l_return.Item2, l_return.Item3)
     End Sub
 
-    Private Sub MostrarEnDataConsolidado(totalTalla As List(Of Dictionary(Of String, Object)), detalleTalla As Dictionary(Of String, List(Of Dictionary(Of String, Object))))
-        ' Limpiar cualquier configuración previa
-        dGVConsolidado.DataSource = Nothing
-        dGVConsolidado.Rows.Clear()
-        dGVConsolidado.Columns.Clear()
+    'Private Sub MostrarEnDataConsolidado(totalTalla As List(Of Dictionary(Of String, Object)), detalleTalla As Dictionary(Of String, List(Of Dictionary(Of String, Object))))
+    '    ' Limpiar cualquier configuración previa
+    '    dGVConsolidado.DataSource = Nothing
+    '    dGVConsolidado.Rows.Clear()
+    '    dGVConsolidado.Columns.Clear()
 
-        ' Configurar las columnas del DataGridView
-        dGVConsolidado.Columns.Add("Linea", "Linea")
-        dGVConsolidado.Columns.Add("Op", "Op")
-        dGVConsolidado.Columns.Add("Talla", "Talla")
-        dGVConsolidado.Columns.Add("Color", "Color")
-        dGVConsolidado.Columns.Add("Cantidad", "Cantidad")
-        dGVConsolidado.Columns.Add("Total", "Total")
+    '    ' Configurar las columnas del DataGridView
+    '    dGVConsolidado.Columns.Add("Linea", "Linea")
+    '    dGVConsolidado.Columns.Add("Op", "Op")
+    '    dGVConsolidado.Columns.Add("Talla", "Talla")
+    '    dGVConsolidado.Columns.Add("Color", "Color")
+    '    dGVConsolidado.Columns.Add("Cant", "Cant")
+    '    dGVConsolidado.Columns.Add("Total", "Total")
+    '    Dim total_ As Integer = 0
+    '    ' Iterar sobre los datos y agregar filas al DataGridView
+    '    For Each total In totalTalla
+    '        Dim linea As String = total("linea").ToString()
+    '        Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
+    '        total_ += totalCantidad
+    '        ' Agregar fila del resumen (Color y Total)
+    '        Dim resumenRowIndex As Integer = dGVConsolidado.Rows.Add()
+    '        dGVConsolidado.Rows(resumenRowIndex).Cells("Linea").Value = linea
+    '        dGVConsolidado.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad.ToString("N0") ' Formato numérico
 
-        ' Iterar sobre los datos y agregar filas al DataGridView
+    '        ' Aplicar estilos para resaltar la fila de resumen
+    '        With dGVConsolidado.Rows(resumenRowIndex)
+    '            .DefaultCellStyle.BackColor = pinturaGrisClaro
+    '            .DefaultCellStyle.Font = New Font(dGVConsolidado.Font, FontStyle.Bold)
+
+    '            ' Resaltar totales altos
+    '            If totalCantidad > 500 Then
+    '                .DefaultCellStyle.ForeColor = pinturaVerdeOscuro
+    '            End If
+    '        End With
+
+    '        ' Agregar filas de detalle (Talla y Cantidad)
+    '        If detalleTalla.ContainsKey(linea) Then
+    '            For Each detalle In detalleTalla(linea)
+    '                Dim op As String = detalle("op").ToString()
+    '                Dim color As String = detalle("color").ToString()
+    '                Dim talla As String = detalle("talla").ToString()
+    '                Dim cantidad As Integer = Convert.ToInt32(detalle("cantidad"))
+
+    '                Dim detalleRowIndex As Integer = dGVConsolidado.Rows.Add()
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Op").Value = op
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Color").Value = color
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Talla").Value = talla
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Cant").Value = cantidad.ToString("N0") ' Formato numérico
+
+    '                ' Dejar las celdas de Color y Total en blanco para que visualmente parezca un detalle
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Linea").Value = ""
+    '                dGVConsolidado.Rows(detalleRowIndex).Cells("Total").Value = ""
+
+    '                ' Alternar color para las filas de detalle
+    '                If detalleRowIndex Mod 2 = 0 Then
+    '                    dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = pinturaBlanca
+    '                Else
+    '                    dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = pinturaAzulClaro
+    '                End If
+    '            Next
+    '        End If
+    '    Next
+
+    '    Dim detalleRowIndex2 As Integer = dGVConsolidado.Rows.Add()
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Linea").Value = ""
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Op").Value = ""
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Color").Value = ""
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Talla").Value = ""
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Cant").Value = "Total"
+    '    dGVConsolidado.Rows(detalleRowIndex2).Cells("Total").Value = total_
+    '    ' Aplicar estilos para resaltar la fila de resumen
+    '    With dGVConsolidado.Rows(detalleRowIndex2)
+    '        .DefaultCellStyle.BackColor = pinturaGrisClaro
+    '        .DefaultCellStyle.Font = New Font(dGVConsolidado.Font, FontStyle.Bold)
+    '    End With
+    'End Sub
+
+    Private Sub GenerarConsolidadoDinamico(totalTalla As List(Of Dictionary(Of String, Object)),
+                                      detalleTalla As Dictionary(Of String, List(Of Dictionary(Of String, Object))))
+
+        ' 🔹 Limpiar el contenido anterior
+        tbDetalleTimbrado.Controls.Clear()
+        tbDetalleTimbrado.RowStyles.Clear()
+        tbDetalleTimbrado.RowCount = 0
+
+        ' 🔹 Asegurar que `panelScroll` tenga AutoScroll activado correctamente
+        panelScroll.AutoScroll = True
+        panelScroll.Dock = DockStyle.Fill
+        panelScroll.Controls.Clear() ' Limpiar contenido previo
+
+        ' 🔹 Evitar AutoSize en `tbDetalleTimbrado`
+        tbDetalleTimbrado.AutoSize = False
+        tbDetalleTimbrado.Dock = DockStyle.Top ' 🔥 Se asegura que crezca hacia abajo dentro de `panelScroll`
+        tbDetalleTimbrado.Height = 0 ' Inicializa en 0 y crece dinámicamente
+        panelScroll.Controls.Add(tbDetalleTimbrado)
+
+        ' 🔹 Variable para el total general
+        Dim totalGeneral As Integer = 0
+
+        ' 🔹 Iterar sobre cada línea (14B, 17B, 27B, etc.)
         For Each total In totalTalla
             Dim linea As String = total("linea").ToString()
             Dim totalCantidad As Integer = Convert.ToInt32(total("total"))
+            totalGeneral += totalCantidad
 
-            ' Agregar fila del resumen (Color y Total)
-            Dim resumenRowIndex As Integer = dGVConsolidado.Rows.Add()
-            dGVConsolidado.Rows(resumenRowIndex).Cells("Linea").Value = linea
-            dGVConsolidado.Rows(resumenRowIndex).Cells("Total").Value = totalCantidad.ToString("N0") ' Formato numérico
+            ' 🔹 1️⃣ Agregar un Label para la línea
+            Dim lblLinea As New Label With {
+                .Text = $"LINEA: {linea}",
+                .Font = New Font("Arial", 12, FontStyle.Bold),
+                .ForeColor = pinturaNegra,
+                .BackColor = pinturaPlata,
+                .Dock = DockStyle.Top,
+                .AutoSize = True,
+                .TextAlign = ContentAlignment.MiddleCenter
+            }
 
-            ' Aplicar estilos para resaltar la fila de resumen
-            With dGVConsolidado.Rows(resumenRowIndex)
-                .DefaultCellStyle.BackColor = Color.LightGray
-                .DefaultCellStyle.Font = New Font(dGVConsolidado.Font, FontStyle.Bold)
+            tbDetalleTimbrado.RowCount += 1
+            tbDetalleTimbrado.Controls.Add(lblLinea, 0, tbDetalleTimbrado.RowCount - 1)
 
-                ' Resaltar totales altos
-                If totalCantidad > 500 Then
-                    .DefaultCellStyle.ForeColor = Color.DarkGreen
-                End If
-            End With
+            ' 🔹 2️⃣ Crear el DataGridView dinámico
+            Dim dgv As New DataGridView With {
+                .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells, ' 🔥 Se ajusta completamente
+                .ReadOnly = True,
+                .AllowUserToAddRows = False,
+                .AllowUserToDeleteRows = False,
+                .ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+                .Dock = DockStyle.Top
+            }
 
-            ' Agregar filas de detalle (Talla y Cantidad)
+            ' Configurar columnas del DataGridView
+            dgv.Columns.Add("Op", "OP")
+            dgv.Columns.Add("Color", "Color")
+            dgv.Columns.Add("Talla", "Talla")
+            dgv.Columns.Add("Cant", "Cant")
+
+            ' Aplicar estilos al encabezado
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = pinturaVerdeClaro
+            dgv.ColumnHeadersDefaultCellStyle.Font = New Font("Arial", 10, FontStyle.Bold)
+            dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgv.EnableHeadersVisualStyles = False
+
+            ' 🔹 Llenar el DataGridView con los detalles
             If detalleTalla.ContainsKey(linea) Then
                 For Each detalle In detalleTalla(linea)
-                    Dim op As String = detalle("op").ToString()
-                    Dim color As String = detalle("color").ToString()
-                    Dim talla As String = detalle("talla").ToString()
-                    Dim cantidad As Integer = Convert.ToInt32(detalle("cantidad"))
-
-                    Dim detalleRowIndex As Integer = dGVConsolidado.Rows.Add()
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Op").Value = op
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Color").Value = color
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Talla").Value = talla
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Cantidad").Value = cantidad.ToString("N0") ' Formato numérico
-
-                    ' Dejar las celdas de Color y Total en blanco para que visualmente parezca un detalle
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Linea").Value = ""
-                    dGVConsolidado.Rows(detalleRowIndex).Cells("Total").Value = ""
-
-                    ' Alternar color para las filas de detalle
-                    If detalleRowIndex Mod 2 = 0 Then
-                        dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorFondo
-                    Else
-                        dGVConsolidado.Rows(detalleRowIndex).DefaultCellStyle.BackColor = colorSeleccion
-                    End If
+                    dgv.Rows.Add(detalle("op"), detalle("color"), detalle("talla"), detalle("cantidad"))
                 Next
             End If
+
+            ' 🔹 Agregar fila de total
+            Dim detalleRowIndex2 As Integer = dgv.Rows.Add()
+            dgv.Rows(detalleRowIndex2).Cells("Op").Value = ""
+            dgv.Rows(detalleRowIndex2).Cells("Color").Value = ""
+            dgv.Rows(detalleRowIndex2).Cells("Talla").Value = "Total"
+            dgv.Rows(detalleRowIndex2).Cells("Cant").Value = totalCantidad
+
+            ' 🔹 Aplicar estilos a la fila total
+            With dgv.Rows(detalleRowIndex2)
+                .DefaultCellStyle.BackColor = pinturaGrisClaro
+                .DefaultCellStyle.Font = New Font(dgv.Font, FontStyle.Bold)
+            End With
+
+            ' 🔹 Alinear el texto de "Total" a la derecha
+            dgv.Rows(detalleRowIndex2).Cells("Talla").Style.Alignment = DataGridViewContentAlignment.MiddleRight
+
+            ' 🔹 Ajustar la altura del DataGridView dinámicamente
+            dgv.Height = Math.Min(250, dgv.ColumnHeadersHeight + (dgv.RowTemplate.Height * dgv.Rows.Count) + 5)
+
+            ' 🔹 Agregar DataGridView al TableLayoutPanel
+            tbDetalleTimbrado.RowCount += 1
+            tbDetalleTimbrado.Controls.Add(dgv, 0, tbDetalleTimbrado.RowCount - 1)
         Next
+
+        ' 🔹 Ajustar la altura de `tbDetalleTimbrado` para permitir el scroll
+        tbDetalleTimbrado.Height = tbDetalleTimbrado.PreferredSize.Height
+
+        ' 🔹 Mostrar el total general
+        lblTotalDetalle.Text = $"TOTAL TIMBRADO: {totalGeneral}"
+
+        ' 🔹 Ajustar `panelScroll` para que active el Scroll
+        panelScroll.Refresh()
     End Sub
+
 
     Private Sub DataGridView1_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellEndEdit
         ' Validar que la celda editada es la columna "hoja_marcacion"
@@ -2523,75 +2789,100 @@ Public Class frmLector
             ' Obtener el nuevo valor editado
             Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
             Dim nuevaHM As String = selectedRow.Cells("hoja_marcacion").Value.ToString()
+            ' Obtener los valores adicionales necesarios para la base de datos
+            Dim op As String = DataGridView1.Rows(e.RowIndex).Cells("op").Value.ToString()
 
             ' Verificar que el valor sea numérico antes de formatearlo
-            If IsNumeric(nuevaHM) Then
-                ' Completar con ceros a la izquierda hasta tres dígitos
-                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = nuevaHM.PadLeft(3, "0"c)
-
-                ' Obtener los valores adicionales necesarios para la base de datos
-                Dim op As String = DataGridView1.Rows(e.RowIndex).Cells("op").Value.ToString()
-                Dim corte As String = DataGridView1.Rows(e.RowIndex).Cells("corte").Value.ToString()
-                Dim subcorte As String = DataGridView1.Rows(e.RowIndex).Cells("subcorte").Value.ToString()
-                Dim cod_talla As String = DataGridView1.Rows(e.RowIndex).Cells("cod_talla").Value.ToString()
-                Dim id_talla As String = DataGridView1.Rows(e.RowIndex).Cells("id_talla").Value.ToString()
-
-                ' Aquí puedes llamar a un método para guardar estos datos en la base de datos
-                'Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
-
-                ' Diccionario con los parámetros para la actualización
-                Dim whereParameters As New Dictionary(Of String, Object) From {
-                    {"nnope", op},
-                    {"nordencorte", corte},
-                    {"nordensubcorte", subcorte},
-                    {"cod_talla", cod_talla},
-                    {"id_talla", id_talla}
-                }
-
-                Dim updateParameters As New Dictionary(Of String, Object) From {
-                    {"nhoja", nuevaHM},
-                    {"usregsalemb", mCodTrabajador}
-                }
-
-                ' Llamar al método para actualizar la base de datos
-                Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
-
-                whereParameters.Clear() ' Elimina todos los elementos existentes
-
-                ' Agregar nuevos valores
-                whereParameters.Add("op", op)
-                whereParameters.Add("corte", corte)
-                whereParameters.Add("subcorte", subcorte)
-                whereParameters.Add("cod_talla", cod_talla)
-                whereParameters.Add("id_talla", id_talla)
-                whereParameters.Add("cod_trabajador", mCodTrabajador)
-
-                updateParameters.Clear() ' Elimina todos los elementos existentes
-
-                ' Agregar nuevos valores
-                updateParameters.Add("hoja_marcacion", nuevaHM)
-                updateParameters.Add("cod_trabajador_modificacion", mCodTrabajador)
-
-                Dim lsResult = m_BDPrendaScm.UpdatePrenda(whereParameters, updateParameters)
-
-                ' Verificar resultado y mostrar alertas
-                'If resultado > 0 Then
-                'AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 5)
-                ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
-                'selectedRow.Cells("fecha").Value = fechaSalida
-                'selectedRow.Cells("id_rfid").Value = nuevaHM
-                'End If
-
-                If lsResult > 0 Then
-                    AlertaManager.MostrarAlerta("Registro Prenda.", Color.Green, 1, 5)
-                Else
-                    AlertaManager.MostrarAlerta("Error al actualizar Prenda.", Color.Red, 3, 5)
-                End If
-            Else
+            If Not IsNumeric(nuevaHM) Then
                 ' En caso de que el usuario ingrese un valor no numérico, mostrar alerta
-                AlertaManager.MostrarAlerta("Error ingrese #s.", Color.Red, 3, 5)
+                AlertaManager.MostrarAlerta("Ingresar números.", pinturaRoja, 3, 5)
                 ' Restaurar el valor anterior si es inválido
-                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = "000"
+                DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = ""
+                Return
+            End If
+            Dim tipo As String = "nhjmr"
+
+            If nuevaHM.Length < 1 OrElse nuevaHM.Length > 3 Then
+                Return
+            End If
+
+            Dim whereParameters As New Dictionary(Of String, Object) From {{"norpd", op}, {tipo, nuevaHM.PadLeft(3, "0"c)}}
+            Dim valor As String = m_DBConsultarPrenda.ValidarOP(whereParameters, tipo)
+
+            If String.IsNullOrWhiteSpace(valor) Then
+                selectedRow.Cells("hoja_marcacion").Value = ""
+                AlertaError($"Verificar la Hoja Marcación: {nuevaHM} .", pinturaRojoLadrillo)
+                Return
+            End If
+
+            ' Completar con ceros a la izquierda hasta tres dígitos
+            DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = nuevaHM.PadLeft(3, "0"c)
+
+            ' Obtener los valores adicionales necesarios para la base de datos
+            Dim corte As String = DataGridView1.Rows(e.RowIndex).Cells("corte").Value.ToString()
+            Dim subcorte As String = DataGridView1.Rows(e.RowIndex).Cells("subcorte").Value.ToString()
+            Dim cod_talla As String = DataGridView1.Rows(e.RowIndex).Cells("cod_talla").Value.ToString()
+            Dim id_talla As String = DataGridView1.Rows(e.RowIndex).Cells("id_talla").Value.ToString()
+
+            whereParameters.Clear()
+            ' Diccionario con los parámetros para la actualización
+            whereParameters.Add("nnope", op)
+            whereParameters.Add("nordencorte", corte)
+            whereParameters.Add("nordensubcorte", subcorte)
+            whereParameters.Add("cod_talla", cod_talla)
+            whereParameters.Add("id_talla", id_talla)
+
+            Dim updateParameters As New Dictionary(Of String, Object) From {
+                {"nhoja", valor},
+                {"usregsalemb", mCodTrabajador}
+            }
+
+            ' Llamar al método para actualizar la base de datos
+            Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
+
+            whereParameters.Clear() 'Limpiar parametros
+            'Agregar valores
+            whereParameters.Add("op", op)
+            whereParameters.Add("corte", corte)
+            whereParameters.Add("sub_corte", subcorte)
+            whereParameters.Add("cod_talla", cod_talla)
+            whereParameters.Add("id_talla", id_talla)
+            whereParameters.Add("fotocheck", mCodTrabajador)
+
+            updateParameters.Clear() ' Elimina todos los elementos existentes
+
+            ' Agregar nuevos valores
+            updateParameters.Add("nhoja", valor)
+
+            resultado = m_BDPrenda.UpdateTimbrado(whereParameters, updateParameters)
+
+            whereParameters.Clear() ' Elimina todos los elementos existentes
+            ' Agregar nuevos valores
+            whereParameters.Add("op", op)
+            whereParameters.Add("corte", corte)
+            whereParameters.Add("subcorte", subcorte)
+            whereParameters.Add("cod_talla", cod_talla)
+            whereParameters.Add("id_talla", id_talla)
+            whereParameters.Add("cod_trabajador", mCodTrabajador)
+
+            updateParameters.Clear() ' Elimina todos los elementos existentes
+
+            ' Agregar nuevos valores
+            updateParameters.Add("hoja_marcacion", valor)
+            updateParameters.Add("cod_trabajador_modificacion", mCodTrabajador)
+
+            Dim lsResult = m_BDPrendaScm.UpdatePrenda(whereParameters, updateParameters)
+
+            ' Aquí puedes llamar a un método para guardar estos datos en la base de datos
+            Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
+            selectedRow.Cells("fecha").Value = fechaSalida
+            'selectedRow.Cells("id_rfid").Value = nuevaHM
+            'End If
+
+            If lsResult > 0 Then
+                AlertaManager.MostrarAlerta("Registro Prenda.", pinturaVerde, 1, 5)
+            Else
+                AlertaManager.MostrarAlerta("Error al actualizar Prenda.", pinturaRoja, 3, 5)
             End If
         End If
     End Sub
@@ -2644,7 +2935,7 @@ Public Class frmLector
                 rfidCode = If(rfidCode.Length > 24, rfidCode.Substring(rfidCode.Length - 24), rfidCode)
                 Console.WriteLine($" rfidCode-->{rfidCode}")
 
-                'Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
+                Dim fechaSalida As DateTime = DateTime.Now ' Obtener la fecha actual
 
                 ' Diccionario con los parámetros para la actualización
                 Dim whereParameters As New Dictionary(Of String, Object) From {
@@ -2663,6 +2954,22 @@ Public Class frmLector
                 ' Llamar al método para actualizar la base de datos
                 Dim resultado = m_BDPrenda.UPDAcabadosTallaMov(whereParameters, updateParameters)
 
+                whereParameters.Clear() 'Limpiar parametros
+                'Agregar valores
+                whereParameters.Add("op", op)
+                whereParameters.Add("corte", corte)
+                whereParameters.Add("sub_corte", subcorte)
+                whereParameters.Add("cod_talla", cod_talla)
+                whereParameters.Add("id_talla", id_talla)
+                whereParameters.Add("fotocheck", mCodTrabajador)
+
+                updateParameters.Clear() ' Elimina todos los elementos existentes
+
+                ' Agregar nuevos valores
+                updateParameters.Add("rfid", rfidCode)
+
+                resultado = m_BDPrenda.UpdateTimbrado(whereParameters, updateParameters)
+
                 whereParameters.Clear() ' Elimina todos los elementos existentes
 
                 ' Agregar nuevos valores
@@ -2670,7 +2977,7 @@ Public Class frmLector
                 whereParameters.Add("corte", corte)
                 whereParameters.Add("subcorte", subcorte)
                 whereParameters.Add("cod_talla", cod_talla)
-                whereParameters.Add("id_talla", id_talla)
+                whereParameters.Add("id_talla", idTalla)
                 whereParameters.Add("cod_trabajador", mCodTrabajador)
 
                 updateParameters.Clear() ' Elimina todos los elementos existentes
@@ -2680,20 +2987,12 @@ Public Class frmLector
                 updateParameters.Add("cod_trabajador_modificacion", mCodTrabajador)
 
                 Dim lsResult = m_BDPrendaScm.UpdatePrenda(whereParameters, updateParameters)
-                ' Verificar resultado y mostrar alertas
-                If resultado > 0 Then
-                    AlertaManager.MostrarAlerta("Registro actualizado correctamente.", Color.Green, 1, 5)
-                    ' Actualizar el valor en el DataGridView sin recargar los datos desde la BD
-                    'selectedRow.Cells("fecha").Value = fechaSalida
-                    selectedRow.Cells("id_rfid").Value = rfidCode
-                Else
-                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 5)
-                End If
+                selectedRow.Cells("fecha").Value = fechaSalida
 
                 If lsResult > 0 Then
-                    AlertaManager.MostrarAlerta("Registro Prenda.", Color.Green, 1, 5)
+                    AlertaManager.MostrarAlerta("Registro Prenda.", pinturaVerde, 1, 5)
                 Else
-                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", Color.Red, 3, 5)
+                    AlertaManager.MostrarAlerta("Error al actualizar el registro.", pinturaRoja, 3, 5)
                 End If
             End If
         End If
@@ -2718,16 +3017,16 @@ Public Class frmLector
             ' Pinta el fondo de la cabecera
             e.PaintBackground(e.CellBounds, False)
 
-            Dim colorFondo As Color = DataGridView1.ColumnHeadersDefaultCellStyle.BackColor
+            Dim pinturaBlanca As Color = DataGridView1.ColumnHeadersDefaultCellStyle.BackColor
             Dim colorTexto As Color = DataGridView1.ColumnHeadersDefaultCellStyle.ForeColor
 
             ' Si la columna está seleccionada, cambiar el color de fondo y texto
             If e.ColumnIndex = columnaSeleccionada Then
-                colorFondo = Color.Teal ' Color de fondo cuando está seleccionada
-                colorTexto = Color.White ' Texto en blanco si se cambia el fondo
+                pinturaBlanca = pinturaVerdeAzulado ' Color de fondo cuando está seleccionada
+                colorTexto = pinturaBlanca ' Texto en blanco si se cambia el fondo
             End If
 
-            Using brush As New SolidBrush(colorFondo)
+            Using brush As New SolidBrush(pinturaBlanca)
                 e.Graphics.FillRectangle(brush, e.CellBounds)
             End Using
 
@@ -2746,6 +3045,21 @@ Public Class frmLector
     Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
         ' Redibujar la cabecera al cambiar de selección
         DataGridView1.Invalidate()
+    End Sub
+
+    Private Sub NuevoTimbrado()
+        Dim whereParameters As New Dictionary(Of String, Object) From {
+            {"fotocheck", mCodTrabajador}
+        }
+        ' Llamar al método para actualizar la base de datos
+        Dim lsResult = m_BDPrenda.NuevoTimbrado(whereParameters)
+
+        If lsResult > 0 Then
+            AlertaManager.MostrarAlerta("Nuevo timbrado OK.", pinturaVerde, 1, 5)
+        Else
+            AlertaManager.MostrarAlerta("Error.", pinturaRoja, 3, 5)
+        End If
+
     End Sub
 
     'Private Sub DataGridView_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) _
@@ -2777,4 +3091,105 @@ Public Class frmLector
     '    End If
     'End Sub
 
+    Private Sub ListarTimbrados()
+        ' Diccionario con los parámetros para la consulta
+        Dim whereParameters As New Dictionary(Of String, Object) From {
+            {"fotocheck", mCodTrabajador}
+        }
+
+        ' Ejecutar la consulta para listar las prendas timbradas
+        Dim resultado = m_BDPrenda.ListarTimbradas(whereParameters)
+
+        ' Verificar si la consulta fue exitosa
+        If resultado.Item1 < 0 Then
+            ' Mostrar alerta en caso de error
+            MsnVincular.Text = $"Error al obtener timbradas: {resultado.Item2}"
+            Exit Sub
+        End If
+
+        ' Obtener el DataTable con los resultados
+        Dim dataTimbrado As DataTable = resultado.Item3
+
+        ' Verificar si hay datos en la respuesta
+        If dataTimbrado.Rows.Count = 0 Then
+            MsnVincular.Text = $"No se encontraron prendas timbradas para el trabajador."
+            Exit Sub
+        End If
+
+        LlenarDataGridViewDesdeDataTable(dataTimbrado)
+        ConfigurarEstiloDataGridView(DataGridView1) ' 🔹 Reaplicar estilos globales
+
+
+        ' 🔹 Contar filas visibles y actualizar el label
+        Dim totalFilas As Integer = DataGridView1.RowCount
+        If DataGridView1.AllowUserToAddRows Then
+            totalFilas -= 1 ' Evita contar la fila vacía si está habilitada la opción de agregar filas
+        End If
+
+        lblTotalCount.Text = totalFilas.ToString()
+        MsnVincular.Text = $"Prendas timbradas."
+    End Sub
+
+    Private Sub LlenarDataGridViewDesdeDataTable_(dataTable As DataTable)
+        DataGridView1.DataSource = Nothing ' Elimina cualquier DataSource anterior
+        DataGridView1.DataSource = dataTable ' Asigna el DataTable como fuente de datos
+    End Sub
+
+    Private Sub LlenarDataGridViewDesdeDataTable(dataTable As DataTable)
+        If dataTable Is Nothing OrElse dataTable.Rows.Count = 0 Then
+            MostrarAlerta("No hay datos para llenar el DataGridView.")
+            Return
+        End If
+
+        Try
+            ' Verifica si la llamada está en un subproceso diferente
+            If DataGridView1.InvokeRequired Then
+                DataGridView1.Invoke(New Action(Of DataTable)(AddressOf LlenarDataGridViewDesdeDataTable), dataTable)
+            Else
+                DataGridView1.Rows.Clear() ' Limpiar filas previas
+
+                For Each row As DataRow In dataTable.Rows
+                    Dim rowIndex As Integer = DataGridView1.Rows.Add()
+
+                    ' Asignar valores a cada celda según la columna existente en DataGridView1
+                    For Each column As DataColumn In dataTable.Columns
+                        If DataGridView1.Columns.Contains(column.ColumnName) Then
+                            DataGridView1.Rows(rowIndex).Cells(column.ColumnName).Value = row(column.ColumnName)
+                        End If
+                    Next
+
+                    ' 🔹 Aplicar Padding a cada celda
+                    Dim cellStyle As New DataGridViewCellStyle()
+                    cellStyle.Padding = New Padding(5, 10, 5, 10) ' 10px de padding arriba/abajo
+                    cellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+                    ' 🔹 Aplicar colores alternos en filas
+                    If rowIndex Mod 2 = 0 Then
+                        cellStyle.BackColor = pinturaAzulClaro ' Azul claro
+                    Else
+                        cellStyle.BackColor = pinturaBlanca
+                    End If
+
+                    ' Aplicar estilos de Padding y color a cada celda
+                    For Each cell As DataGridViewCell In DataGridView1.Rows(rowIndex).Cells
+                        cell.Style = cellStyle
+                    Next
+                Next
+
+                ' 🔹 Refrescar DataGridView para que los estilos se apliquen correctamente
+                DataGridView1.Refresh()
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error al llenar el DataGridView: {ex.Message}")
+            MostrarAlerta("Error inesperado al llenar los datos. Consulte con el administrador.")
+        End Try
+    End Sub
+
+    Private Sub LimpiarGridConsolidado()
+        ' 🔹 Limpiar el contenedor antes de agregar nuevos elementos
+        tbDetalleTimbrado.Controls.Clear()
+        tbDetalleTimbrado.RowStyles.Clear()
+        tbDetalleTimbrado.RowCount = 0
+        lblTotalDetalle.Text = ""
+    End Sub
 End Class
